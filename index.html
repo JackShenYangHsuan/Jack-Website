@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jack Shen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            min-height: 80vh;
+        }
+
+        .profile-image {
+            flex-shrink: 0;
+        }
+
+        .profile-image img {
+            width: 280px;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        .content p {
+            font-size: 20px;
+            line-height: 1.8;
+            color: #000000;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .profile-image img {
+                width: 220px;
+                height: 220px;
+            }
+
+            .content p {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-image">
+            <img src="profile.png" alt="Jack Shen">
+        </div>
+        <div class="content">
+            <p>I'm Jack, a builder pivoting from strategy consulting to applied AI startups. Built a camera app to 500K downloads in college. Spent four years at McKinsey rebuilding performance engines and org structures for Fortune 500 financial turnarounds. Recently worked with YC founders on agentic sales platforms. Now at Berkeley B-school, exploring career options and tinkering with AI. Based in SF.</p>
+        </div>
+    </div>
+</body>
+</html>
