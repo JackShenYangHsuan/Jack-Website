@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jack Shen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,8 +14,18 @@
             box-sizing: border-box;
         }
 
+        ::selection {
+            background-color: #F2C94C;
+            color: #000000;
+        }
+
+        ::-moz-selection {
+            background-color: #F2C94C;
+            color: #000000;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
             background-color: #ffffff;
             color: #000000;
             line-height: 1.6;
@@ -30,6 +43,8 @@
 
         .profile-image {
             flex-shrink: 0;
+            perspective: 1000px;
+            position: relative;
         }
 
         .profile-image img {
@@ -37,6 +52,89 @@
             height: 280px;
             object-fit: cover;
             border-radius: 8px;
+            cursor: pointer;
+            animation: profileTilt 5s ease-in-out infinite;
+        }
+
+        .profile-image:hover img {
+            transform: rotateY(-8deg) rotateX(5deg);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: none;
+        }
+
+        @keyframes profileTilt {
+            0%, 100% {
+                transform: rotateY(0deg) rotateX(0deg);
+                box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+            }
+            10%, 30% {
+                transform: rotateY(-8deg) rotateX(5deg);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            }
+            40%, 100% {
+                transform: rotateY(0deg) rotateX(0deg);
+                box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+            }
+        }
+
+        .pixar-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.25) 0%,
+                rgba(255, 255, 255, 0.15) 100%
+            );
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 14px 24px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 30px;
+            cursor: pointer;
+            white-space: nowrap;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            animation: buttonReveal 5s ease-in-out infinite;
+        }
+
+        .profile-image:hover .pixar-button {
+            opacity: 1;
+            animation: none;
+        }
+
+        @keyframes buttonReveal {
+            0%, 100% {
+                opacity: 0;
+            }
+            10%, 30% {
+                opacity: 1;
+            }
+            40%, 100% {
+                opacity: 0;
+            }
+        }
+
+        .pixar-button:hover {
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.35) 0%,
+                rgba(255, 255, 255, 0.25) 100%
+            );
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%) scale(1.05);
+            box-shadow:
+                0 12px 40px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
         }
 
         .content {
@@ -49,11 +147,305 @@
             color: #000000;
         }
 
+        .underline {
+            border-bottom: 3px solid #CCCCCC;
+            padding-bottom: 2px;
+            cursor: ne-resize;
+            transition: color 0.2s ease;
+        }
+
+        .underline:hover {
+            color: #DDDDDD;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.85) 0%,
+                rgba(255, 255, 255, 0.75) 100%
+            );
+            backdrop-filter: blur(40px) saturate(200%) brightness(120%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(120%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow:
+                0 25px 80px rgba(0, 0, 0, 0.2),
+                0 10px 40px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+            animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: #000000;
+            transition: all 0.2s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding-right: 40px;
+            flex-wrap: wrap;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #000000;
+            margin: 0;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .modal-body {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #000000;
+        }
+
+        .modal-body ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .modal-body li {
+            margin-bottom: 0;
+            padding: 20px 0;
+            padding-left: 0;
+            position: relative;
+            border-bottom: 1px solid #CCCCCC;
+        }
+
+        .modal-body li:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .modal-body li:first-child {
+            padding-top: 0;
+        }
+
+        .modal-body li::before {
+            display: none;
+        }
+
+        .modal-body strong {
+            font-weight: 600;
+            color: #666666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 14px;
+        }
+
+        .modal-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .modal-year {
+            background: #000000;
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .modal-body p {
+            color: #000000;
+        }
+
         @media (max-width: 768px) {
+            .modal-content {
+                padding: 30px 20px;
+                max-height: 90vh;
+                max-width: 95%;
+            }
+
+            .modal-header {
+                gap: 12px;
+                padding-right: 50px;
+            }
+
+            .modal-logo {
+                width: 50px;
+                height: 50px;
+            }
+
+            .modal-title {
+                font-size: 18px;
+                line-height: 1.4;
+            }
+
+            .modal-year {
+                font-size: 12px;
+                padding: 5px 10px;
+            }
+
+            .modal-close {
+                width: 32px;
+                height: 32px;
+                font-size: 20px;
+            }
+
+            .modal-body {
+                font-size: 15px;
+            }
+
+            .modal-body li {
+                padding: 16px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                padding: 25px 16px;
+            }
+
+            .modal-header {
+                gap: 10px;
+            }
+
+            .modal-logo {
+                width: 45px;
+                height: 45px;
+            }
+
+            .modal-title {
+                font-size: 16px;
+            }
+
+            .modal-year {
+                font-size: 11px;
+                padding: 4px 8px;
+            }
+
+            .modal-body {
+                font-size: 14px;
+            }
+
+            .modal-body li {
+                padding: 14px 0;
+            }
+
+            .modal-body strong {
+                font-size: 12px;
+            }
+        }
+
+        footer {
+            max-width: 1000px;
+            margin: 60px auto 40px;
+            padding: 0 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-left {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .footer-links a, .footer-links .location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #000000;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: opacity 0.2s;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.6;
+        }
+
+        .footer-links a span, .footer-links .location span {
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+
             .container {
                 flex-direction: column;
                 gap: 40px;
-                text-align: center;
+                text-align: left;
+                min-height: auto;
             }
 
             .profile-image img {
@@ -61,8 +453,58 @@
                 height: 220px;
             }
 
+            .pixar-button {
+                font-size: 11px;
+                padding: 10px 14px;
+                white-space: normal;
+                text-align: center;
+                max-width: 180px;
+            }
+
             .content p {
                 font-size: 18px;
+                line-height: 1.7;
+            }
+
+            footer {
+                margin: 40px auto 20px;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+
+            .footer-left {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .footer-links a, .footer-links .location {
+                font-size: 13px;
+            }
+
+            .footer-links a span, .footer-links .location span {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-image img {
+                width: 180px;
+                height: 180px;
+            }
+
+            .content p {
+                font-size: 16px;
+            }
+
+            .pixar-button {
+                font-size: 10px;
+                padding: 8px 12px;
+                max-width: 160px;
             }
         }
     </style>
@@ -71,10 +513,234 @@
     <div class="container">
         <div class="profile-image">
             <img src="profile.png" alt="Jack Shen">
+            <button class="pixar-button">Watch my life as a Pixar Movie</button>
         </div>
         <div class="content">
-            <p>I'm Jack, a builder pivoting from strategy consulting to applied AI startups. Built a camera app to 500K downloads in college. Spent four years at McKinsey rebuilding performance engines and org structures for Fortune 500 financial turnarounds. Recently worked with YC founders on agentic sales platforms. Now at Berkeley B-school, exploring career options and tinkering with AI. Based in SF.</p>
+            <p>I'm Jack, a builder pivoting from strategy consulting to applied AI startups. Built a <span class="underline" data-tooltip="Camera App">camera app</span> to 500K downloads in college. Spent four years at <span class="underline" data-tooltip="McKinsey">McKinsey</span> rebuilding performance engines and org structures for Fortune 500 financial turnarounds. Recently worked with YC founders on <span class="underline" data-tooltip="Agentic Sales Platforms">agentic sales platforms</span>. Now at Berkeley B-school, exploring career options and <span class="underline" data-tooltip="Tinkering with AI">tinkering with AI</span>. Read my thoughts <span class="underline" data-tooltip="Blog">here</span>.</p>
         </div>
     </div>
+
+    <footer>
+        <div class="footer-links">
+            <div class="footer-left">
+                <a href="https://www.linkedin.com/in/jackshen1997/" target="_blank">
+                    <span>💼</span>LINKEDIN
+                </a>
+                <a href="mailto:jack_shen@berkeley.edu">
+                    <span>✉️</span>EMAIL
+                </a>
+            </div>
+            <div class="location">
+                <span>📍</span>MANUFACTURED IN TW, OPERATING IN SF
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">×</button>
+            <div class="modal-header" id="modalHeader">
+                <h2 class="modal-title" id="modalTitle">Title</h2>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <p>Content goes here...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div class="modal-overlay" id="videoModal">
+        <div class="modal-content" style="max-width: 90%; max-height: 90vh; padding: 0; background: #000000; overflow: hidden;">
+            <button class="modal-close" id="videoModalClose" style="z-index: 10;">×</button>
+            <video id="pixarVideo" controls style="width: 100%; height: 100%; display: block;">
+                <source src="Pixar.mp4" type="video/mp4">
+                <track src="subtitles.vtt" kind="subtitles" srclang="en" label="English" default>
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('modal');
+        const modalHeader = document.getElementById('modalHeader');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const modalClose = document.getElementById('modalClose');
+        const underlineElements = document.querySelectorAll('.underline[data-tooltip]');
+
+        // Video modal elements
+        const videoModal = document.getElementById('videoModal');
+        const videoModalClose = document.getElementById('videoModalClose');
+        const pixarVideo = document.getElementById('pixarVideo');
+        const pixarButton = document.querySelector('.pixar-button');
+
+        // Enable subtitles by default
+        pixarVideo.addEventListener('loadedmetadata', function() {
+            const tracks = pixarVideo.textTracks;
+            if (tracks.length > 0) {
+                tracks[0].mode = 'showing';
+            }
+        });
+
+        // Open video modal when Pixar button is clicked
+        pixarButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            videoModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            pixarVideo.play();
+            // Ensure subtitles are showing
+            const tracks = pixarVideo.textTracks;
+            if (tracks.length > 0) {
+                tracks[0].mode = 'showing';
+            }
+        });
+
+        // Close video modal
+        videoModalClose.addEventListener('click', function() {
+            videoModal.classList.remove('active');
+            document.body.style.overflow = '';
+            pixarVideo.pause();
+            pixarVideo.currentTime = 0;
+        });
+
+        // Close video modal when clicking overlay
+        videoModal.addEventListener('click', function(e) {
+            if (e.target === videoModal) {
+                videoModal.classList.remove('active');
+                document.body.style.overflow = '';
+                pixarVideo.pause();
+                pixarVideo.currentTime = 0;
+            }
+        });
+
+        // Modal content data
+        const modalData = {
+            'Camera App': {
+                title: 'Frismo — iOS Camera App',
+                logo: 'Frismo Logo.png',
+                year: '2017',
+                content: `
+                    <ul>
+                        <li><strong>PROBLEM:</strong> Solo travelers unable to capture quality portraits when asking strangers to take photos</li>
+                        <li><strong>SOLUTION:</strong> Developed iOS app with ML-powered real-time composition guidance to coach photo-takers toward ideal framing</li>
+                        <li><strong>RESULT:</strong> Scaled to 500K downloads, #3 App Store ranking, viral media attention</li>
+                    </ul>
+                `
+            },
+            'McKinsey': {
+                title: 'McKinsey & Company — Senior Digital Transformation Associate',
+                logo: 'McKinsey logo.png',
+                year: '2015-2021',
+                content: `
+                    <ul>
+                        <li><strong>INDUSTRY:</strong> Consumer electronics manufacturing, high-performance computing, pharmaceutical</li>
+                        <li><strong>ADVISING MODEL:</strong> P&L-based engagements, actively shaping client operations and co-owning financial outcomes</li>
+                        <li><strong>GEOGRAPHY:</strong> Greater China, Germany, North America</li>
+                    </ul>
+                `
+            },
+            'Agentic Sales Platforms': {
+                title: 'FuseAI — AI Product Manager | All-in-one Agentic Sales Platform',
+                logo: 'FuseAI logo.jpeg',
+                year: '2025',
+                content: `
+                    <ul>
+                        <li><strong>PROBLEM:</strong> Startup teams lack expertise and time to stitch together dozens of outreach tools</li>
+                        <li><strong>SOLUTION:</strong> Unified platform for lead generation, data enrichment, outreach sequencing, and CRM</li>
+                        <li><strong>SCOPE:</strong> Created working prototype of demo call live-assistant to surface real-time talk tracks and prospect insights; designed landing page; analyzed competitors; drove SEO optimization through content</li>
+                    </ul>
+                `
+            }
+        };
+
+        // Open modal
+        underlineElements.forEach(element => {
+            element.addEventListener('click', function(e) {
+                e.preventDefault();
+                const key = this.getAttribute('data-tooltip');
+
+                // Navigate to separate pages for these items
+                if (key === 'Tinkering with AI') {
+                    window.location.href = 'tinkering.html';
+                    return;
+                }
+                if (key === 'Blog') {
+                    window.location.href = 'blog.html';
+                    return;
+                }
+
+                const data = modalData[key];
+
+                if (data) {
+                    // Clear header
+                    modalHeader.innerHTML = '';
+
+                    // Remove existing year badge if any
+                    const existingYear = document.querySelector('.modal-year');
+                    if (existingYear) {
+                        existingYear.remove();
+                    }
+
+                    // Add logo if exists
+                    if (data.logo) {
+                        const logoImg = document.createElement('img');
+                        logoImg.src = data.logo;
+                        logoImg.alt = 'Logo';
+                        logoImg.className = 'modal-logo';
+                        modalHeader.appendChild(logoImg);
+                    }
+
+                    // Add title
+                    const titleElement = document.createElement('h2');
+                    titleElement.className = 'modal-title';
+                    titleElement.textContent = data.title;
+                    modalHeader.appendChild(titleElement);
+
+                    // Add year badge if exists
+                    if (data.year) {
+                        const yearBadge = document.createElement('div');
+                        yearBadge.className = 'modal-year';
+                        yearBadge.textContent = data.year;
+                        modalHeader.appendChild(yearBadge);
+                    }
+
+                    modalBody.innerHTML = data.content;
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+
+        // Close modal
+        modalClose.addEventListener('click', function() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        // Close modal when clicking overlay
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (modal.classList.contains('active')) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+                if (videoModal.classList.contains('active')) {
+                    videoModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                    pixarVideo.pause();
+                    pixarVideo.currentTime = 0;
+                }
+            }
+        });
+    </script>
 </body>
 </html>
