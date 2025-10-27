@@ -204,6 +204,20 @@ export default function CreatePage() {
       return;
     }
 
+    // Check if user has API key configured
+    try {
+      const settingsResponse = await fetch('/api/settings/openai');
+      if (settingsResponse.ok) {
+        const settingsData = await settingsResponse.json();
+        if (!settingsData.hasKey) {
+          alert('⚠️ Please enter your OpenAI API key using the header button before generating a script.');
+          return;
+        }
+      }
+    } catch (error) {
+      console.error('Failed to check API key status:', error);
+    }
+
     setGenerating(true);
     setStoryId(null);
     setVideoUrl(null);

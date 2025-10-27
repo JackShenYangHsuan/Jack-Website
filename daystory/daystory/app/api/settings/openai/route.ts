@@ -57,8 +57,16 @@ export async function POST(request: Request) {
     );
   }
 
-  await upsertUserSettings(userId, { openAIApiKey: apiKey });
-  return NextResponse.json({ success: true });
+  try {
+    await upsertUserSettings(userId, { openAIApiKey: apiKey });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error saving API key:', error);
+    return NextResponse.json(
+      { error: "Failed to save API key. Please try again." },
+      { status: 500 }
+    );
+  }
 }
 
 export async function DELETE() {
