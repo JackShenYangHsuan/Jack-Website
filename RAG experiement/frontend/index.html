@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RAG Experiment</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <main class="app">
+        <header class="app__header">
+            <h1>RAG Experiment</h1>
+            <p>Upload PDFs and ask questions powered by Pinecone retrieval and GPT.</p>
+        </header>
+        <section class="panel">
+            <h2>Upload PDF</h2>
+            <div id="dropzone" class="dropzone">
+                <input id="file-input" type="file" accept="application/pdf" hidden />
+                <p>Drag & drop a PDF here or <button id="browse-btn" type="button">browse</button></p>
+                <p class="dropzone__status" id="upload-status">No file selected</p>
+            </div>
+            <button id="upload-btn" class="primary" disabled>Upload</button>
+        </section>
+        <section class="panel">
+            <h2>Chat</h2>
+            <div id="conversation" class="conversation"></div>
+            <form id="chat-form" class="chat-form">
+                <textarea id="question" placeholder="Ask a question about your PDFs" rows="3" required></textarea>
+                <button type="submit" class="primary">Ask</button>
+            </form>
+        </section>
+    </main>
+    <script src="app.js" type="module"></script>
+</body>
+</html>

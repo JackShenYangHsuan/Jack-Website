@@ -16,19 +16,27 @@ function getUserIdFromSession(session: any): string | null {
 }
 
 export async function GET() {
-  const session = await auth();
+  try {
+    const session = await auth();
 
-  if (!session?.user) {
-    return NextResponse.json({ hasKey: false }, { status: 200 });
+    if (!session?.user) {
+      return NextResponse.json({ hasKey: false }, { status: 200 });
+    }
+
+    const userId = getUserIdFromSession(session);
+    if (!userId) {
+      return NextResponse.json({ hasKey: false }, { status: 200 });
+    }
+
+    const settings = await getUserSettings(userId);
+    return NextResponse.json({ hasKey: Boolean(settings?.openAIApiKey) });
+  } catch (error) {
+    console.error('Error fetching API key status:', error);
+    return NextResponse.json(
+      { error: "Failed to load API key status" },
+      { status: 500 }
+    );
   }
-
-  const userId = getUserIdFromSession(session);
-  if (!userId) {
-    return NextResponse.json({ hasKey: false }, { status: 200 });
-  }
-
-  const settings = await getUserSettings(userId);
-  return NextResponse.json({ hasKey: Boolean(settings?.openAIApiKey) });
 }
 
 export async function POST(request: Request) {
@@ -70,17 +78,25 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE() {
-  const session = await auth();
+  try {
+    const session = await auth();
 
-  if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const userId = getUserIdFromSession(session);
+    if (!userId) {
+      return NextResponse.json({ error: "Unable to determine user" }, { status: 400 });
+    }
+
+    await deleteUserOpenAIApiKey(userId);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting API key:', error);
+    return NextResponse.json(
+      { error: "Failed to delete API key" },
+      { status: 500 }
+    );
   }
-
-  const userId = getUserIdFromSession(session);
-  if (!userId) {
-    return NextResponse.json({ error: "Unable to determine user" }, { status: 400 });
-  }
-
-  await deleteUserOpenAIApiKey(userId);
-  return NextResponse.json({ success: true });
 }
