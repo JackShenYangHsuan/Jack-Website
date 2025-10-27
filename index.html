@@ -617,14 +617,14 @@
         // Modal content data
         const modalData = {
             'Camera App': {
-                title: 'Frismo — iOS Camera App',
+                title: 'Frismo - Co-founder / CEO',
                 logo: 'Frismo Logo.png',
                 year: '2017',
                 content: `
                     <ul>
                         <li><strong>PROBLEM:</strong> Solo travelers unable to capture quality portraits when asking strangers to take photos</li>
                         <li><strong>SOLUTION:</strong> Developed iOS app with ML-powered real-time composition guidance to coach photo-takers toward ideal framing</li>
-                        <li><strong>RESULT:</strong> Scaled to 500K downloads, #3 App Store ranking, viral media attention</li>
+                        <li><strong>RESULT:</strong> Scaled to 500K downloads, #3 App Store ranking, <a href="https://agirls.aotter.net/post/52127" target="_blank" style="color: #000000; text-decoration: underline;">viral media attention</a></li>
                     </ul>
                 `
             },
@@ -642,6 +642,7 @@
             },
             'Agentic Sales Platforms': {
                 title: 'FuseAI — AI Product Manager | All-in-one Agentic Sales Platform',
+                titleLink: 'https://tryfuse.ai/',
                 logo: 'FuseAI logo.jpeg',
                 year: '2025',
                 content: `
@@ -694,7 +695,23 @@
                     // Add title
                     const titleElement = document.createElement('h2');
                     titleElement.className = 'modal-title';
-                    titleElement.textContent = data.title;
+
+                    // Make title clickable if titleLink exists
+                    if (data.titleLink) {
+                        const titleLink = document.createElement('a');
+                        titleLink.href = data.titleLink;
+                        titleLink.target = '_blank';
+                        titleLink.textContent = data.title;
+                        titleLink.style.color = '#000000';
+                        titleLink.style.textDecoration = 'none';
+                        titleLink.style.transition = 'opacity 0.2s';
+                        titleLink.onmouseover = function() { this.style.opacity = '0.6'; };
+                        titleLink.onmouseout = function() { this.style.opacity = '1'; };
+                        titleElement.appendChild(titleLink);
+                    } else {
+                        titleElement.textContent = data.title;
+                    }
+
                     modalHeader.appendChild(titleElement);
 
                     // Add year badge if exists

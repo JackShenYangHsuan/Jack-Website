@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's under the hood of LLMs? - Jack Shen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        ::selection {
+            background-color: #F2C94C;
+            color: #000000;
+        }
+
+        ::-moz-selection {
+            background-color: #F2C94C;
+            color: #000000;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 40px;
+            color: #000000;
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: opacity 0.2s;
+        }
+
+        .back-link:hover {
+            opacity: 0.6;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .blog-date {
+            font-size: 14px;
+            color: #666666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 40px;
+        }
+
+        .content {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #000000;
+        }
+
+        .content p {
+            margin-bottom: 24px;
+        }
+
+        .content ol {
+            margin-bottom: 24px;
+            padding-left: 24px;
+        }
+
+        .content ul {
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        .content li {
+            margin-bottom: 12px;
+        }
+
+        .content li > ol,
+        .content li > ul {
+            margin-top: 12px;
+        }
+
+        .content strong {
+            font-weight: 600;
+        }
+
+        .content a {
+            color: #000000;
+            text-decoration: underline;
+            transition: opacity 0.2s;
+        }
+
+        .content a:hover {
+            opacity: 0.6;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .content {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="blog.html" class="back-link">← BACK TO BLOG</a>
+        <h1>What's under the hood of LLMs?</h1>
+        <div class="blog-date">January 2024</div>
+        <div class="content">
+            <p>The LLM stack has 4 layers:</p>
+
+            <ol>
+                <li><strong>Data layer</strong>
+                    <ol>
+                        <li>RAG (retrieval-augmented generation) allows LLMs to make predictions based on a corpus of input data, increasing contextual awareness and eliminating hallucination
+                            <ol>
+                                <li>ELT & featurization
+                                    <ol>
+                                        <li>Feature data to increase search and retrieval effectiveness. A prevalent way to do so is by breaking the data into chunks and transform them into vectors to do semantic search.</li>
+                                        <li>Companies working in this area include: Superlinked, Unstructured, Waveline</li>
+                                    </ol>
+                                </li>
+                                <li>Storage
+                                    <ol>
+                                        <li>Vector databases that stores these vectors for semantic search</li>
+                                        <li>Companies working in this area include: Pinecone, Zilliz, Weaviate, Chroma, Featureform, LanceDB, pgvector</li>
+                                    </ol>
+                                </li>
+                                <li>Search & Retrieval
+                                    <ol>
+                                        <li>During inference, information must be retrieved and fed into the model at high speed. Some retrieval methods include:
+                                            <ul>
+                                                <li>Simplistic – vector similarity search on naive text embeddings</li>
+                                                <li>Complex – hand-crafted rules-based systems (e.g. Github Copilot, well described in this <a href="https://thakkarparth007.github.io/copilot-explorer/posts/copilot-internals.html" target="_blank">blog post</a>)</li>
+                                            </ul>
+                                        </li>
+                                        <li>Companies working in this area includes: Nomic, Aryn, Metal, Vald, MyScale</li>
+                                    </ol>
+                                </li>
+                            </ol>
+                        </li>
+                        <li>Companies working on end-to-end data layer include: LlamaIndex, Activeloop, Inkeep, Baseplate, Vespa</li>
+                    </ol>
+                </li>
+                <li><strong>Model layer</strong>
+                    <ol>
+                        <li>There are 2 future emerging paths:
+                            <ol>
+                                <li>Large foundation model dominates</li>
+                                <li>Fine-tuned models for each specific use case</li>
+                            </ol>
+                        </li>
+                        <li>There are 4 components in the model layer:
+                            <ol>
+                                <li>Core model
+                                    <ol>
+                                        <li>train the model from scratch ($100M spend on GPT-4) or fine-tune a pre-trained model</li>
+                                        <li>Companies working in this area include: Google, OpenAI, Anthropic, Adept, Imbue, Cohere, Hugging Face, Stability AI, Mistral, Contextual, DeepInfra</li>
+                                    </ol>
+                                </li>
+                                <li>Serving & Computing
+                                    <ol>
+                                        <li>Pricing
+                                            <ol>
+                                                <li>GPT 3.5 costs $0.01-0.03 per query vs. GPT 4 $3</li>
+                                                <li>Self-hosting is even more costly - Nvidia A100 cost $4-40 per hour to run on GLP</li>
+                                            </ol>
+                                        </li>
+                                        <li>Latency
+                                            <ol>
+                                                <li>batch queries, cache results, optimize memory to reduce fragmentation, speculative decoding</li>
+                                            </ol>
+                                        </li>
+                                        <li>Companies working in this area include: Modular, Lambda Labs, Union, Exafunction, Modal, HippoML, Banana, SkyPilot, Texel, Paperspace, Foundry, Goose</li>
+                                    </ol>
+                                </li>
+                                <li>Model routing/ abstraction
+                                    <ol>
+                                        <li>an abstraction layer that decides which model to fulfill the user request</li>
+                                        <li>Companies working in this area include: Martian, Lite LLM, NotDiamond</li>
+                                    </ol>
+                                </li>
+                                <li>Fine-tuning & Optimization
+                                    <ol>
+                                        <li>It is an evolving process with 2 components:
+                                            <ol>
+                                                <li>Data ops / curation: create good data quality through data modification or augmentation (with synthetic data)</li>
+                                                <li>Fine tuning ops: a process to orchestrate the fine-tuning process, through which model weights are updated</li>
+                                            </ol>
+                                        </li>
+                                        <li>Companies working in this area include: Manual labeling: Scale, Appen, Hive, Labelbox, Surge; Programmatic labeling: Snorkel, Watchful, Lilac; <strong>Fine-tuning ops/optimization</strong>: Arcee.ai, Lamini, Predibase, Together, Watchful, Superintel, Thirdai, GenJet, Glaive, LMFlow, Nolano</li>
+                                    </ol>
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+                <li><strong>Deployment layer</strong>
+                    <ol>
+                        <li>Security & Governance
+                            <ol>
+                                <li>at the data layer, the model can only access user-restricted data</li>
+                                <li>at the model layer, supervisor/firewall can try to identify and block things (but only with limited effectiveness)</li>
+                                <li>Companies working in this area include: Hiddenlayer, Lakera, Preamble, Vera, Credal, Fortify, Guardrail, Harmonic, Cadea, Laiyer</li>
+                            </ol>
+                        </li>
+                        <li>Observability & Evaluation
+                            <ol>
+                                <li>Monitor performance degradation, system outage, or security breaches</li>
+                                <li>Companies working in this area include: Arthur, Arize, Fiddler, Latticeflow, Ventrilo, Gentrace, Katanemo, Helicone, Langfuse, Uptrain, Honeyhive, Whylabs</li>
+                            </ol>
+                        </li>
+                        <li>Product analytics
+                            <ol>
+                                <li>analyze whether the model fulfilled the user request and user behaviors</li>
+                                <li>Companies working in this area include: Context.ai, Freeplay, Langfuse</li>
+                            </ol>
+                        </li>
+                        <li>Orchestration & LLMOps
+                            <ol>
+                                <li>Coordinate multi-step process (e.g., API calls, state mgmt)</li>
+                                <li>Companies working in this area include: OctoML, Weights_and_biases, Langchain, LlamaIndex, Comet, Replicate, MindsDB, Ikigailabs, MosaicML, Qwak, Outerbounds, Continual, Fixie, Griptape, Graft, Bentoml, Steamship, Vellum, Humanloop, Patterns, Mendable, Konko_AI, Stack, Dify, Nomos, Log10, Relevance AI, Klu, GradientJ, Pyqai, Autoblocks, Superintel, Pullflow, Vellum; <strong>No-code</strong>: Swai AI, Lastmile.ai, Retune, Respell; <strong>Enterprise/GUI-based</strong>: Glean, Yurts, Dust</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+                <li><strong>Interface layer</strong>
+                    <ol>
+                        <li>3rd party API interoperability
+                            <ol>
+                                <li>Companies working in this area include: Anon, Recall.ai, Bruinen, Induced AI, Reworkd</li>
+                            </ol>
+                        </li>
+                        <li>User interface - what's beyond chat?
+                            <ol>
+                                <li>Companies working in this area include: xPrompt, Inkeep</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>

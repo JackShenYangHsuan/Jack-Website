@@ -1,0 +1,5 @@
+# Exclude Vlog from calendar project
+Vlog from calendar/
+
+# macOS system files
+.DS_Store

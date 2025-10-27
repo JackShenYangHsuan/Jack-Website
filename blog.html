@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Jack Shen</title>
+    <title>Writings - Jack Shen</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -68,6 +68,60 @@
             margin-bottom: 24px;
         }
 
+        .blog-post {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #EEEEEE;
+        }
+
+        .blog-post:last-child {
+            border-bottom: none;
+        }
+
+        .blog-post a {
+            text-decoration: none;
+            color: #000000;
+        }
+
+        .blog-post h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            line-height: 1.4;
+            transition: opacity 0.2s;
+        }
+
+        .blog-post a:hover h2 {
+            opacity: 0.6;
+        }
+
+        .blog-date {
+            font-size: 13px;
+            color: #666666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0;
+        }
+
+        .blog-excerpt {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #666666;
+        }
+
+        .read-more {
+            display: inline-block;
+            margin-top: 16px;
+            color: #000000;
+            font-size: 16px;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .blog-post a:hover .read-more {
+            opacity: 0.6;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 36px;
@@ -76,15 +130,102 @@
             .content {
                 font-size: 16px;
             }
+
+            .blog-post h2 {
+                font-size: 18px;
+            }
+
+            .blog-date {
+                font-size: 12px;
+            }
+
+            .blog-excerpt {
+                font-size: 16px;
+            }
+
+            .read-more {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <a href="index.html" class="back-link">← BACK</a>
-        <h1>Blog</h1>
+        <h1>Writings</h1>
         <div class="content">
-            <p>Coming soon...</p>
+            <article class="blog-post">
+                <a href="blog-leaving-mckinsey.html">
+                    <h2>Leaving McKinsey</h2>
+                    <div class="blog-date">April 2025</div>
+                </a>
+            </article>
+            <article class="blog-post">
+                <a href="blog-goals.html">
+                    <h2>Goals in life</h2>
+                    <div class="blog-date">March 2025</div>
+                </a>
+            </article>
+            <article class="blog-post">
+                <a href="blog-mental-models.html">
+                    <h2>Mental models</h2>
+                    <div class="blog-date">January 2025</div>
+                </a>
+            </article>
+            <article class="blog-post">
+                <a href="blog-english.html">
+                    <h2>Now is the time to master English</h2>
+                    <div class="blog-date">October 2024</div>
+                </a>
+            </article>
+            <article class="blog-post">
+                <a href="blog-fulfillment.html">
+                    <h2>How to find fulfillment</h2>
+                    <div class="blog-date">September 2024</div>
+                </a>
+            </article>
+            <article class="blog-post">
+                <a href="blog-writing.html">
+                    <h2>Why write when you can just think?</h2>
+                    <div class="blog-date">May 2024</div>
+                </a>
+            </article>
+            <article class="blog-post">
+                <a href="blog-fermi-paradox.html">
+                    <h2>Learning Kardashev Scale, Fermi Paradox, and ASI</h2>
+                    <div class="blog-date">May 2024</div>
+                </a>
+            </article>
+            <article class="blog-post">
+                <a href="blog-charlies-almanack.html">
+                    <h2>Notes from reading Charlie's Almanack</h2>
+                    <div class="blog-date">February 2024</div>
+                </a>
+            </article>
+            <article class="blog-post">
+                <a href="blog-llm-stack.html">
+                    <h2>What's under the hood of LLMs?</h2>
+                    <div class="blog-date">January 2024</div>
+                </a>
+            </article>
+            <article class="blog-post">
+                <a href="blog-marriage.html">
+                    <h2>How I decided to get married at 26</h2>
+                    <div class="blog-date">December 2023</div>
+                </a>
+            </article>
+            <article class="blog-post">
+                <a href="blog-wisdom-intelligence.html">
+                    <h2>Wisdom vs. Intelligence</h2>
+                    <div class="blog-date">November 2023</div>
+                </a>
+            </article>
+            <article class="blog-post">
+                <a href="blog-people-first.html">
+                    <h2>People comes first</h2>
+                    <div class="blog-date">June 2022</div>
+                </a>
+            </article>
         </div>
     </div>
 </body>
