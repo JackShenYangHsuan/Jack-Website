@@ -3,6 +3,16 @@ import { generatePixarScript } from "@/lib/openai";
 import { CHARACTERS } from "@/lib/characters";
 import { getUserSettings } from "@/lib/firebase";
 import { NextResponse } from "next/server";
+import type { Session } from "next-auth";
+
+function getUserIdFromSession(session: Awaited<ReturnType<typeof auth>>): string | null {
+  const typedSession = session as (Session & { user?: (Session["user"] & { id?: string; sub?: string }) | null | undefined }) | null;
+  const user = typedSession?.user;
+  if (!user) {
+    return null;
+  }
+  return user.email || user.id || user.sub || null;
+}
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -28,8 +38,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid character" }, { status: 400 });
     }
 
-    const userName = session.user.name || "User";
-    const userId = session.user.email || (session.user as any)?.id || null;
+    const typedSession = session as Session | null;
+    const userName = typedSession?.user?.name || "User";
+    const userId = getUserIdFromSession(session);
 
     if (!userId) {
       return NextResponse.json({ error: "Unable to determine user" }, { status: 400 });

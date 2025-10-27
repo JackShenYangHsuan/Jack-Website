@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { Session } from "next-auth";
 import { auth } from "@/auth";
 import {
   deleteUserOpenAIApiKey,
@@ -6,8 +7,15 @@ import {
   upsertUserSettings,
 } from "@/lib/firebase";
 
+type SessionUser = (Session["user"] & { id?: string; sub?: string }) | null | undefined;
+
 function getUserIdFromSession(session: Awaited<ReturnType<typeof auth>>) {
-  return session?.user?.email || (session?.user as any)?.id || null;
+  const typedSession = session as (Session & { user?: SessionUser }) | null;
+  const user = typedSession?.user;
+  if (!user) {
+    return null;
+  }
+  return user.email || user.id || user.sub || null;
 }
 
 export async function GET() {

@@ -1,6 +1,16 @@
 import { auth } from "@/auth";
 import { getStoriesByUser } from "@/lib/firebase";
 import { NextResponse } from "next/server";
+import type { Session } from "next-auth";
+
+function getUserIdFromSession(session: Awaited<ReturnType<typeof auth>>): string | null {
+  const typedSession = session as (Session & { user?: (Session["user"] & { id?: string; sub?: string }) | null | undefined }) | null;
+  const user = typedSession?.user;
+  if (!user) {
+    return null;
+  }
+  return user.email || user.id || user.sub || null;
+}
 
 export async function GET() {
   const session = await auth();
@@ -10,7 +20,10 @@ export async function GET() {
   }
 
   try {
-    const userId = session.user.email || session.user.id || "";
+    const userId = getUserIdFromSession(session);
+    if (!userId) {
+      return NextResponse.json({ error: "Unable to determine user" }, { status: 400 });
+    }
     const stories = await getStoriesByUser(userId);
 
     return NextResponse.json({ stories });

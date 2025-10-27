@@ -14,6 +14,18 @@ import {
   checkSoraJob,
 } from "@/lib/sora";
 import { downloadAndStoreVideo } from "@/lib/videoStorage";
+import type { Session } from "next-auth";
+
+type SessionUser = (Session["user"] & { id?: string; sub?: string }) | null | undefined;
+
+function getUserIdFromSession(session: Awaited<ReturnType<typeof auth>>) {
+  const typedSession = session as (Session & { user?: SessionUser }) | null;
+  const user = typedSession?.user;
+  if (!user) {
+    return null;
+  }
+  return user.email || user.id || user.sub || null;
+}
 
 async function ensureStoryAccess(
   storyId: string,
@@ -69,7 +81,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const userId = session.user.email || (session.user as any)?.id || "";
+    const userId = getUserIdFromSession(session);
 
     if (!userId) {
       return NextResponse.json({ error: "Unable to determine user" }, { status: 400 });
@@ -168,7 +180,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const userId = session.user.email || (session.user as any)?.id || "";
+    const userId = getUserIdFromSession(session);
 
     if (!userId) {
       return NextResponse.json({ error: "Unable to determine user" }, { status: 400 });
