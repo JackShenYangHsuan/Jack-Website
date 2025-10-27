@@ -18,7 +18,7 @@ export default async function Home() {
             <OpenAIApiKeyButton />
             {session ? (
               <>
-                <span className="text-sm text-gray-600">{session.user.name}</span>
+                <span className="text-sm text-gray-600">{session.user?.name}</span>
                 <a
                   href="/dashboard"
                   className="px-5 py-2 bg-gray-900 text-white rounded-full text-sm font-medium hover:bg-gray-800 transition-all"

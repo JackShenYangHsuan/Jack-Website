@@ -29,7 +29,7 @@ export default async function DashboardPage() {
           </a>
           <div className="flex items-center gap-3">
             <OpenAIApiKeyButton />
-            <span className="text-sm text-gray-600">{session.user.name}</span>
+            <span className="text-sm text-gray-600">{session.user?.name}</span>
             <form
               action={async () => {
                 "use server";
@@ -52,7 +52,7 @@ export default async function DashboardPage() {
         {/* Welcome Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {session.user.name?.split(' ')[0]}
+            Welcome back, {session.user?.name?.split(' ')[0]}
           </h1>
           <p className="text-sm text-gray-600">Transform your calendar into cinematic stories</p>
         </div>
