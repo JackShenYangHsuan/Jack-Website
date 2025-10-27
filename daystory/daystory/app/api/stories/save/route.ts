@@ -3,12 +3,11 @@ import { saveStory } from "@/lib/firebase";
 import { NextResponse } from "next/server";
 import type { Session } from "next-auth";
 
-function getUserIdFromSession(session: Awaited<ReturnType<typeof auth>>): { id: string; name: string } | null {
-  const typedSession = session as (Session & { user?: (Session["user"] & { id?: string; sub?: string }) | null | undefined }) | null;
-  const user = typedSession?.user;
-  if (!user) {
+function getUserIdFromSession(session: any): { id: string; name: string } | null {
+  if (!session?.user) {
     return null;
   }
+  const user = session.user;
   const id = user.email || user.id || user.sub;
   if (!id) {
     return null;

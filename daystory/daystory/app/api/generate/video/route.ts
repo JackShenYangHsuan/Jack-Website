@@ -16,14 +16,11 @@ import {
 import { downloadAndStoreVideo } from "@/lib/videoStorage";
 import type { Session } from "next-auth";
 
-type SessionUser = (Session["user"] & { id?: string; sub?: string }) | null | undefined;
-
-function getUserIdFromSession(session: Awaited<ReturnType<typeof auth>>) {
-  const typedSession = session as (Session & { user?: SessionUser }) | null;
-  const user = typedSession?.user;
-  if (!user) {
+function getUserIdFromSession(session: any): string | null {
+  if (!session?.user) {
     return null;
   }
+  const user = session.user;
   return user.email || user.id || user.sub || null;
 }
 
