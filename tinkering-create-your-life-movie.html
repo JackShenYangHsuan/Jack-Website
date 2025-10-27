@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Life Movie (Pixar Style) - Tinkering with AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            color-scheme: light;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #0f172a;
+            line-height: 1.7;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .top-nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 32px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            color: #111827;
+        }
+
+        .brand span {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #0c9a64 100%);
+        }
+
+        .top-links {
+            display: flex;
+            gap: 24px;
+            font-size: 14px;
+        }
+
+        .top-link {
+            color: #64748b;
+            text-decoration: none;
+            padding-bottom: 4px;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .top-link:hover {
+            color: #111827;
+        }
+
+        .top-link.active {
+            color: #111827;
+            border-color: #0c9a64;
+            font-weight: 500;
+        }
+
+        .doc-layout {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 260px minmax(0, 1fr);
+            gap: 48px;
+            padding: 32px 32px 120px;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 92px;
+            align-self: start;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+            padding-right: 16px;
+            border-right: 1px solid #e2e8f0;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.4);
+            border-radius: 999px;
+        }
+
+        .sidebar-heading {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #94a3b8;
+            margin-bottom: 12px;
+        }
+
+        .sidebar-search {
+            position: relative;
+            margin-bottom: 28px;
+        }
+
+        .sidebar-search input {
+            width: 100%;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 12px 10px 36px;
+            font-size: 13px;
+            color: #0f172a;
+            background: #f8fafc;
+        }
+
+        .sidebar-search svg {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            stroke: #94a3b8;
+        }
+
+        .nav-group {
+            margin-bottom: 32px;
+        }
+
+        .sidebar-link {
+            display: block;
+            text-decoration: none;
+            color: #334155;
+            font-size: 14px;
+            padding: 8px 0 8px 14px;
+            border-left: 2px solid transparent;
+            border-radius: 0 10px 10px 0;
+            transition: color 0.2s, border-color 0.2s, background 0.2s;
+        }
+
+        .sidebar-link:hover {
+            color: #0f172a;
+        }
+
+        .sidebar-link.active {
+            color: #0f172a;
+            font-weight: 600;
+            border-color: #0c9a64;
+            background: #ecfdf5;
+        }
+
+        .article {
+            max-width: 740px;
+        }
+
+        .article h1 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            color: #111827;
+        }
+
+        .article > p {
+            font-size: 18px;
+            color: #334155;
+            margin-bottom: 32px;
+        }
+
+        section {
+            margin-bottom: 56px;
+            scroll-margin-top: 100px;
+        }
+
+        section:last-of-type {
+            margin-bottom: 0;
+        }
+
+        section h2 {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #0f172a;
+        }
+
+        section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 28px 0 12px;
+            color: #111827;
+        }
+
+        p {
+            margin-bottom: 18px;
+            color: #334155;
+        }
+
+        ul, ol {
+            margin: 0 0 24px 24px;
+            color: #334155;
+        }
+
+        li {
+            margin-bottom: 12px;
+        }
+
+        code {
+            font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .scene-library {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .scene-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px 24px;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+        }
+
+        .scene-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #111827;
+        }
+
+        .scene-label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .scene-card p {
+            margin-bottom: 16px;
+        }
+
+        .scene-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 1024px) {
+            .top-nav-inner,
+            .doc-layout {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+        }
+
+        @media (max-width: 960px) {
+            .doc-layout {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .sidebar {
+                position: static;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+                padding-bottom: 20px;
+                margin-bottom: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="top-nav">
+        <div class="top-nav-inner">
+            <a class="top-link active" href="tinkering.html" style="border-bottom: none; font-weight: 500;">&larr; Back</a>
+        </div>
+    </header>
+
+    <div class="doc-layout">
+        <aside class="sidebar">
+            <div class="nav-group">
+                <div class="sidebar-heading">Guide</div>
+                <a class="sidebar-link" href="#overview">Overview</a>
+                <a class="sidebar-link" href="#workflow">How it works</a>
+            </div>
+
+            <div class="nav-group">
+                <div class="sidebar-heading">Examples</div>
+                <a class="sidebar-link" href="#sample-output">Sample output</a>
+                <a class="sidebar-link" href="#prompt-example">Sample prompts</a>
+            </div>
+        </aside>
+
+        <article class="article">
+            <section id="overview">
+            <h1>Create your life movie, Pixar style</h1>
+            <p>A simple guide to turn your life story into a Pixar-style animated video using GPT-5, Sora, and CapCut.</p>
+
+            <div>
+                <h2>Overview</h2>
+                <p>Break your life story into short scenes, turn each into a 15-second Pixar-style video clip, then combine them into one video.</p>
+                <h3>What you need</h3>
+                <ul>
+                    <li>GPT-5 (for writing scene prompts)</li>
+                    <li>Sora (for creating the video clips)</li>
+                    <li>CapCut (for editing and adding captions)</li>
+                </ul>
+            </div>
+            </section>
+
+            <section id="workflow">
+                <h2>How it works</h2>
+                <h3>Step 1: Write scene prompts (GPT-5)</h3>
+                <p>Break your story into scenes. For each scene, ask GPT-5 to write a video prompt and a narration prompt. Keep character details consistent across scenes.</p>
+
+                <h3>Step 2: Create video clips (Sora)</h3>
+                <ul>
+                    <li>Create a project in Sora and add all your scene prompts</li>
+                    <li>Use landscape format (16:9), 15 seconds, Pixar style, medium motion</li>
+                    <li>Redo any clips that don't look right</li>
+                </ul>
+
+                <h3>Step 3: Edit the video (CapCut)</h3>
+                <ul>
+                    <li>Import all clips and trim them</li>
+                    <li>Add auto-captions and fix any mistakes</li>
+                    <li>Add transitions and export</li>
+                </ul>
+            </section>
+
+            <section id="sample-output">
+                <h2>Sample output</h2>
+                <p>Here's an example video created using this process.</p>
+                <video controls style="width: 100%; max-width: 740px; border-radius: 12px; margin-top: 20px;">
+                    <source src="Jacks Story Pixar Style.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </section>
+
+            <section id="prompt-example">
+                <h2>Example prompts</h2>
+                <p>Here are sample prompts you can use as a starting point. Each scene has a video prompt and a narration prompt.</p>
+
+                <div class="scene-library">
+                    <div class="scene-card">
+                        <h3>Scene 1 - The Summer Factory</h3>
+                        <div class="scene-label">Video prompt</div>
+                        <p>Vibrant Pixar-style animation. Twelve-year-old Taiwanese boy named Jack in his father's small women's-shoe factory. The air shimmers at 35 degrees Celsius. Fans spin lazily, sewing machines clatter, dust floats in golden sunlight. Workers chat softly in Mandarin. Jack wipes sweat, carries shoe boxes, and hides an envelope labeled MacBook Fund. Camera slowly pans from steaming street to Jack's proud smile. Warm orange palette, subtle motion blur, ambient sound of leather and metal.</p>
+                        <div class="scene-label">Narration</div>
+                        <p>Deep, smooth baritone voice with gentle warmth-confident, intimate, like a movie trailer or luxury brand narrator. Speak slowly, with slight pauses that let emotion breathe: "Jack grew up in the thick heat of a small shoe factory in Taiwan. At twelve, he stacked boxes taller than himself as the scent of leather and glue filled the air and the old fans spun slow circles above his head. Every coin he earned for his father's shop went into his MacBook fund."</p>
+                    </div>
+
+                    <div class="scene-card">
+                        <h3>Scene 2 - The Spark of Code</h3>
+                        <div class="scene-label">Video prompt</div>
+                        <p>Vibrant Pixar-style animation. Jack's dim bedroom. Neon light leaks from Taipei streets through curtains. A silver laptop glows on the desk, reflecting in his eyes. Posters of white male founder heroes and circuit diagrams cover the wall. Jack types code as rain taps the window. Inspirational speeches flicker on screen. Camera circles slowly around him, showing energy and solitude. Cool blue and amber lighting, cinematic lens flare.</p>
+                        <div class="scene-label">Narration</div>
+                        <p>Same narrator style as Scene 1: "That laptop changed everything. Nights in Taipei turned into tiny silicon valleys in his room. He watched his heroes speak, learned English by rewinding every sentence, and filled notebooks with lines of code. He dreamt of building something with code that could impact millions."</p>
+                    </div>
+
+                    <div class="scene-card">
+                        <h3>Scene 3 - Dream School</h3>
+                        <div class="scene-label">Video prompt</div>
+                        <p>Vibrant Pixar-style animation. Morning at National Tsing Hua University. Cherry blossoms drift through sunbeams. Students ride bikes past futuristic glass halls. Jack, in a hoodie and backpack, walks under the stone arch smiling. Cut to him in a bright computer lab, screens reflecting lines of code. Camera cranes up showing the whole campus framed by mountains. Lively orchestral music, soft pastel colors.</p>
+                        <div class="scene-label">Narration</div>
+                        <p>Deep baritone narration: "Years later, Jack's dream came true. He studied computer science at National Tsing Hua University. Between late-night debugging, he found joy in creation itself-discovering that code was not just logic, it was a language for imagination."</p>
+                    </div>
+
+                    <div class="scene-card">
+                        <h3>Scene 4 - The Leap of Faith</h3>
+                        <div class="scene-label">Video prompt</div>
+                        <p>Vibrant Pixar-style animation. Cozy Taipei cafe with wooden walls, sunlight through windows. Jack and a close friend pitch to two investors. Laptops open, mock-ups displayed. One investor nods, smiles, and slides a check across the table. The boys cheer quietly. Coffee steam rises, scooters pass outside. Camera glides around them, golden afternoon light fills the room. Background chatter, upbeat string score.</p>
+                        <div class="scene-label">Narration</div>
+                        <p>Deep baritone narration: "After his first year of college, Jack made a wild decision-to pause school and build his own company. In a tiny cafe, he pitched to investors and secured fifty thousand dollars. It became his first real vote of confidence, and he started building with his co-founder, Frank."</p>
+                    </div>
+
+                    <div class="scene-card">
+                        <h3>Scene 5 - The App That Traveled</h3>
+                        <div class="scene-label">Video prompt</div>
+                        <p>Vibrant Pixar-style travel montage: Jack backpacking alone across Europe-Eiffel Tower, Swiss Alps, Italian piazzas. He struggles to take self-portraits by strangers, then sketches an app on a napkin. Transition to him coding in hostels, interface coming alive on his phone. The app is named "Frismo". App Store ranking climbs to top three, confetti animation bursts, Apple feature banner flashes. Warm global palette, dynamic transitions.</p>
+                        <div class="scene-label">Narration</div>
+                        <p>Deep baritone narration: "His startup idea came from the frustration of blurry selfies and kind strangers cutting off his head in photos while he backpacked through Europe. So he built a camera app that saw what he saw. It went viral-ranked third on the App Store with half a million downloads."</p>
+                    </div>
+
+                    <div class="scene-card">
+                        <h3>Scene 6 - When Dreams Stall</h3>
+                        <div class="scene-label">Video prompt</div>
+                        <p>Vibrant Pixar-style animation. Nighttime in Taipei. Jack sits alone at his desk, eyes on analytics graphs falling flat. Coffee cups pile up. Outside, rain streaks the window, city lights blur. A single small plant on the desk sways under the fan. Camera zooms out slowly until Jack is a tiny figure surrounded by blue glow. Somber piano and rain sounds.</p>
+                        <div class="scene-label">Narration</div>
+                        <p>Deep baritone narration: "But downloads did not mean dollars. The charts that once climbed now refused to move. He tried subscriptions, ads, partnerships-nothing stuck. Yet somewhere behind that tired face was a quiet voice whispering: this, too, is part of the story."</p>
+                    </div>
+
+                    <div class="scene-card">
+                        <h3>Scene 7 - The McKinsey Chapter</h3>
+                        <div class="scene-label">Video prompt</div>
+                        <p>Vibrant Pixar-style animation. Sleek office montage. Jack, now older in a suit, enters McKinsey inside Taipei 101. Cut to planes taking off, skyscrapers of Shanghai, Munich, and New York. Scenes of him guiding factory workers, presenting dashboards, shaking hands with clients. Cool blue-silver palette, crisp motion transitions, inspiring orchestral rhythm.</p>
+                        <div class="scene-label">Narration</div>
+                        <p>Deep baritone narration: "To understand how great businesses survive, Jack joined McKinsey-a place where questions mattered more than answers. From Taipei's factories to Germany's plants to boardrooms in New York, he learned that business was not just numbers-it was about people."</p>
+                    </div>
+
+                    <div class="scene-card">
+                        <h3>Scene 8 - The Growth Within</h3>
+                        <div class="scene-label">Video prompt</div>
+                        <p>Vibrant Pixar-style animation. Warm golden office lighting. Jack leads a presentation; mentors nod approvingly. Late-night collaboration scenes, sticky notes, global video calls. Camera pans around the table showing teamwork and laughter. Sunset shines through blinds. Tone: mature, grateful, cinematic.</p>
+                        <div class="scene-label">Narration</div>
+                        <p>Deep baritone narration: "Four years passed. Jack carried laptops across airports, notebooks filled with frameworks, and stories of leaders who never gave up. Mentors taught him to think from first principles, to stay calm when plans fell apart, and to act with integrity when no one was watching. Those lessons became part of his spine."</p>
+                    </div>
+
+                    <div class="scene-card">
+                        <h3>Scene 9 - The West Coast Dream</h3>
+                        <div class="scene-label">Video prompt</div>
+                        <p>Vibrant Pixar-style animation. Sunset over the Golden Gate Bridge. Jack and his wife walk hand-in-hand with luggage in San Francisco airport, wind brushing their faces. Cut to their cozy apartment-boxes everywhere, two coffee mugs by a big window overlooking the skyline. Camera pans slowly from the city to their smiling faces. Warm golden tones, soft romantic score.</p>
+                        <div class="scene-label">Narration</div>
+                        <p>Deep baritone narration: "Together, Jack and his wife crossed the Pacific to begin again in San Francisco. Two suitcases, one dream. Deep down, Jack still wanted to build-and he wanted to build with the best and brightest in the world."</p>
+                    </div>
+
+                    <div class="scene-card">
+                        <h3>Scene 10 - The Builder's Heart</h3>
+                        <div class="scene-label">Video prompt</div>
+                        <p>Vibrant Pixar-style animation. Morning at UC Berkeley campus. Students walk under eucalyptus trees. Jack in class, sunlight flickering through blinds. Quick cuts: whiteboarding AI flowcharts with founders at a cafe, coding prototypes glowing with holographic overlays, city skyline at night. Final shot: Jack gazes out the window, reflection of the Bay in his glasses. Blue-gold color grade, crescendoing orchestral finale.</p>
+                        <div class="scene-label">Narration</div>
+                        <p>Deep baritone narration: "Now, Jack spends his days at Berkeley and his nights tinkering with AI. He talks to founders and rediscovers the joy of building something people want."</p>
+                    </div>
+                </div>
+            </section>
+        </article>
+    </div>
+
+    <script>
+        const navLinks = Array.from(document.querySelectorAll('.sidebar-link'));
+        const sections = navLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+
+        if (navLinks.length && sections.length) {
+            navLinks[0].classList.add('active');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    }
+                    const index = sections.indexOf(entry.target);
+                    if (index === -1) {
+                        return;
+                    }
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    navLinks[index].classList.add('active');
+                });
+            }, {
+                rootMargin: '-50% 0px -50% 0px',
+                threshold: 0
+            });
+
+            sections.forEach(section => observer.observe(section));
+        }
+    </script>
+</body>
+</html>

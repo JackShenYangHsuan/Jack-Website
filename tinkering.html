@@ -33,7 +33,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
@@ -51,40 +51,134 @@
             opacity: 0.6;
         }
 
-        h1 {
-            font-size: 48px;
+        .page-title {
+            font-size: 46px;
             font-weight: 600;
-            margin-bottom: 40px;
-            line-height: 1.2;
+            margin-bottom: 16px;
+            line-height: 1.1;
         }
 
-        .content {
+        .page-subtitle {
             font-size: 18px;
-            line-height: 1.8;
-            color: #000000;
+            color: #333333;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            max-width: 640px;
         }
 
-        .content p {
-            margin-bottom: 24px;
+        .articles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 28px;
+        }
+
+        .article-card {
+            position: relative;
+            padding: 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.7) 100%);
+            box-shadow:
+                0 18px 40px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .article-card:hover {
+            transform: translateY(-6px);
+            box-shadow:
+                0 25px 50px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        }
+
+        .article-card .tools {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .article-card .tool-icon {
+            height: 28px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .article-card .tool-icon img {
+            height: 20px;
+            width: auto;
+            object-fit: contain;
+            margin-right: 6px;
+        }
+
+        .article-card .difficulty-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: #10b981;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .article-card h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .article-card p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #333333;
+            margin: 0;
         }
 
         @media (max-width: 768px) {
-            h1 {
-                font-size: 36px;
+            .page-title {
+                font-size: 38px;
             }
 
-            .content {
+            .page-subtitle {
                 font-size: 16px;
             }
+
+            .article-card {
+                padding: 24px;
+            }
         }
+
     </style>
 </head>
 <body>
     <div class="container">
         <a href="index.html" class="back-link">← BACK</a>
-        <h1>Tinkering with AI</h1>
-        <div class="content">
-            <p>Content coming soon...</p>
+        <h1 class="page-title">Tinkering with AI</h1>
+        <p class="page-subtitle">Experiments, build logs, and field notes from pushing applied AI into real projects. Dive into the walkthroughs below for step-by-step playbooks.</p>
+
+        <div class="articles">
+            <a class="article-card" href="tinkering-create-your-life-movie.html">
+                <span class="difficulty-badge">Beginner</span>
+                <div class="tools">
+                    <span class="tool-icon"><img src="OpenAI Logo.svg" alt="OpenAI"> GPT-5</span>
+                    <span class="tool-icon"><img src="sora icon.png" alt="Sora"> Sora</span>
+                    <span class="tool-icon"><img src="CapCut Logo.jpg" alt="CapCut"> CapCut</span>
+                </div>
+                <h2>Create your life movie, Pixar style</h2>
+                <p>Turn your life story into a Pixar-inspired short film using GPT-5, Sora, and CapCut.</p>
+            </a>
         </div>
     </div>
 </body>
