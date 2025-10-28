@@ -54,24 +54,18 @@ export default async function Home() {
             {session ? (
               <a
                 href="/dashboard"
-                className="px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all text-base"
+                className="px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all text-base cursor-pointer"
               >
                 Go to Dashboard
               </a>
             ) : (
               <a
                 href="/auth/signin"
-                className="px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all text-base"
+                className="px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all text-base cursor-pointer"
               >
                 Get Started
               </a>
             )}
-            <a
-              href="/demo"
-              className="px-6 py-3 bg-white text-gray-900 border border-gray-200 rounded-full font-semibold hover:border-gray-300 hover:shadow-md transition-all text-base"
-            >
-              Try Demo
-            </a>
           </div>
         </div>
 
@@ -112,44 +106,6 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* Features Grid */}
-        <div className="mt-16 max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">Features You'll Love</h2>
-
-          <div className="grid md:grid-cols-2 gap-5">
-            <div className="flex items-start gap-3 p-5 bg-gray-50 rounded-2xl">
-              <span className="text-xl">✨</span>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-1 text-sm">AI-Powered Storytelling</h4>
-                <p className="text-gray-600 text-xs">GPT-4o crafts personalized narratives from your calendar events</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3 p-5 bg-gray-50 rounded-2xl">
-              <span className="text-xl">🎨</span>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-1 text-sm">Pixar-Style Characters</h4>
-                <p className="text-gray-600 text-xs">Five unique character archetypes inspired by beloved Pixar films</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3 p-5 bg-gray-50 rounded-2xl">
-              <span className="text-xl">🎥</span>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-1 text-sm">Cinematic Videos</h4>
-                <p className="text-gray-600 text-xs">OpenAI Sora generates beautiful, movie-quality video vlogs</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3 p-5 bg-gray-50 rounded-2xl">
-              <span className="text-xl">💾</span>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-1 text-sm">Download & Share</h4>
-                <p className="text-gray-600 text-xs">Save your stories and share them with friends and family</p>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Final CTA */}
         <div className="mt-16 text-center bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-12">
@@ -162,7 +118,7 @@ export default async function Home() {
           {!session && (
             <a
               href="/auth/signin"
-              className="inline-block px-7 py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-full font-semibold hover:shadow-xl hover:scale-105 transition-all text-base"
+              className="inline-block px-7 py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-full font-semibold hover:shadow-xl hover:scale-105 transition-all text-base cursor-pointer"
             >
               Sign in with Google
             </a>
