@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fine-Tune & Chat Interface</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Settings Section -->
+        <section id="settings-section" class="section">
+            <h1>Settings</h1>
+            <p class="subtitle">Stored locally in your browser (localStorage)</p>
+            <div class="scripts-container">
+                <div class="script-input">
+                    <label for="backend-base">Backend Base URL</label>
+                    <input id="backend-base" type="text" placeholder="http://localhost:8000/api" />
+                </div>
+                <div class="script-input">
+                    <label for="tinker-tune">Tinker Tune Endpoint (optional)</label>
+                    <input id="tinker-tune" type="text" placeholder="https://.../tune" />
+                </div>
+                <div class="script-input">
+                    <label for="tinker-chat">Tinker Chat Endpoint (optional)</label>
+                    <input id="tinker-chat" type="text" placeholder="https://.../chat" />
+                </div>
+                <div class="script-input">
+                    <label for="tinker-key">Tinker API Key (optional)</label>
+                    <input id="tinker-key" type="password" placeholder="Paste API key" />
+                </div>
+            </div>
+            <button id="save-settings-btn" class="primary-btn">Save Settings</button>
+            <button id="back-to-tune-btn" class="secondary-btn">← Back to Fine-Tune</button>
+        </section>
+
+        <!-- Fine-Tuning Section -->
+        <section id="fine-tune-section" class="section active">
+            <div class="chat-header">
+                <h1>Fine-Tune Your Model</h1>
+                <button id="settings-btn" class="secondary-btn">⚙️ Settings</button>
+            </div>
+            <p class="subtitle">Paste your training data in JSONL format (one JSON object per line)</p>
+            
+            <div class="scripts-container">
+                <div class="script-input">
+                    <label for="training-jsonl">Training Data (JSONL)</label>
+                    <textarea id="training-jsonl" placeholder='Example (each line is a JSON object):\n{"prompt":"...","completion":"..."}\n{"prompt":"...","completion":"..."}' rows="10"></textarea>
+                </div>
+            </div>
+            
+            <button id="fine-tune-btn" class="primary-btn">Fine Tune</button>
+            <div id="status-message" class="status-message"></div>
+        </section>
+
+        <!-- Chat Section -->
+        <section id="chat-section" class="section">
+            <div class="chat-header">
+                <h1>Chat with Fine-Tuned Model</h1>
+                <div>
+                    <button id="settings-from-chat-btn" class="secondary-btn">⚙️ Settings</button>
+                    <button id="back-btn" class="secondary-btn">← Back to Fine-Tune</button>
+                </div>
+            </div>
+            
+            <div id="chat-container" class="chat-container">
+                <div id="chat-messages" class="chat-messages">
+                    <div class="message bot-message">
+                        <div class="message-content">
+                            Hello! I'm your fine-tuned AI assistant. How can I help you today?
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input-container">
+                <textarea id="user-input" placeholder="Type your message..." rows="2"></textarea>
+                <button id="send-btn" class="primary-btn">Send</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+      // Optional: configure Tinker via URL params to avoid hardcoding secrets
+      // ?tinkerTune=https://YOUR_TUNE_ENDPOINT&tinkerChat=https://YOUR_CHAT_ENDPOINT&tinkerKey={{TINKER_API_KEY}}
+      (function(){
+        const p = new URLSearchParams(window.location.search);
+        if (p.get('tinkerTune')) window.TINKER_TUNE_ENDPOINT = p.get('tinkerTune');
+        if (p.get('tinkerChat')) window.TINKER_CHAT_ENDPOINT = p.get('tinkerChat');
+        if (p.get('tinkerKey')) window.TINKER_API_KEY = p.get('tinkerKey');
+      })();
+      // Or set directly (for local testing only):
+      // window.TINKER_TUNE_ENDPOINT = 'https://YOUR_TUNE_ENDPOINT';
+      // window.TINKER_CHAT_ENDPOINT = 'https://YOUR_CHAT_ENDPOINT';
+      // window.TINKER_API_KEY = '{{TINKER_API_KEY}}';
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

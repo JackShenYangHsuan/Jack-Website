@@ -59,66 +59,37 @@
         }
 
         .content {
-            font-size: 18px;
-            line-height: 1.8;
+            font-size: 16px;
+            line-height: 1.6;
             color: #000000;
         }
 
-        .content p {
-            margin-bottom: 24px;
+        .content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
-        .blog-post {
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #EEEEEE;
+        .content li {
+            margin-bottom: 6px;
+            padding-left: 16px;
+            position: relative;
         }
 
-        .blog-post:last-child {
-            border-bottom: none;
+        .content li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #000000;
         }
 
-        .blog-post a {
+        .content a {
             text-decoration: none;
             color: #000000;
-        }
-
-        .blog-post h2 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 6px;
-            line-height: 1.4;
             transition: opacity 0.2s;
         }
 
-        .blog-post a:hover h2 {
-            opacity: 0.6;
-        }
-
-        .blog-date {
-            font-size: 13px;
-            color: #666666;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0;
-        }
-
-        .blog-excerpt {
-            font-size: 18px;
-            line-height: 1.8;
-            color: #666666;
-        }
-
-        .read-more {
-            display: inline-block;
-            margin-top: 16px;
-            color: #000000;
-            font-size: 16px;
-            font-weight: 500;
-            transition: opacity 0.2s;
-        }
-
-        .blog-post a:hover .read-more {
+        .content a:hover {
             opacity: 0.6;
         }
 
@@ -128,23 +99,7 @@
             }
 
             .content {
-                font-size: 16px;
-            }
-
-            .blog-post h2 {
-                font-size: 18px;
-            }
-
-            .blog-date {
-                font-size: 12px;
-            }
-
-            .blog-excerpt {
-                font-size: 16px;
-            }
-
-            .read-more {
-                font-size: 14px;
+                font-size: 15px;
             }
         }
     </style>
@@ -154,78 +109,20 @@
         <a href="index.html" class="back-link">← BACK</a>
         <h1>Writings</h1>
         <div class="content">
-            <article class="blog-post">
-                <a href="blog-leaving-mckinsey.html">
-                    <h2>Leaving McKinsey</h2>
-                    <div class="blog-date">April 2025</div>
-                </a>
-            </article>
-            <article class="blog-post">
-                <a href="blog-goals.html">
-                    <h2>Goals in life</h2>
-                    <div class="blog-date">March 2025</div>
-                </a>
-            </article>
-            <article class="blog-post">
-                <a href="blog-mental-models.html">
-                    <h2>Mental models</h2>
-                    <div class="blog-date">January 2025</div>
-                </a>
-            </article>
-            <article class="blog-post">
-                <a href="blog-english.html">
-                    <h2>Now is the time to master English</h2>
-                    <div class="blog-date">October 2024</div>
-                </a>
-            </article>
-            <article class="blog-post">
-                <a href="blog-fulfillment.html">
-                    <h2>How to find fulfillment</h2>
-                    <div class="blog-date">September 2024</div>
-                </a>
-            </article>
-            <article class="blog-post">
-                <a href="blog-writing.html">
-                    <h2>Why write when you can just think?</h2>
-                    <div class="blog-date">May 2024</div>
-                </a>
-            </article>
-            <article class="blog-post">
-                <a href="blog-fermi-paradox.html">
-                    <h2>Learning Kardashev Scale, Fermi Paradox, and ASI</h2>
-                    <div class="blog-date">May 2024</div>
-                </a>
-            </article>
-            <article class="blog-post">
-                <a href="blog-charlies-almanack.html">
-                    <h2>Notes from reading Charlie's Almanack</h2>
-                    <div class="blog-date">February 2024</div>
-                </a>
-            </article>
-            <article class="blog-post">
-                <a href="blog-llm-stack.html">
-                    <h2>What's under the hood of LLMs?</h2>
-                    <div class="blog-date">January 2024</div>
-                </a>
-            </article>
-            <article class="blog-post">
-                <a href="blog-marriage.html">
-                    <h2>How I decided to get married at 26</h2>
-                    <div class="blog-date">December 2023</div>
-                </a>
-            </article>
-            <article class="blog-post">
-                <a href="blog-wisdom-intelligence.html">
-                    <h2>Wisdom vs. Intelligence</h2>
-                    <div class="blog-date">November 2023</div>
-                </a>
-            </article>
-            <article class="blog-post">
-                <a href="blog-people-first.html">
-                    <h2>People comes first</h2>
-                    <div class="blog-date">June 2022</div>
-                </a>
-            </article>
+            <ul>
+                <li><a href="blog-goals.html">Goals in life</a></li>
+                <li><a href="blog-leaving-mckinsey.html">Leaving McKinsey</a></li>
+                <li><a href="blog-mental-models.html">Mental models</a></li>
+                <li><a href="blog-english.html">Now is the time to master English</a></li>
+                <li><a href="blog-fulfillment.html">How to find fulfillment</a></li>
+                <li><a href="blog-writing.html">Why write when you can just think?</a></li>
+                <li><a href="blog-fermi-paradox.html">Learning Kardashev Scale, Fermi Paradox, and ASI</a></li>
+                <li><a href="blog-charlies-almanack.html">Notes from reading Charlie's Almanack</a></li>
+                <li><a href="blog-llm-stack.html">What's under the hood of LLMs?</a></li>
+                <li><a href="blog-marriage.html">How I decided to get married at 26</a></li>
+                <li><a href="blog-wisdom-intelligence.html">Wisdom vs. Intelligence</a></li>
+                <li><a href="blog-people-first.html">People comes first</a></li>
+            </ul>
         </div>
     </div>
 </body>
