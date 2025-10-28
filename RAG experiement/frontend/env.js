@@ -1,3 +1,3 @@
 window.ENV = {
-  API_BASE: "http://localhost:8000/api"
+  API_BASE: "/api"
 };
