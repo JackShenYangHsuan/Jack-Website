@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Sequence
+from typing import Optional, Sequence
 from uuid import UUID
 
 from pinecone import Index, Pinecone
@@ -8,8 +8,8 @@ from pinecone import Index, Pinecone
 from ..config import get_settings
 
 _settings = get_settings()
-_pinecone_client: Pinecone | None = None
-_index: Index | None = None
+_pinecone_client: Optional[Pinecone] = None
+_index: Optional[Index] = None
 
 
 def get_index() -> Index:
@@ -35,7 +35,7 @@ def upsert_chunks(
 
     index = get_index()
     vectors = []
-    for idx, (chunk, embedding, page) in enumerate(zip(chunks, embeddings, pages, strict=True)):
+    for idx, (chunk, embedding, page) in enumerate(zip(chunks, embeddings, pages)):
         vector_id = f"{document_id}:{idx}"
         vectors.append(
             {

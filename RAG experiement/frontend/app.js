@@ -1,4 +1,5 @@
-const API_BASE = "http://localhost:8000/api";
+// Use environment variable or fallback to localhost for development
+const API_BASE = window.ENV?.API_BASE || "http://localhost:8000/api";
 const dropzone = document.getElementById("dropzone");
 const fileInput = document.getElementById("file-input");
 const browseBtn = document.getElementById("browse-btn");
@@ -14,6 +15,13 @@ const documentIds = new Set();
 function setUploadState(state, message) {
     uploadBtn.disabled = state !== "ready";
     uploadStatus.textContent = message;
+
+    // Add visual feedback
+    if (state === "ready") {
+        uploadStatus.style.color = "var(--color-primary)";
+    } else if (state === "uploading") {
+        uploadStatus.style.color = "var(--color-text-light)";
+    }
 }
 
 function addMessage(role, content, citations = []) {
@@ -32,9 +40,9 @@ function addMessage(role, content, citations = []) {
     if (citations.length > 0) {
         const list = document.createElement("ul");
         list.classList.add("citation-list");
-        citations.forEach((citation) => {
+        citations.forEach((citation, index) => {
             const item = document.createElement("li");
-            item.textContent = `Doc ${citation.document_id} · Page ${citation.page} (score: ${citation.score.toFixed(3)})`;
+            item.textContent = `Source ${index + 1}: Page ${citation.page} (relevance: ${(citation.score * 100).toFixed(0)}%)`;
             list.appendChild(item);
         });
         wrapper.appendChild(list);
@@ -98,12 +106,14 @@ uploadBtn.addEventListener("click", async () => {
 
         const result = await response.json();
         documentIds.add(result.document_id);
-        setUploadState("idle", `Uploaded ✔ Document ID: ${result.document_id}`);
+        setUploadState("idle", `✓ Document uploaded successfully`);
+        uploadStatus.style.color = "#059669"; // green
         selectedFile = null;
         fileInput.value = "";
     } catch (error) {
         console.error(error);
-        setUploadState("idle", `Upload failed: ${error.message}`);
+        setUploadState("idle", `✗ Upload failed: ${error.message}`);
+        uploadStatus.style.color = "#DC2626"; // red
     }
 });
 

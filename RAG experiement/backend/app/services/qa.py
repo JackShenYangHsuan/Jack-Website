@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Iterable
+from typing import Any, Iterable, Optional
 from uuid import UUID, uuid4
 
 from fastapi import HTTPException, status
@@ -61,8 +61,8 @@ def format_context(snippets: Iterable[dict]) -> tuple[str, list[Citation]]:
 
 def answer_question(
     question: str,
-    document_ids: list[UUID] | None = None,
-    session_id: UUID | None = None,
+    document_ids: Optional[list[UUID]] = None,
+    session_id: Optional[UUID] = None,
 ) -> ChatResponse:
     if not question.strip():
         raise HTTPException(
@@ -86,9 +86,9 @@ def answer_question(
     context, citations = format_context(matches)
 
     client = get_client()
-    completion = client.responses.create(
+    completion = client.chat.completions.create(
         model=_settings.gpt_model,
-        input=[
+        messages=[
             {
                 "role": "system",
                 "content": "You are a retrieval augmented assistant. Only answer with information from the provided context.",
@@ -97,14 +97,14 @@ def answer_question(
         ],
     )
 
-    answer = completion.output[0].content[0].text  # type: ignore[attr-defined]
+    answer = completion.choices[0].message.content or ""
     response_session_id = session_id or uuid4()
 
     usage = None
     if completion.usage:
         usage = {
-            "input_tokens": completion.usage.input_tokens,
-            "output_tokens": completion.usage.output_tokens,
+            "input_tokens": completion.usage.prompt_tokens,
+            "output_tokens": completion.usage.completion_tokens,
         }
 
     return ChatResponse(

@@ -26,14 +26,21 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-            background-color: #ffffff;
+            background: 
+                radial-gradient(ellipse 800px 600px at 10% 20%, rgba(249, 168, 212, 0.5) 0%, transparent 50%),
+                radial-gradient(ellipse 800px 600px at 90% 20%, rgba(134, 239, 172, 0.5) 0%, transparent 50%),
+                radial-gradient(ellipse 800px 600px at 80% 80%, rgba(147, 197, 253, 0.5) 0%, transparent 50%),
+                radial-gradient(ellipse 800px 600px at 20% 80%, rgba(253, 224, 71, 0.5) 0%, transparent 50%),
+                linear-gradient(135deg, #fef3f2 0%, #f0f9ff 100%);
+            background-attachment: fixed;
             color: #000000;
             line-height: 1.6;
             padding: 40px 20px;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -52,98 +59,178 @@
         }
 
         .page-title {
-            font-size: 46px;
+            font-size: 38px;
             font-weight: 600;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             line-height: 1.1;
         }
 
         .page-subtitle {
-            font-size: 18px;
+            font-size: 16px;
             color: #333333;
-            margin-bottom: 40px;
-            line-height: 1.6;
+            margin-bottom: 32px;
+            line-height: 1.5;
             max-width: 640px;
         }
 
         .articles {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 28px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        @media (max-width: 1400px) {
+            .articles {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .articles {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .articles {
+                grid-template-columns: 1fr;
+            }
         }
 
         .article-card {
             position: relative;
-            padding: 20px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.7) 100%);
-            box-shadow:
-                0 18px 40px rgba(0, 0, 0, 0.08),
-                inset 0 1px 0 rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border-radius: 12px;
+            padding: 12px;
+            overflow: visible;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             text-decoration: none;
-            color: inherit;
+            color: #000000;
+            background: #ffffff;
+            box-shadow: 
+                0 1px 2px rgba(0, 0, 0, 0.05),
+                0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.06);
         }
 
         .article-card:hover {
-            transform: translateY(-6px);
-            box-shadow:
-                0 25px 50px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.7);
+            transform: translateY(-4px);
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.06),
+                0 12px 32px rgba(0, 0, 0, 0.08);
         }
 
-        .article-card .tools {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 14px;
-        }
 
-        .article-card .tool-icon {
-            height: 28px;
-            padding: 4px 10px;
-            border-radius: 6px;
-            background: rgba(0, 0, 0, 0.05);
+        .card-hero {
+            position: relative;
+            width: calc(100% + 24px);
+            aspect-ratio: 1 / 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
+            padding: 0;
+            background: #e8f4fd;
+            margin: -12px -12px 0 -12px;
+            border-radius: 12px 12px 0 0;
+            overflow: hidden;
         }
 
-        .article-card .tool-icon img {
-            height: 20px;
-            width: auto;
-            object-fit: contain;
-            margin-right: 6px;
+        .card-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .article-card .difficulty-badge {
+        .card-time {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 4px 10px;
-            border-radius: 6px;
-            background: #10b981;
-            color: #ffffff;
-            font-size: 11px;
+            top: 10px;
+            left: 10px;
+            background: #ffffff;
+            padding: 3px 7px;
+            border-radius: 4px;
+            font-size: 9px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            color: #475569;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 6px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 500;
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .tag.difficulty {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #bbf7d0;
+        }
+
+        .tag.difficulty.intermediate {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #fde68a;
+        }
+
+        .card-content {
+            padding: 12px 0 0 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
         }
 
         .article-card h2 {
-            font-size: 20px;
+            font-size: 15px;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin: 0;
             line-height: 1.3;
+            color: #1a202c;
         }
 
         .article-card p {
-            font-size: 16px;
-            line-height: 1.7;
-            color: #333333;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #64748b;
             margin: 0;
+        }
+
+        .card-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            background: #ffffff;
+            color: #1a202c;
+            transition: all 0.15s ease;
+            align-self: flex-start;
+            margin-top: auto;
+            text-decoration: none;
+        }
+
+        .card-action:hover {
+            background: #f8fafc;
+            border-color: #cbd5e0;
         }
 
         @media (max-width: 768px) {
@@ -166,18 +253,66 @@
     <div class="container">
         <a href="index.html" class="back-link">← BACK</a>
         <h1 class="page-title">Tinkering with AI</h1>
-        <p class="page-subtitle">Experiments, build logs, and field notes from pushing applied AI into real projects. Dive into the walkthroughs below for step-by-step playbooks.</p>
+        <p class="page-subtitle">Experiments, build logs, and field notes from pushing applied AI into real projects. All built with Claude, Codex, Cursor, and Warp.</p>
 
         <div class="articles">
-            <a class="article-card" href="tinkering-create-your-life-movie.html">
-                <span class="difficulty-badge">Beginner</span>
-                <div class="tools">
-                    <span class="tool-icon"><img src="OpenAI Logo.svg" alt="OpenAI"> GPT-5</span>
-                    <span class="tool-icon"><img src="sora icon.png" alt="Sora"> Sora</span>
-                    <span class="tool-icon"><img src="CapCut Logo.jpg" alt="CapCut"> CapCut</span>
+            <a class="article-card card-pink" href="tinkering-create-your-life-movie.html">
+                <div class="card-hero">
+                    <span class="card-time">1:00</span>
+                    <img src="Pixar Hero image.png" alt="Pixar style movie">
                 </div>
-                <h2>Create your life movie, Pixar style</h2>
-                <p>Turn your life story into a Pixar-inspired short film using GPT-5, Sora, and CapCut.</p>
+                <div class="card-content">
+                    <div class="card-tags">
+                        <span class="tag difficulty">Beginner</span>
+                        <span class="tag">GPT-5</span>
+                        <span class="tag">Sora</span>
+                        <span class="tag">CapCut</span>
+                    </div>
+                    <h2>Create your life movie, Pixar style</h2>
+                    <p>Turn your life story into a Pixar-inspired short film using GPT-5, Sora, and CapCut.</p>
+                    <span class="card-action">Learn More</span>
+                </div>
+            </a>
+
+            <div class="article-card card-blue">
+                <div class="card-hero">
+                    <span class="card-time">1:00</span>
+                    <img src="daystory/daystory/public/DayStory Logo.png" alt="DayStory app">
+                </div>
+                <div class="card-content">
+                    <div class="card-tags">
+                        <span class="tag difficulty intermediate">Intermediate</span>
+                        <span class="tag">Next.js</span>
+                        <span class="tag">GPT-4o</span>
+                        <span class="tag">Sora</span>
+                        <span class="tag">Firebase</span>
+                    </div>
+                    <h2>Create vlogs from your calendar event</h2>
+                    <p>Step-by-step build log of a web app that transforms Google Calendar events into Pixar-style videos.</p>
+                    <div style="display: flex; gap: 12px;">
+                        <a href="https://daystory.vercel.app/" target="_blank" class="card-action" style="background: #000000; color: #ffffff;">Try It Now</a>
+                        <a href="tinkering-building-daystory.html" class="card-action">Learn More</a>
+                    </div>
+                </div>
+            </div>
+
+            <a class="article-card" href="tinkering-rag-pdf-chat.html">
+                <div class="card-hero">
+                    <span class="card-time">1:00</span>
+                    <img src="RAG PDF Logo.png" alt="RAG PDF Chat">
+                </div>
+                <div class="card-content">
+                    <div class="card-tags">
+                        <span class="tag difficulty intermediate">Intermediate</span>
+                        <span class="tag">FastAPI</span>
+                        <span class="tag">GPT-4</span>
+                        <span class="tag">Pinecone</span>
+                        <span class="tag">RAG</span>
+                    </div>
+                    <h2>RAG PDF Chat</h2>
+                    <p>Upload PDFs and ask questions with GPT-powered answers backed by vector search.</p>
+                    <span class="card-action">Learn More</span>
+                </div>
             </a>
         </div>
     </div>

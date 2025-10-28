@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "app/main.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app/main.py"
+    }
+  ],
+  "env": {
+    "PINECONE_API_KEY": "@pinecone_api_key",
+    "PINECONE_INDEX_NAME": "@pinecone_index_name",
+    "PINECONE_ENVIRONMENT": "@pinecone_environment",
+    "OPENAI_API_KEY": "@openai_api_key",
+    "EMBEDDING_MODEL": "text-embedding-3-large",
+    "GPT_MODEL": "gpt-4o-mini",
+    "CHUNK_SIZE": "800",
+    "CHUNK_OVERLAP": "120",
+    "MAX_CONTEXT_CHUNKS": "6",
+    "MAX_UPLOAD_SIZE_MB": "25",
+    "CORS_ORIGINS": "@cors_origins",
+    "STORAGE_BUCKET": "@storage_bucket"
+  }
+}

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any
+from typing import Any, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field
@@ -14,8 +14,8 @@ class UploadResponse(BaseModel):
 
 class ChatRequest(BaseModel):
     question: str
-    session_id: UUID | None = Field(None, description="Conversation session identifier.")
-    document_ids: list[UUID] | None = Field(
+    session_id: Optional[UUID] = Field(None, description="Conversation session identifier.")
+    document_ids: Optional[list[UUID]] = Field(
         None, description="Limit retrieval to a subset of previously uploaded documents."
     )
 
@@ -32,7 +32,7 @@ class ChatResponse(BaseModel):
     answer: str
     citations: list[Citation]
     created_at: datetime
-    usage: dict[str, Any] | None = None
+    usage: Optional[dict[str, Any]] = None
 
 
 class ErrorResponse(BaseModel):

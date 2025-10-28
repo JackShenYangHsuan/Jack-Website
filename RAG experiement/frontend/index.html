@@ -3,33 +3,260 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RAG Experiment</title>
+    <title>RAG Experiment - AI-Powered Document Q&A</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
     <main class="app">
-        <header class="app__header">
-            <h1>RAG Experiment</h1>
-            <p>Upload PDFs and ask questions powered by Pinecone retrieval and GPT.</p>
+        <header class="hero">
+            <h1>Document Q&A with <span class="accent">Retrieval Augmented Generation</span></h1>
+            <p class="subtitle">OpenAI embeddings · Pinecone vector search · GPT-4o-mini</p>
         </header>
-        <section class="panel">
-            <h2>Upload PDF</h2>
-            <div id="dropzone" class="dropzone">
-                <input id="file-input" type="file" accept="application/pdf" hidden />
-                <p>Drag & drop a PDF here or <button id="browse-btn" type="button">browse</button></p>
-                <p class="dropzone__status" id="upload-status">No file selected</p>
+
+        <div class="interactive-section">
+            <section class="panel upload-section">
+                <h2>Upload PDF</h2>
+                <div id="dropzone" class="dropzone">
+                    <input id="file-input" type="file" accept="application/pdf" hidden />
+                    <div class="dropzone-content">
+                        <svg class="upload-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p class="dropzone-text">Drag & drop a PDF here or <button id="browse-btn" type="button" class="browse-btn">browse</button></p>
+                        <p class="dropzone-status" id="upload-status">No file selected</p>
+                    </div>
+                </div>
+                <button id="upload-btn" class="btn-primary" disabled>Upload Document</button>
+            </section>
+
+            <section class="panel chat-section">
+                <h2>Ask Questions</h2>
+                <div id="conversation" class="conversation"></div>
+                <form id="chat-form" class="chat-form">
+                    <textarea id="question" placeholder="What would you like to know about your documents?" rows="3" required></textarea>
+                    <button type="submit" class="btn-primary">Send Question</button>
+                </form>
+            </section>
+        </div>
+
+        <div class="section-divider">
+            <span class="divider-text">How it works</span>
+        </div>
+
+        <section class="how-it-works">
+            <h2>How it works</h2>
+            <div class="flows">
+                <div class="flow-card">
+                    <div class="flow-header">
+                        <span class="flow-number">1</span>
+                        <h3>Ingestion Pipeline</h3>
+                    </div>
+                    <div class="flow-content">
+                        <div class="flow-step">
+                            <div class="step-num">1</div>
+                            <div class="step-text">Extract text from PDF with pdfplumber</div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-num">2</div>
+                            <div class="step-text">Chunk into 800-word segments with 120-word overlap</div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-num">3</div>
+                            <div class="step-text">Generate embeddings with text-embedding-3-large (3,072 dimensions)</div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-num">4</div>
+                            <div class="step-text">Store vectors in Pinecone with page metadata</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flow-card">
+                    <div class="flow-header">
+                        <span class="flow-number">2</span>
+                        <h3>Retrieval & Generation</h3>
+                    </div>
+                    <div class="flow-content">
+                        <div class="flow-step">
+                            <div class="step-num">1</div>
+                            <div class="step-text">Embed user question with same model</div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-num">2</div>
+                            <div class="step-text">Search Pinecone for top 6 most similar chunks (cosine similarity)</div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-num">3</div>
+                            <div class="step-text">Build prompt with retrieved context</div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-num">4</div>
+                            <div class="step-text">GPT-4o-mini generates answer with citations</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button id="upload-btn" class="primary" disabled>Upload</button>
         </section>
-        <section class="panel">
-            <h2>Chat</h2>
-            <div id="conversation" class="conversation"></div>
-            <form id="chat-form" class="chat-form">
-                <textarea id="question" placeholder="Ask a question about your PDFs" rows="3" required></textarea>
-                <button type="submit" class="primary">Ask</button>
-            </form>
+
+        <div class="section-divider">
+            <span class="divider-text">Pipeline Example</span>
+        </div>
+
+        <section class="pipeline-example">
+            <h2>Pipeline Example</h2>
+            <div class="example-flow">
+                <!-- Step 1: PDF Input -->
+                <div class="example-step">
+                    <div class="step-label">1. PDF Document</div>
+                    <div class="pdf-preview">
+                        <div class="pdf-header">research_paper.pdf - Page 3</div>
+                        <div class="pdf-content">
+                            <p><strong>3.2 Neural Network Architectures</strong></p>
+                            <p>Transformer models have revolutionized natural language processing by introducing the self-attention mechanism. Unlike recurrent neural networks (RNNs), transformers process sequences in parallel, enabling faster training on modern hardware. The core innovation lies in the attention mechanism, which computes weighted relationships between all tokens in the input sequence...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow">↓</div>
+
+                <!-- Step 2: Text Extraction -->
+                <div class="example-step">
+                    <div class="step-label">2. Extract Text</div>
+                    <div class="code-block">
+                        <div class="code-header">pdfplumber output</div>
+                        <code>"3.2 Neural Network Architectures\nTransformer models have revolutionized natural language processing by introducing the self-attention mechanism. Unlike recurrent neural networks (RNNs), transformers process sequences in parallel..."</code>
+                    </div>
+                </div>
+
+                <div class="arrow">↓</div>
+
+                <!-- Step 3: Chunking -->
+                <div class="example-step">
+                    <div class="step-label">3. Chunk Text</div>
+                    <div class="chunks-container">
+                        <div class="chunk chunk-1">
+                            <div class="chunk-header">Chunk 1 (words 1-800)</div>
+                            <div class="chunk-preview">"3.2 Neural Network Architectures Transformer models have revolutionized..."</div>
+                            <div class="chunk-meta">Page 3 · 800 words</div>
+                        </div>
+                        <div class="overlap-indicator">120-word overlap</div>
+                        <div class="chunk chunk-2">
+                            <div class="chunk-header">Chunk 2 (words 681-1480)</div>
+                            <div class="chunk-preview">"...transformers process sequences in parallel, enabling faster training..."</div>
+                            <div class="chunk-meta">Page 3-4 · 800 words</div>
+                        </div>
+                        <div class="explanation">
+                            <strong>Why overlap?</strong> Prevents information loss at chunk boundaries. If a concept spans across a boundary, the overlap ensures both chunks contain the full context.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow">↓</div>
+
+                <!-- Step 4: Embeddings -->
+                <div class="example-step">
+                    <div class="step-label">4. Generate Embeddings</div>
+                    <div class="embedding-visual">
+                        <div class="embedding-header">text-embedding-3-large</div>
+                        <div class="vector-representation">
+                            <div class="vector-label">3,072-dimensional vector</div>
+                            <div class="vector-preview">
+                                <span class="vector-value">0.0234</span>
+                                <span class="vector-value">-0.1847</span>
+                                <span class="vector-value">0.0891</span>
+                                <span class="vector-value">0.2103</span>
+                                <span class="vector-value">-0.0445</span>
+                                <span class="vector-ellipsis">...</span>
+                                <span class="vector-value">0.1267</span>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <strong>What are embeddings?</strong> Mathematical representations that capture semantic meaning. Text with similar meanings produces vectors that are close together in 3,072-dimensional space. This allows computers to understand conceptual similarity beyond exact word matching.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow">↓</div>
+
+                <!-- Step 5: Vector Storage -->
+                <div class="example-step">
+                    <div class="step-label">5. Store in Pinecone</div>
+                    <div class="storage-visual">
+                        <div class="storage-header">Vector Database</div>
+                        <div class="vector-entry">
+                            <div class="entry-id">doc-123:0</div>
+                            <div class="entry-vector">[0.0234, -0.1847, 0.0891, ...]</div>
+                            <div class="entry-metadata">
+                                <div class="meta-item">page: 3</div>
+                                <div class="meta-item">chunk_index: 0</div>
+                                <div class="meta-item">text: "3.2 Neural..."</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="query-example">
+                <h3>Query Process</h3>
+                <div class="query-flow">
+                    <div class="query-input">
+                        <div class="query-label">User Question</div>
+                        <div class="query-text">"How do transformers differ from RNNs?"</div>
+                    </div>
+
+                    <div class="arrow-small">↓</div>
+
+                    <div class="query-embed">
+                        <div class="query-label">Query Embedding</div>
+                        <div class="vector-preview-small">
+                            <span class="vector-value">0.0198</span>
+                            <span class="vector-value">-0.1923</span>
+                            <span class="vector-value">0.0856</span>
+                            <span class="vector-ellipsis">...</span>
+                        </div>
+                        <div class="explanation">
+                            <strong>Why embed the query?</strong> Convert the question into the same vector space as the document chunks. This allows us to mathematically compare the question's meaning against all stored chunks.
+                        </div>
+                    </div>
+
+                    <div class="arrow-small">↓</div>
+
+                    <div class="similarity-search">
+                        <div class="query-label">Similarity Search</div>
+                        <div class="search-results">
+                            <div class="search-result">
+                                <span class="result-rank">1.</span>
+                                <span class="result-score">0.94</span>
+                                <span class="result-ref">Chunk 1, Page 3</span>
+                            </div>
+                            <div class="search-result">
+                                <span class="result-rank">2.</span>
+                                <span class="result-score">0.89</span>
+                                <span class="result-ref">Chunk 2, Page 3</span>
+                            </div>
+                            <div class="search-result-more">+ 4 more chunks</div>
+                        </div>
+                        <div class="explanation">
+                            <strong>How does similarity work?</strong> Cosine similarity measures the angle between vectors. A score of 1.0 means identical meaning, 0.0 means unrelated. We retrieve the top 6 chunks most semantically relevant to the question.
+                        </div>
+                    </div>
+
+                    <div class="arrow-small">↓</div>
+
+                    <div class="gpt-generation">
+                        <div class="query-label">GPT-4o-mini Response</div>
+                        <div class="gpt-answer">"Transformers differ from RNNs in that they process sequences in parallel rather than sequentially, using self-attention mechanisms to compute relationships between all tokens simultaneously..."</div>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
+    <script src="env.js"></script>
     <script src="app.js" type="module"></script>
 </body>
 </html>
