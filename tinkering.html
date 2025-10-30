@@ -325,21 +325,24 @@
             .article-card {
                 flex-direction: row;
                 padding: 20px;
-                align-items: center;
+                align-items: flex-start;
                 gap: 16px;
             }
 
             .card-hero {
-                width: 96px;
-                height: 96px;
+                width: 108px;
+                height: 108px;
                 margin: 0;
                 background: transparent;
             }
 
             .card-hero img.card-icon {
-                padding: 14px;
+                padding: clamp(12px, 4vw, 16px);
             }
-            .card-content { gap: 8px; }
+            .card-content {
+                gap: 8px;
+                align-items: flex-start;
+            }
 
             .typewriter-container {
                 margin-top: 60px;

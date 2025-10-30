@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Your Life Movie (Pixar Style) - Tinkering with AI</title>
+    <title>Create your life movie, Pixar style - Tinkering with AI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -20,6 +20,7 @@
 
         html {
             scroll-behavior: smooth;
+            overflow-x: hidden;
         }
 
         body {
@@ -27,6 +28,8 @@
             background: #ffffff;
             color: #0f172a;
             line-height: 1.7;
+            overflow-x: hidden;
+            width: 100%;
         }
 
         a {
@@ -302,6 +305,13 @@
                 padding-bottom: 20px;
                 margin-bottom: 32px;
             }
+        }
+
+        @media (max-width: 768px) {
+            .article pre { padding: 12px; overflow-x: auto; max-width: 100%; }
+            .article code { font-size: 12px; word-wrap: break-word; }
+            .article h1 { font-size: 28px; }
+            .article h2 { font-size: 22px; flex-wrap: wrap; }
         }
     </style>
 </head>

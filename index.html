@@ -29,6 +29,18 @@
             background-color: #ffffff;
             color: #000000;
             line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Portfolio section - fixed position */
+        .portfolio-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
             padding: 40px 20px;
         }
 
@@ -38,7 +50,7 @@
             display: flex;
             align-items: center;
             gap: 60px;
-            min-height: 80vh;
+            min-height: 70vh;
         }
 
         .profile-image {
@@ -408,8 +420,8 @@
 
         footer {
             max-width: 1000px;
-            margin: 60px auto 40px;
-            padding: 0 20px;
+            margin: 60px auto 80px;
+            padding: 0 20px 0 20px;
         }
 
         .footer-links {
@@ -444,7 +456,7 @@
         }
 
         @media (max-width: 768px) {
-            body {
+            .portfolio-section {
                 padding: 20px 15px;
             }
 
@@ -466,7 +478,6 @@
                 white-space: normal;
                 text-align: center;
                 max-width: 220px;
-                opacity: 1 !important;
             }
 
             .content p {
@@ -500,6 +511,10 @@
         }
 
         @media (max-width: 480px) {
+            .portfolio-section {
+                padding: 20px 15px;
+            }
+
             .profile-image img {
                 width: 180px;
                 height: 180px;
@@ -513,7 +528,6 @@
                 font-size: 12px;
                 padding: 10px 18px;
                 max-width: 200px;
-                opacity: 1 !important;
             }
         }
 
@@ -545,19 +559,9 @@
         .header-nav a.ai-experiments {
             padding: 8px 16px;
             border-radius: 20px;
-            background: 
-                linear-gradient(135deg, #fef3f2 0%, #f0f9ff 100%) padding-box,
-                linear-gradient(135deg, 
-                    rgba(249, 168, 212, 0.8), 
-                    rgba(134, 239, 172, 0.8), 
-                    rgba(147, 197, 253, 0.8), 
-                    rgba(253, 224, 71, 0.8)
-                ) border-box;
-            border: 2px solid transparent;
-            box-shadow: 
-                0 0 20px rgba(249, 168, 212, 0.4),
-                0 0 25px rgba(134, 239, 172, 0.3),
-                0 0 30px rgba(147, 197, 253, 0.3);
+            background: none;
+            border: none;
+            box-shadow: none;
         }
 
         @media (max-width: 768px) {
@@ -573,40 +577,113 @@
                 font-size: 13px;
             }
         }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+            cursor: pointer;
+        }
+
+        .scroll-indicator:hover {
+            opacity: 1;
+        }
+
+        .scroll-indicator.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 30px;
+            border-bottom: 2px solid #000000;
+            border-right: 2px solid #000000;
+            transform: rotate(45deg);
+            animation: scrollBounce 2s infinite;
+        }
+
+        @keyframes scrollBounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) rotate(45deg);
+            }
+            40% {
+                transform: translateY(-10px) rotate(45deg);
+            }
+            60% {
+                transform: translateY(-5px) rotate(45deg);
+            }
+        }
+
+        /* Tinkering section - scrolls up to cover portfolio */
+        .tinkering-section {
+            position: relative;
+            margin-top: 100vh;
+            background: #ffffff;
+            z-index: 10;
+            min-height: 100vh;
+            width: 100%;
+            box-shadow: 0 -16px 64px rgba(0, 0, 0, 0.06), 0 -4px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        .tinkering-section iframe {
+            width: 100%;
+            min-height: 100vh;
+            border: none;
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <nav class="header-nav">
-            <a href="blog.html">Writings</a>
-            <a href="tinkering.html" class="ai-experiments">AI Experiments</a>
-        </nav>
-    </header>
-    <div class="container">
-        <div class="profile-image">
-            <img src="profile.png" alt="Jack Shen">
-            <button class="pixar-button">Watch my life as a Pixar Movie</button>
+    <!-- Portfolio Section - Fixed -->
+    <div class="portfolio-section">
+        <header>
+            <nav class="header-nav">
+                <a href="blog.html">Writings</a>
+                <a href="tinkering.html" class="ai-experiments">AI Experiments</a>
+            </nav>
+        </header>
+        <div class="container">
+            <div class="profile-image">
+                <img src="profile.png" alt="Jack Shen">
+                <button class="pixar-button">Watch my life as a Pixar Movie</button>
+            </div>
+            <div class="content">
+                <p>I'm Jack, a builder pivoting from strategy consulting to applied AI startups. Built a <span class="underline" data-tooltip="Camera App">camera app</span> to 500K downloads in college. Spent four years at <span class="underline" data-tooltip="McKinsey">McKinsey</span> rebuilding performance engines and org structures for Fortune 500 financial turnarounds. Recently worked with YC founders on <span class="underline" data-tooltip="Agentic Sales Platforms">agentic sales platforms</span>. Now at Berkeley B-school, exploring career options and <span class="underline" data-tooltip="Tinkering with AI">tinkering with AI</span>. Strive for craft and taste. Read my thoughts <span class="underline" data-tooltip="Blog">here</span>.</p>
+            </div>
         </div>
-        <div class="content">
-            <p>I'm Jack, a builder pivoting from strategy consulting to applied AI startups. Built a <span class="underline" data-tooltip="Camera App">camera app</span> to 500K downloads in college. Spent four years at <span class="underline" data-tooltip="McKinsey">McKinsey</span> rebuilding performance engines and org structures for Fortune 500 financial turnarounds. Recently worked with YC founders on <span class="underline" data-tooltip="Agentic Sales Platforms">agentic sales platforms</span>. Now at Berkeley B-school, exploring career options and <span class="underline" data-tooltip="Tinkering with AI">tinkering with AI</span>. Strive for craft and taste. Read my thoughts <span class="underline" data-tooltip="Blog">here</span>.</p>
-        </div>
+
+        <footer>
+            <div class="footer-links">
+                <div class="footer-left">
+                    <a href="https://www.linkedin.com/in/jackshen1997/" target="_blank">
+                        <span>💼</span>LINKEDIN
+                    </a>
+                    <a href="mailto:jack_shen@berkeley.edu">
+                        <span>✉️</span>EMAIL
+                    </a>
+                </div>
+                <div class="location">
+                    <span>📍</span>MANUFACTURED IN TW, OPERATING IN SF
+                </div>
+            </div>
+        </footer>
     </div>
 
-    <footer>
-        <div class="footer-links">
-            <div class="footer-left">
-                <a href="https://www.linkedin.com/in/jackshen1997/" target="_blank">
-                    <span>💼</span>LINKEDIN
-                </a>
-                <a href="mailto:jack_shen@berkeley.edu">
-                    <span>✉️</span>EMAIL
-                </a>
-            </div>
-            <div class="location">
-                <span>📍</span>MANUFACTURED IN TW, OPERATING IN SF
-            </div>
-        </div>
-    </footer>
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator" id="scrollIndicator">
+        <div class="scroll-arrow"></div>
+    </div>
+
+    <!-- Tinkering Section - Scrolls up to cover portfolio -->
+    <section class="tinkering-section">
+        <iframe src="tinkering.html" id="tinkeringFrame"></iframe>
+    </section>
 
     <!-- Modal -->
     <div class="modal-overlay" id="modal">
@@ -741,11 +818,12 @@
                 e.preventDefault();
                 const key = this.getAttribute('data-tooltip');
 
-                // Navigate to separate pages for these items
+                // Scroll to tinkering section
                 if (key === 'Tinkering with AI') {
-                    window.location.href = 'tinkering.html';
+                    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
                     return;
                 }
+                // Navigate to blog page
                 if (key === 'Blog') {
                     window.location.href = 'blog.html';
                     return;
@@ -836,6 +914,51 @@
                     pixarVideo.pause();
                     pixarVideo.currentTime = 0;
                 }
+            }
+        });
+
+        // Scroll indicator functionality
+        const scrollIndicator = document.getElementById('scrollIndicator');
+        const tinkeringFrame = document.getElementById('tinkeringFrame');
+        let hasScrolledToTinkering = false;
+
+        // Click to scroll down
+        scrollIndicator.addEventListener('click', function() {
+            window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+        });
+
+        // Hide indicator when user scrolls and manage back button visibility
+        window.addEventListener('scroll', function() {
+            const scrollY = window.scrollY;
+            const viewportHeight = window.innerHeight;
+
+            // Hide scroll indicator when scrolled down
+            if (scrollY > 100) {
+                scrollIndicator.classList.add('hidden');
+            } else {
+                scrollIndicator.classList.remove('hidden');
+            }
+
+            // Track if user has scrolled into tinkering section
+            if (scrollY > viewportHeight * 0.5) {
+                hasScrolledToTinkering = true;
+            }
+
+            // Send message to iframe about back button visibility
+            // Show back button when user has scrolled down and is now in the tinkering section near top
+            if (tinkeringFrame.contentWindow) {
+                if (hasScrolledToTinkering && scrollY >= viewportHeight && scrollY < viewportHeight + 200) {
+                    tinkeringFrame.contentWindow.postMessage({ action: 'showBackButton', show: true }, '*');
+                } else {
+                    tinkeringFrame.contentWindow.postMessage({ action: 'showBackButton', show: false }, '*');
+                }
+            }
+        });
+
+        // Intercept clicks on back link in iframe
+        window.addEventListener('message', function(event) {
+            if (event.data === 'scrollToTop') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         });
     </script>
