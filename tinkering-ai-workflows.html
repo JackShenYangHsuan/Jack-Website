@@ -19,20 +19,21 @@
             line-height: 1.7;
             overflow-x: hidden;
             width: 100%;
+            padding-top: 70px;
         }
 
         a { color: inherit; text-decoration: none; }
         img { max-width: 100%; height: auto; }
 
         /* Top nav (matches RAG PDF Chat) */
-        .top-nav { position: sticky; top: 0; z-index: 20; background: #ffffff; border-bottom: 1px solid #e2e8f0; }
+        .top-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 20; background: #ffffff; border-bottom: 1px solid #e2e8f0; }
         .top-nav-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; }
         .top-link { color: #64748b; padding-bottom: 4px; border-bottom: 2px solid transparent; transition: color .2s, border-color .2s; }
         .top-link:hover { color: #111827; }
 
         /* Layout with sidebar */
-        .doc-layout { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 48px; padding: 28px 32px 100px; }
-        .sidebar { position: sticky; top: 84px; align-self: start; padding-right: 16px; border-right: 1px solid #e2e8f0; }
+        .doc-layout { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 48px; padding: 28px 32px 100px; align-items: flex-start; }
+        .sidebar { padding-right: 16px; border-right: 1px solid #e2e8f0; }
         .sidebar::-webkit-scrollbar { width: 6px; }
         .sidebar::-webkit-scrollbar-thumb { background: rgba(148,163,184,.4); border-radius: 999px; }
         .sidebar-heading { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: #94a3b8; margin-bottom: 10px; }
@@ -60,9 +61,15 @@
         .article pre { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; overflow-x: auto; margin: 16px 0; word-break: break-word; overflow-wrap: anywhere; }
         .article code { font-family: 'Monaco', 'Courier New', monospace; font-size: 14px; color: #334155; line-height: 1.5; word-break: break-word; overflow-wrap: anywhere; }
 
+        @media (min-width: 961px) {
+            .sidebar { position: fixed; top: 112px; left: max(32px, calc(50vw - 568px)); width: 260px; max-height: calc(100vh - 112px - 32px); overflow-y: auto; }
+            .sidebar::after { content: ''; position: fixed; top: 112px; left: calc(max(32px, calc(50vw - 568px)) + 260px + 16px); bottom: 0; width: 1px; background: #e2e8f0; z-index: -1; }
+            .article { grid-column: 2; }
+        }
+
         @media (max-width: 960px){
             .doc-layout { grid-template-columns: 1fr; gap: 0; }
-            .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 24px; }
+            .sidebar { border-right: none; border-bottom: 1px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 24px; }
         }
         @media (max-width: 768px){
             .article {
