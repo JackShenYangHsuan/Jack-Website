@@ -63,9 +63,11 @@ Then visit `http://localhost:3000` and interact with the UI.
 
 ## Production Deployment (Vercel)
 
+> **📋 See [VERCEL_SETUP.md](./VERCEL_SETUP.md) for complete deployment instructions and environment variable configuration.**
+
 The repository is configured for a Vercel deployment where the static frontend and the FastAPI backend share the same project:
 
-1. **Environment variables** — configure these in Vercel (`Project Settings → Environment Variables`). Secrets referenced in `vercel.json` (`@pinecone_api_key`, `@pinecone_index_name`, `@pinecone_environment`, `@openai_api_key`, `@cors_origins`, `@storage_bucket`) must exist. Set `CORS_ORIGINS` to include your production domain (e.g. `https://<project>.vercel.app`).
+1. **Environment variables** — configure these in Vercel (`Project Settings → Environment Variables`). Required variables: `PINECONE_API_KEY`, `PINECONE_INDEX_NAME`, `PINECONE_ENVIRONMENT`, `OPENAI_API_KEY`, and `CORS_ORIGINS` (set to your Vercel domain, e.g. `https://<project>.vercel.app`). See [VERCEL_SETUP.md](./VERCEL_SETUP.md) for complete setup guide.
 2. **Build command** — Vercel will run `npm run build`, which executes `scripts/build-frontend.sh`. This script generates `frontend/env.js` and copies all frontend assets into the `dist/` output directory. The build defaults `API_BASE` to `/api` so the frontend talks to the co-located backend; override `API_BASE` if you host the API elsewhere.
 3. **Output directory** — `dist` (handled automatically by `vercel.json` via `@vercel/static-build`).
 4. **API routing** — Requests under `/api/*` are routed to `backend/app/main.py` using the Python serverless runtime. All other routes serve the static frontend.
