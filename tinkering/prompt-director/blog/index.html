@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construct your prompt with annotation and voice - Tinkering with AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #ffffff;
+            color: #222222;
+            line-height: 1.6;
+            padding: 50px 20px 80px;
+        }
+
+        a { color: inherit; }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #666666;
+            text-decoration: none;
+            font-size: 12px;
+            margin-bottom: 30px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #000000;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 400;
+            margin-bottom: 16px;
+            line-height: 1.1;
+            color: #000000;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            color: #000000;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.75;
+            margin-bottom: 18px;
+            color: #333333;
+        }
+
+        .try-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #000000;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-bottom: 32px;
+        }
+
+        .try-button:hover {
+            background: #1a1a1a;
+            transform: translateY(-1px);
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #555555;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 30px 15px 60px;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="/tinkering">← Back</a>
+        <h1>Construct your prompt with annotation and voice</h1>
+        <a href="/tinkering/prompt-director" class="try-button">Try It Now →</a>
+
+        <h2>Motivation</h2>
+        <p>I often struggle with describing front-end UI details while vibe coding. I could use Figma, but switching tools kills momentum. Words work better, except when you're describing pixel-perfect layouts.</p>
+        <p>At McKinsey, partners solved this by annotating slides on Zoom while talking through their vision. Real-time markup plus verbal context. I built a tool that brings that workflow to AI prompting.</p>
+
+        <h2>Implementation</h2>
+        <p>The tech is simple: record audio, capture annotations, then feed both to GPT for detailed prompt generation. I added one twist: stitching before-and-after annotation images together gives the model extra context about what changed.</p>
+        <p>It's now part of my vibe coding workflow. Whenever I need to describe complicated or precise UI, I spin it up.</p>
+    </div>
+</body>
+</html>

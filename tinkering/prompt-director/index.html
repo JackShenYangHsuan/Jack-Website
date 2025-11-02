@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Director - Tinkering with AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #222222;
+            line-height: 1.5;
+            padding: 50px 20px 80px;
+        }
+
+        ::selection {
+            background-color: #F2C94C;
+            color: #000000;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #666666;
+            text-decoration: none;
+            font-size: 12px;
+            margin-bottom: 30px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #000000;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 400;
+            margin-bottom: 12px;
+            color: #000000;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #666666;
+            margin-bottom: 20px;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: #f8f8f8;
+            padding: 8px;
+            border-radius: 8px;
+            width: fit-content;
+        }
+
+        .mode-btn {
+            padding: 8px 16px;
+            background: transparent;
+            color: #666666;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .mode-btn:hover:not(.active) {
+            background: #e8e8e8;
+            color: #000000;
+        }
+
+        .api-key-section {
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .api-key-section label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #222222;
+        }
+
+        .api-key-input-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        .api-key-input-wrapper input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: 'Monaco', monospace;
+        }
+
+        .api-key-input-wrapper input:focus {
+            outline: none;
+            border-color: #000000;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            opacity: 1;
+        }
+
+        .btn-secondary {
+            background: #666666;
+        }
+
+        .canvas-section {
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            border: 2px solid #000000;
+            border-radius: 8px;
+            cursor: crosshair;
+            display: block;
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            aspect-ratio: 4 / 3;
+            touch-action: none;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .status {
+            font-size: 13px;
+            color: #666666;
+            margin-top: 10px;
+        }
+
+        .status.recording {
+            color: #ff0000;
+            font-weight: 500;
+        }
+
+        .output-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #ddd;
+            display: none;
+        }
+
+        .output-section.visible {
+            display: block;
+        }
+
+        .output-section h2 {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .prompt-output {
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .prompt-output h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+
+        .prompt-output p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            color: #222222;
+        }
+
+        .prompt-output ul {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .prompt-output li {
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #222222;
+        }
+
+        .full-prompt {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .image-output {
+            margin-top: 20px;
+        }
+
+        .image-output img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .image-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .image-box {
+            position: relative;
+        }
+
+        .image-box img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .image-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            .image-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .paste-area {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+            background: #fafafa;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .paste-area:hover {
+            border-color: #000000;
+            background: #f5f5f5;
+        }
+
+        .paste-area.has-image {
+            display: none;
+        }
+
+        .paste-area p {
+            color: #666666;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .paste-area .hint {
+            font-size: 11px;
+            color: #999999;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #666666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 30px 15px 60px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← Back</a>
+        
+        <h1>Prompt Director</h1>
+        <p class="subtitle">Draw and speak your ideas - we'll turn them into structured LLM prompts</p>
+
+        <!-- Mode Selector -->
+        <div class="mode-selector">
+            <button class="mode-btn active" data-mode="annotate" onclick="switchMode('annotate')">Annotation Mode</button>
+            <button class="mode-btn" data-mode="draw" onclick="switchMode('draw')">Drawing Mode</button>
+        </div>
+
+        <!-- API Key Input -->
+        <div class="api-key-section">
+            <label for="apiKey">OpenAI API Key (stored locally in your browser)</label>
+            <div class="api-key-input-wrapper">
+                <input 
+                    type="password" 
+                    id="apiKey" 
+                    placeholder="sk-..."
+                    autocomplete="off"
+                >
+                <button class="btn btn-secondary" onclick="toggleApiKeyVisibility(this)">Show</button>
+            </div>
+        </div>
+
+        <!-- Canvas Section -->
+        <div class="canvas-section">
+            <!-- Paste Area (only visible in annotation mode) -->
+            <div class="paste-area" id="pasteArea" onclick="triggerImageUpload()" style="display: none;">
+                <p>📎 Click to upload or paste an image (Cmd/Ctrl+V)</p>
+                <p class="hint">Supports JPG, PNG, GIF - Max 5MB</p>
+            </div>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+            
+            <canvas id="drawingCanvas" width="800" height="600"></canvas>
+            <div class="controls">
+                <button class="btn btn-secondary" onclick="eraseAll()">Erase All</button>
+                <button class="btn" id="recordBtn" onclick="toggleRecording()">Start Recording</button>
+                <button class="btn" id="generateBtn" onclick="generatePrompt()" disabled>Generate Prompt</button>
+            </div>
+        </div>
+
+        <!-- Output Section -->
+        <div class="output-section" id="outputSection">
+            <h2>Generated Prompt</h2>
+            <div class="prompt-output" id="promptOutput"></div>
+            
+            <!-- Single image output (drawing mode) -->
+            <div class="image-output" id="singleImageOutput">
+                <h3>Your Drawing</h3>
+                <img id="outputImage" alt="Your drawing">
+                <div style="margin-top: 10px;">
+                    <button class="btn btn-secondary" onclick="downloadImage('single')">Download Image</button>
+                </div>
+            </div>
+            
+            <!-- Before/After comparison (annotation mode) -->
+            <div class="image-comparison" id="beforeAfterOutput" style="display: none;">
+                <div class="image-box">
+                    <div class="image-label">Before</div>
+                    <img id="beforeImage" alt="Before - Original image">
+                    <button class="btn btn-secondary" onclick="downloadImage('before')" style="margin-top: 10px; width: 100%;">Download Before</button>
+                </div>
+                <div class="image-box">
+                    <div class="image-label">After</div>
+                    <img id="afterImage" alt="After - Annotated image">
+                    <button class="btn btn-secondary" onclick="downloadImage('after')" style="margin-top: 10px; width: 100%;">Download After</button>
+                </div>
+            </div>
+            
+            <!-- Combined image (annotation mode) -->
+            <div id="combinedImageOutput" style="display: none; margin-top: 20px;">
+                <h3>Combined Comparison <span id="copiedBadge" style="display: none; margin-left: 10px; font-size: 12px; background: #4CAF50; color: white; padding: 4px 10px; border-radius: 4px; font-weight: 600;">✓ Copied to Clipboard!</span></h3>
+                <img id="combinedImage" alt="Before and After Comparison" style="max-width: 100%; border: 1px solid #ddd; border-radius: 8px;">
+                <div style="margin-top: 10px; display: flex; gap: 10px;">
+                    <button class="btn btn-secondary" onclick="downloadImage('combined')">Download Combined</button>
+                    <button class="btn" onclick="copyImageToClipboard()">Copy to Clipboard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Canvas setup
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let drawingTimeline = [];
+        let currentStroke = null;
+        
+        // Audio recording
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let audioBlob = null;
+        let recordingStartTime = null;
+        let isRecording = false;
+
+        // Mode and image management
+        let currentMode = 'annotate'; // 'draw' or 'annotate'
+        let originalImage = null; // Store original image for annotation mode
+        let originalImageData = null; // Store image data URL
+
+        // Initialize canvas
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // Load API key from localStorage
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedKey = localStorage.getItem('openai_api_key');
+            if (savedKey) {
+                document.getElementById('apiKey').value = savedKey;
+            }
+            switchMode('annotate');
+        });
+
+        // Save API key to localStorage
+        document.getElementById('apiKey').addEventListener('change', (e) => {
+            localStorage.setItem('openai_api_key', e.target.value);
+        });
+
+        function toggleApiKeyVisibility(button) {
+            const input = document.getElementById('apiKey');
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            button.textContent = isPassword ? 'Hide' : 'Show';
+        }
+
+        // Drawing functions
+        function getCanvasPoint(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY,
+                timestamp: Date.now()
+            };
+        }
+
+        function startDrawing(e) {
+            e.preventDefault();
+            isDrawing = true;
+            const point = getCanvasPoint(e);
+            currentStroke = {
+                points: [point],
+                startTime: point.timestamp
+            };
+            
+            ctx.beginPath();
+            ctx.moveTo(point.x, point.y);
+        }
+
+        function draw(e) {
+            e.preventDefault();
+            if (!isDrawing) return;
+            
+            const point = getCanvasPoint(e);
+            currentStroke.points.push(point);
+            
+            ctx.lineTo(point.x, point.y);
+            ctx.stroke();
+        }
+
+        function stopDrawing(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            isDrawing = false;
+            
+            if (currentStroke && currentStroke.points.length > 0) {
+                currentStroke.endTime = Date.now();
+                drawingTimeline.push(currentStroke);
+                currentStroke = null;
+            }
+        }
+
+        // Mouse events
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        // Touch events
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+        canvas.addEventListener('touchcancel', stopDrawing);
+
+        function eraseAll() {
+            if (currentMode === 'annotate' && originalImage) {
+                // In annotation mode, redraw the original image
+                ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+            } else {
+                // In draw mode, clear to white
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#000000';
+            }
+            drawingTimeline = [];
+            document.getElementById('outputSection').classList.remove('visible');
+        }
+
+        // Mode switching
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            // Update button states
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                const isActive = btn.dataset.mode === mode;
+                btn.classList.toggle('active', isActive);
+            });
+            
+            // Show/hide paste area
+            const pasteArea = document.getElementById('pasteArea');
+            if (mode === 'annotate') {
+                pasteArea.style.display = originalImage ? 'none' : 'block';
+                canvas.style.display = originalImage ? 'block' : 'none';
+            } else {
+                pasteArea.style.display = 'none';
+                canvas.style.display = 'block';
+                // Clear canvas in draw mode
+                originalImage = null;
+                originalImageData = null;
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#000000';
+            }
+            
+            drawingTimeline = [];
+            document.getElementById('outputSection').classList.remove('visible');
+            updateStatus(mode === 'draw' ? 'Drawing mode ready' : 'Annotation mode ready');
+        }
+
+        // Image upload and paste functions
+        function triggerImageUpload() {
+            document.getElementById('imageUpload').click();
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                loadImageFile(file);
+            }
+        }
+
+        function loadImageFile(file) {
+            if (file.size > 5 * 1024 * 1024) {
+                showError('Image file is too large. Please use an image under 5MB.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    originalImage = img;
+                    originalImageData = e.target.result;
+                    
+                    // Draw image on canvas
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    // Hide paste area, show canvas
+                    document.getElementById('pasteArea').classList.add('has-image');
+                    canvas.style.display = 'block';
+                    
+                    updateStatus('Image loaded! Start drawing annotations.');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Paste event listener for Cmd/Ctrl+V
+        document.addEventListener('paste', function(e) {
+            if (currentMode !== 'annotate') return;
+            
+            const items = e.clipboardData.items;
+            for (let item of items) {
+                if (item.type.indexOf('image') !== -1) {
+                    const file = item.getAsFile();
+                    loadImageFile(file);
+                    e.preventDefault();
+                    break;
+                }
+            }
+        });
+
+        // Audio recording functions
+        async function toggleRecording() {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                await startRecording();
+            }
+        }
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+                
+                mediaRecorder.onstop = () => {
+                    audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    stream.getTracks().forEach(track => track.stop());
+                    document.getElementById('generateBtn').disabled = false;
+                    updateStatus('Recording stopped. Ready to generate prompt!');
+                };
+                
+                mediaRecorder.start();
+                recordingStartTime = Date.now();
+                isRecording = true;
+                
+                document.getElementById('recordBtn').textContent = 'Stop Recording';
+                document.getElementById('recordBtn').classList.add('btn-secondary');
+                updateStatus('Recording...', true);
+            } catch (error) {
+                showError('Microphone access denied. Please allow microphone access and try again.');
+                console.error('Recording error:', error);
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+                document.getElementById('recordBtn').textContent = 'Start Recording';
+                document.getElementById('recordBtn').classList.remove('btn-secondary');
+            }
+        }
+
+        function updateStatus(message, isRecording = false) {
+            const statusEl = document.getElementById('status');
+            if (!statusEl) return;
+            statusEl.textContent = message;
+            statusEl.className = isRecording ? 'status recording' : 'status';
+        }
+
+        // OpenAI API calls
+        async function generatePrompt() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            
+            if (!apiKey) {
+                showError('Please enter your OpenAI API key');
+                return;
+            }
+
+            if (!audioBlob) {
+                showError('Please record audio before generating prompt');
+                return;
+            }
+
+            if (drawingTimeline.length === 0) {
+                showError('Please draw something on the canvas');
+                return;
+            }
+
+            try {
+                document.getElementById('generateBtn').disabled = true;
+                updateStatus('Processing... (this may take 30-60 seconds)');
+                
+                // Show loading
+                const outputSection = document.getElementById('outputSection');
+                outputSection.classList.add('visible');
+                document.getElementById('promptOutput').innerHTML = '<div class="loading">🤖 Processing your drawing and audio...</div>';
+
+                // Step 1: Transcribe audio
+                updateStatus('Transcribing audio...');
+                const transcription = await transcribeAudio(audioBlob, apiKey);
+                
+                // Step 2: Get canvas images
+                let base64Image, canvasImage, beforeImageData, afterImageData;
+                
+                if (currentMode === 'annotate' && originalImage) {
+                    // Annotation mode: create before and after images with labels
+                    beforeImageData = await createLabeledImage(originalImageData, 'BEFORE');
+                    
+                    canvasImage = canvas.toDataURL('image/png');
+                    afterImageData = await createLabeledImage(canvasImage, 'AFTER');
+                    
+                    base64Image = canvasImage.split(',')[1];
+                } else {
+                    // Drawing mode: single image
+                    canvasImage = canvas.toDataURL('image/png');
+                    base64Image = canvasImage.split(',')[1];
+                }
+                
+                // Step 3: Generate structured prompt with GPT-4V
+                updateStatus('Generating structured prompt...');
+                const result = await generateStructuredPrompt(
+                    base64Image, 
+                    transcription, 
+                    drawingTimeline, 
+                    apiKey,
+                    currentMode,
+                    originalImage ? true : false
+                );
+                
+                // Step 4: Create combined image and copy to clipboard (annotation mode only)
+                let combinedImageData = null;
+                if (beforeImageData && afterImageData) {
+                    updateStatus('Creating combined image...');
+                    combinedImageData = await createCombinedImage(beforeImageData, afterImageData);
+                    
+                    // Auto-copy to clipboard
+                    await copyImageDataToClipboard(combinedImageData);
+                }
+                
+                // Display results
+                displayOutput(result, canvasImage, beforeImageData, afterImageData, combinedImageData);
+                updateStatus('Prompt generated successfully!');
+                
+            } catch (error) {
+                showError('Error generating prompt: ' + error.message);
+                console.error('Generation error:', error);
+            } finally {
+                document.getElementById('generateBtn').disabled = false;
+            }
+        }
+
+        async function transcribeAudio(audioBlob, apiKey) {
+            const formData = new FormData();
+            formData.append('file', audioBlob, 'recording.webm');
+            formData.append('model', 'whisper-1');
+            formData.append('response_format', 'verbose_json');
+
+            const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: formData
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error?.message || 'Transcription failed');
+            }
+
+            const data = await response.json();
+            return data.text;
+        }
+
+        async function generateStructuredPrompt(base64Image, transcription, timeline, apiKey, mode, hasOriginalImage) {
+            const timelineInfo = timeline.map((stroke, idx) => ({
+                stroke: idx + 1,
+                startTime: stroke.startTime,
+                endTime: stroke.endTime,
+                pointCount: stroke.points.length
+            }));
+
+            const isAnnotationMode = mode === 'annotate' && hasOriginalImage;
+
+            const systemPrompt = `You are converting a ${isAnnotationMode ? 'image annotation' : 'whiteboard drawing'} + voice instructions into a structured LLM prompt.
+
+The user has:
+1. ${isAnnotationMode ? 'Annotated an existing image with drawings (BEFORE vs AFTER)' : 'Drawn on a blank canvas'}
+2. Recorded voice instructions while drawing
+
+${isAnnotationMode ? 'IMPORTANT: This is a BEFORE/AFTER scenario. The user started with an existing image (BEFORE) and added annotations to it (AFTER). Focus on what changed and what the annotations indicate.' : ''}
+
+Your task:
+- Understand spatial references ("here", "this", "that") by considering the timing of when things were drawn vs. when they were mentioned
+- ${isAnnotationMode ? 'Describe both the original content and the added annotations/markings' : 'Describe what was drawn'}
+- Generate a comprehensive, structured prompt that captures both visual and verbal information
+- Be specific and detailed
+
+Output as JSON with this structure:
+{
+  "title": "Brief title for the prompt",
+  "objective": "Main goal or purpose",
+  "visual_elements": ["element 1", "element 2", ...],
+  "specifications": ["spec 1", "spec 2", ...],
+  "full_prompt": "A complete, detailed prompt combining all information that could be sent to an LLM"
+}`;
+
+            const userPrompt = `${isAnnotationMode ? 'Mode: IMAGE ANNOTATION (Before/After)\n\n' : ''}Drawing Timeline (annotations/strokes with timestamps):
+${JSON.stringify(timelineInfo, null, 2)}
+
+Voice Transcription:
+"${transcription}"
+
+Please analyze the ${isAnnotationMode ? 'annotated image' : 'drawing'} and voice instructions, understand any spatial references, and generate a structured prompt.`;
+
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: 'gpt-4o',
+                    messages: [
+                        {
+                            role: 'system',
+                            content: systemPrompt
+                        },
+                        {
+                            role: 'user',
+                            content: [
+                                {
+                                    type: 'text',
+                                    text: userPrompt
+                                },
+                                {
+                                    type: 'image_url',
+                                    image_url: {
+                                        url: `data:image/png;base64,${base64Image}`
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    max_tokens: 2000,
+                    response_format: { type: "json_object" }
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error?.message || 'Prompt generation failed');
+            }
+
+            const data = await response.json();
+            return JSON.parse(data.choices[0].message.content);
+        }
+
+        function createLabeledImage(imageDataURL, label) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = function() {
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = img.width;
+                    tempCanvas.height = img.height;
+                    const tempCtx = tempCanvas.getContext('2d');
+                    
+                    // Draw original image
+                    tempCtx.drawImage(img, 0, 0);
+                    
+                    // Add label
+                    tempCtx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+                    tempCtx.fillRect(10, 10, 100, 40);
+                    tempCtx.fillStyle = '#ffffff';
+                    tempCtx.font = 'bold 18px Inter, sans-serif';
+                    tempCtx.textAlign = 'center';
+                    tempCtx.textBaseline = 'middle';
+                    tempCtx.fillText(label, 60, 30);
+                    
+                    resolve(tempCanvas.toDataURL('image/png'));
+                };
+                img.src = imageDataURL;
+            });
+        }
+
+        function createCombinedImage(beforeDataURL, afterDataURL) {
+            return new Promise((resolve) => {
+                const beforeImg = new Image();
+                const afterImg = new Image();
+                let loadedCount = 0;
+                
+                const checkBothLoaded = () => {
+                    loadedCount++;
+                    if (loadedCount === 2) {
+                        const padding = 20;
+                        
+                        // Use the same size for both images (use canvas standard size)
+                        const imgWidth = 800;
+                        const imgHeight = 600;
+                        
+                        const combinedCanvas = document.createElement('canvas');
+                        
+                        // Set canvas size to fit both images side by side with padding
+                        combinedCanvas.width = imgWidth * 2 + padding * 3;
+                        combinedCanvas.height = imgHeight + padding * 2;
+                        
+                        const ctx = combinedCanvas.getContext('2d');
+                        
+                        // White background
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, combinedCanvas.width, combinedCanvas.height);
+                        
+                        // Draw before image (left) - scaled to standard size
+                        ctx.drawImage(beforeImg, padding, padding, imgWidth, imgHeight);
+                        
+                        // Draw after image (right) - scaled to standard size
+                        ctx.drawImage(afterImg, imgWidth + padding * 2, padding, imgWidth, imgHeight);
+                        
+                        // Add separator line
+                        ctx.strokeStyle = '#dddddd';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(imgWidth + padding * 1.5, padding);
+                        ctx.lineTo(imgWidth + padding * 1.5, imgHeight + padding);
+                        ctx.stroke();
+                        
+                        resolve(combinedCanvas.toDataURL('image/png'));
+                    }
+                };
+                
+                beforeImg.onload = checkBothLoaded;
+                afterImg.onload = checkBothLoaded;
+                
+                beforeImg.src = beforeDataURL;
+                afterImg.src = afterDataURL;
+            });
+        }
+
+        function displayOutput(result, canvasImage, beforeImage, afterImage, combinedImage) {
+            const outputHtml = `
+                <h3>${result.title || 'Generated Prompt'}</h3>
+                <p><strong>Objective:</strong><br>${result.objective || 'N/A'}</p>
+                
+                ${result.visual_elements && result.visual_elements.length > 0 ? `
+                    <p><strong>Visual Elements:</strong></p>
+                    <ul>
+                        ${result.visual_elements.map(el => `<li>${el}</li>`).join('')}
+                    </ul>
+                ` : ''}
+                
+                ${result.specifications && result.specifications.length > 0 ? `
+                    <p><strong>Specifications:</strong></p>
+                    <ul>
+                        ${result.specifications.map(spec => `<li>${spec}</li>`).join('')}
+                    </ul>
+                ` : ''}
+                
+                <p><strong>Full Prompt:</strong></p>
+                <div class="full-prompt" id="fullPromptText">${result.full_prompt || 'N/A'}</div>
+                <button class="btn btn-secondary" onclick="copyPrompt(this)" style="margin-top: 10px;">Copy Full Prompt</button>
+            `;
+            
+            document.getElementById('promptOutput').innerHTML = outputHtml;
+            
+            // Show appropriate image output section
+            if (beforeImage && afterImage) {
+                // Annotation mode: show before/after comparison
+                document.getElementById('singleImageOutput').style.display = 'none';
+                document.getElementById('beforeAfterOutput').style.display = 'grid';
+                document.getElementById('beforeImage').src = beforeImage;
+                document.getElementById('afterImage').src = afterImage;
+                
+                // Show combined image
+                if (combinedImage) {
+                    document.getElementById('combinedImageOutput').style.display = 'block';
+                    document.getElementById('combinedImage').src = combinedImage;
+                }
+            } else {
+                // Drawing mode: show single image
+                document.getElementById('singleImageOutput').style.display = 'block';
+                document.getElementById('beforeAfterOutput').style.display = 'none';
+                document.getElementById('combinedImageOutput').style.display = 'none';
+                document.getElementById('outputImage').src = canvasImage;
+            }
+        }
+
+        function copyPrompt(button) {
+            const promptText = document.getElementById('fullPromptText').textContent;
+            navigator.clipboard.writeText(promptText).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        function downloadImage(type = 'single') {
+            const link = document.createElement('a');
+            
+            if (type === 'before') {
+                link.download = 'prompt-director-before.png';
+                link.href = document.getElementById('beforeImage').src;
+            } else if (type === 'after') {
+                link.download = 'prompt-director-after.png';
+                link.href = document.getElementById('afterImage').src;
+            } else if (type === 'combined') {
+                link.download = 'prompt-director-comparison.png';
+                link.href = document.getElementById('combinedImage').src;
+            } else {
+                link.download = 'prompt-director-drawing.png';
+                link.href = canvas.toDataURL('image/png');
+            }
+            
+            link.click();
+        }
+
+        async function copyImageDataToClipboard(imageDataURL) {
+            try {
+                // Convert data URL to blob
+                const response = await fetch(imageDataURL);
+                const blob = await response.blob();
+                
+                // Copy to clipboard
+                await navigator.clipboard.write([
+                    new ClipboardItem({
+                        [blob.type]: blob
+                    })
+                ]);
+                
+                // Show success badge
+                showCopiedBadge();
+            } catch (error) {
+                console.error('Failed to copy image to clipboard:', error);
+                // Fallback: just show a message
+                updateStatus('Image ready! Use the copy button to copy to clipboard.');
+            }
+        }
+
+        async function copyImageToClipboard() {
+            const combinedImage = document.getElementById('combinedImage').src;
+            await copyImageDataToClipboard(combinedImage);
+        }
+
+        function showCopiedBadge() {
+            const badge = document.getElementById('copiedBadge');
+            badge.style.display = 'inline';
+            setTimeout(() => {
+                badge.style.display = 'none';
+            }, 3000);
+        }
+
+        function showError(message) {
+            const outputSection = document.getElementById('outputSection');
+            outputSection.classList.add('visible');
+            document.getElementById('promptOutput').innerHTML = `<div class="error">${message}</div>`;
+        }
+    </script>
+</body>
+</html>
