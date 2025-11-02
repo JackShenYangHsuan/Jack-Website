@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a MCP Server for Document Processing - Jack Shen</title>
+    <meta name="description" content="Building a production MCP server to connect AI agents to OCR APIs">
+    
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #222222;
+            line-height: 1.5;
+            padding: 50px 20px 80px;
+        }
+
+        a { color: inherit; }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #666666;
+            text-decoration: none;
+            font-size: 12px;
+            margin-bottom: 30px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #000000;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            color: #000000;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 400;
+            margin-top: 36px;
+            margin-bottom: 14px;
+            color: #000000;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 14px;
+            color: #222222;
+        }
+
+        ul, ol {
+            margin-left: 18px;
+            margin-bottom: 14px;
+        }
+
+        li {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 5px;
+            color: #222222;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        code {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            background: #f5f0e8;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #333333;
+        }
+
+        pre {
+            background: #f5f0e8;
+            border-radius: 8px;
+            padding: 14px 16px;
+            overflow-x: auto;
+            margin: 14px 0;
+            border: 1px solid #e8e0d5;
+        }
+
+        pre code {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #333333;
+            background: none;
+            padding: 0;
+        }
+
+        .meta {
+            color: #666666;
+            font-size: 12px;
+            margin-bottom: 18px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .tag-list {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            background: #f5f0e8;
+            color: #666666;
+            border: 1px solid #e8e0d5;
+        }
+
+        .hero-image {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+        }
+
+        .hero-image img {
+            max-width: 180px;
+            max-height: 180px;
+        }
+
+        .highlight-box {
+            background: #f5f0e8;
+            border-left: 3px solid #666666;
+            padding: 14px 16px;
+            margin: 14px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .architecture-diagram {
+            background: #f5f0e8;
+            border: 1px solid #e8e0d5;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin: 14px 0;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 11px;
+            overflow-x: auto;
+            line-height: 1.4;
+        }
+
+        .demo-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #000000;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-top: 14px;
+        }
+
+        .demo-link:hover {
+            background: #1a1a1a;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 40px 16px 60px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            p, li {
+                font-size: 13px;
+            }
+
+            pre {
+                padding: 12px 14px;
+            }
+
+            pre code {
+                font-size: 10px;
+            }
+
+            .hero-image {
+                padding: 40px 20px;
+            }
+
+            .hero-image img {
+                max-width: 140px;
+                max-height: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="/tinkering">← Back</a>
+
+        <h1>Building a MCP Server for Document Processing</h1>
+
+        <div class="meta">
+            <span>📅 October 2025</span>
+            <span>⏱️ Under 2 hours</span>
+            <span>🚀 Deployed to Vercel</span>
+        </div>
+
+        <div class="tag-list">
+            <span class="tag">MCP</span>
+            <span class="tag">Reducto API</span>
+            <span class="tag">Gumloop</span>
+        </div>
+
+        <div class="hero-image">
+            <img src="../../Reducto MCP.png" alt="Reducto MCP Server">
+        </div>
+            <h2 id="what-i-built">What I Built</h2>
+            <p>
+                A Model Context Protocol (MCP) server that connects my personal OS (AI workflow system) to Reducto's OCR API. 
+                This gives me a specialized tool for document parsing and OCR that I can call from any AI agent in my system.
+            </p>
+
+            <div class="highlight-box">
+                <strong>🎯 The Problem:</strong> I needed a reliable OCR and document parsing tool for my personal OS. 
+                Rather than calling Reducto's API directly from each workflow, I wanted a standardized MCP interface that any AI agent could use.
+                <br><br>
+                <strong>✅ The Solution:</strong> Built an MCP server that wraps Reducto's API. Now any agent in my personal OS can extract text from PDFs, 
+                parse invoices, or pull structured data from documents using the same simple interface.
+            </div>
+
+            <h2 id="architecture">Architecture</h2>
+            
+            <div class="architecture-diagram">
+┌─────────────────┐         ┌─────────────────┐         ┌─────────────────┐
+│   AI Agent      │         │   MCP Server    │         │  Reducto API    │
+│   (Gumloop)     │◄───────►│  (My Code)      │◄───────►│  (OCR Service)  │
+└─────────────────┘         └─────────────────┘         └─────────────────┘
+     Client                    Middleware                   Backend
+            </div>
+
+            <p>The MCP server acts as middleware that:</p>
+            <ul>
+                <li>Receives requests from AI agents in MCP format (JSON-RPC 2.0)</li>
+                <li>Translates them into Reducto API calls</li>
+                <li>Handles authentication and error handling</li>
+                <li>Returns formatted results back to the AI</li>
+            </ul>
+
+            <h2 id="key-features">Key Features</h2>
+            
+            <h3>🔧 Three Tools for AI Agents</h3>
+            <p><strong>1. parse_document</strong> - Extract all text from PDFs and images</p>
+            <ul>
+                <li>Standard OCR: 1 credit per page, fast</li>
+                <li>Agentic OCR: 2x credits, AI-enhanced for better accuracy</li>
+                <li>Output formats: Markdown or JSON</li>
+            </ul>
+
+            <p><strong>2. extract_structured_data</strong> - Pull specific fields from documents</p>
+            <ul>
+                <li>Define JSON schema for what you want to extract</li>
+                <li>Perfect for invoices, receipts, forms</li>
+                <li>Returns validated structured data</li>
+            </ul>
+
+            <p><strong>3. upload_document</strong> - Validate and prepare documents for processing</p>
+
+
+
+            <h2 id="technical-implementation">Technical Implementation</h2>
+
+            <h3>Component Architecture</h3>
+            <p><strong>1. Reducto API Client</strong> (<code>reducto_client.py</code>)</p>
+            <ul>
+                <li>Wrapper class for Reducto's REST API</li>
+                <li>Handles authentication with Bearer tokens</li>
+                <li>Centralized error handling</li>
+            </ul>
+
+            <p><strong>2. Tool Definitions</strong> (<code>lib/mcp_tools.py</code>)</p>
+            <ul>
+                <li>Defines available tools and their schemas</li>
+                <li>Validates input parameters</li>
+                <li>Routes tool execution to API client</li>
+            </ul>
+
+            <p><strong>3. MCP Protocol Handler</strong> (<code>api/index.py</code>)</p>
+            <ul>
+                <li>Implements JSON-RPC 2.0 protocol</li>
+                <li>Session management with UUID-based IDs</li>
+                <li>HTTP POST for tool execution</li>
+                <li>SSE endpoint for real-time updates</li>
+            </ul>
+
+            <h3>MCP Protocol Deep Dive</h3>
+            <p>MCP uses JSON-RPC 2.0 for communication. Here's what a typical request looks like:</p>
+
+            <pre><code>{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "parse_document",
+    "arguments": {
+      "file_url": "https://example.com/invoice.pdf",
+      "output_format": "markdown"
+    }
+  }
+}</code></pre>
+
+            <p>The server responds with:</p>
+            <pre><code>{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "content": [{
+      "type": "text",
+      "text": "Extracted text from PDF..."
+    }]
+  }
+}</code></pre>
+
+            <h2 id="deployment">Deployment</h2>
+            <p>Deployed as a Vercel serverless function with:</p>
+            <ul>
+                <li><strong>Auto-scaling:</strong> Handles 1 or 1000 requests automatically</li>
+                <li><strong>Zero ops:</strong> No servers to manage</li>
+                <li><strong>Instant HTTPS:</strong> Secure by default</li>
+                <li><strong>Environment variables:</strong> Secure API key management</li>
+            </ul>
+
+            <pre><code># Deploy command
+vercel --prod
+
+# Environment variables set via Vercel dashboard
+REDUCTO_API_KEY=xxx
+MCP_AUTH_TOKEN=xxx</code></pre>
+
+
+
+            <h2 id="what-i-learned">What I Learned</h2>
+            <ul>
+                <li><strong>MCP standardization is powerful:</strong> Building to a standard protocol means any MCP-compatible agent can use my OCR tool without custom integration</li>
+                <li><strong>Separation of concerns works:</strong> Splitting the code into API client, tool definitions, and protocol handler made it easy to debug and extend</li>
+                <li><strong>Serverless is perfect for this:</strong> Don't need to manage servers for a tool that gets called occasionally - Vercel handles scaling automatically</li>
+                <li><strong>Good tool design matters:</strong> Spent time thinking about what parameters each tool needs - makes it much easier to use in workflows</li>
+            </ul>
+
+            <h2 id="try-it">Try It Yourself</h2>
+            <p>The server is live and processing documents! Gumloop uses it to extract text from PDFs:</p>
+            
+            <div class="highlight-box">
+                <strong>Live Server:</strong> <code>https://reducto-mcp-server.vercel.app/</code>
+                <br><br>
+                <strong>Available Tools:</strong>
+                <ul style="margin-top: 12px;">
+                    <li>parse_document - OCR any PDF or image</li>
+                    <li>extract_structured_data - Pull specific fields</li>
+                    <li>upload_document - Validate URLs</li>
+                </ul>
+            </div>
+
+            <h2>Resources</h2>
+            <ul>
+                <li><a href="https://modelcontextprotocol.io" target="_blank">MCP Specification</a></li>
+                <li><a href="https://docs.reducto.ai" target="_blank">Reducto API Documentation</a></li>
+                <li><a href="https://vercel.com/docs/functions/runtimes/python" target="_blank">Vercel Python Functions</a></li>
+                <li><a href="https://reducto-mcp-server.vercel.app/" target="_blank">Live MCP Server</a></li>
+            </ul>
+
+        <a class="demo-link" href="https://reducto-mcp-server.vercel.app/" target="_blank">
+            View Live Server →
+        </a>
+    </div>
+</body>
+</html>

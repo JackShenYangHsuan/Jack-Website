@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a MCP Server for Document Processing - Tinkering with AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #ffffff;
+            color: #222222;
+            line-height: 1.6;
+            padding: 50px 20px 80px;
+        }
+
+        a { color: inherit; }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #666666;
+            text-decoration: none;
+            font-size: 12px;
+            margin-bottom: 30px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #000000;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            color: #000000;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            color: #000000;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+            color: #222222;
+        }
+
+        .try-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #000000;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-bottom: 32px;
+        }
+
+        .try-button:hover {
+            background: #1a1a1a;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 40px 16px 60px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="/tinkering">← Back</a>
+
+        <h1>Build Reducto MCP server</h1>
+
+        <a href="https://reducto-mcp-server.vercel.app/" target="_blank" class="try-button">Try It Now →</a>
+
+        <h2>Motivation</h2>
+        <p>I needed a reliable OCR and document parsing tool for my personal OS. GPT sometimes misses details, especially with handwriting. I learned that Reducto is best in class for this. Rather than calling Reducto's API directly from each workflow, I wanted a standardized MCP interface that any AI agent could use. I also wanted to integrate it with my Gumloop agents so I could call it directly from Slack.</p>
+
+        <h2>Implementation</h2>
+        <p>You can turn any API into an MCP. The way I think about MCPs is they're basically API calls with a reasoning brain. Instead of structured requests, you interact with MCPs in natural language and they decide how to interface with other services.</p>
+
+        <p>This Reducto MCP takes my request in natural language (like "parse this document") and converts it into Reducto API calls. It handles authentication and error handling, then returns the result.</p>
+
+        <p>To run this in my Gumloop agent, I had to deploy the MCP server on Vercel so Gumloop could call it. The server is live here: <a href="https://reducto-mcp-server.vercel.app/" target="_blank">https://reducto-mcp-server.vercel.app/</a></p>
+    </div>
+</body>
+</html>

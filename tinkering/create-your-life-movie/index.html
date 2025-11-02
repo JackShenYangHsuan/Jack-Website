@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create your life movie, Pixar style - Tinkering with AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #222222;
+            line-height: 1.5;
+            padding: 50px 20px 80px;
+        }
+
+        a { color: inherit; }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #666666;
+            text-decoration: none;
+            font-size: 12px;
+            margin-bottom: 30px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #000000;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            color: #000000;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 400;
+            margin-top: 36px;
+            margin-bottom: 14px;
+            color: #000000;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+
+        h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 18px;
+            margin-bottom: 8px;
+            color: #000000;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 14px;
+            color: #222222;
+        }
+
+        ul, ol {
+            margin-left: 18px;
+            margin-bottom: 14px;
+        }
+
+        li {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 5px;
+            color: #222222;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        code {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            background: #f5f0e8;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #333333;
+        }
+
+        pre {
+            background: #f5f0e8;
+            border-radius: 8px;
+            padding: 14px 16px;
+            overflow-x: auto;
+            margin: 14px 0;
+            border: 1px solid #e8e0d5;
+        }
+
+        pre code {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #333333;
+            background: none;
+            padding: 0;
+        }
+
+        video {
+            width: 100%;
+            max-width: 700px;
+            border-radius: 8px;
+            margin: 14px 0;
+        }
+
+        .scene-card {
+            background: #f5f0e8;
+            border: 1px solid #e8e0d5;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin: 14px 0;
+        }
+
+        .scene-card h3 {
+            margin-top: 0;
+        }
+
+        .scene-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666666;
+            margin-top: 12px;
+            margin-bottom: 6px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 40px 16px 60px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            p, li {
+                font-size: 13px;
+            }
+
+            pre {
+                padding: 12px 14px;
+            }
+
+            pre code {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="/tinkering">← Back</a>
+
+        <h1>Create your life movie, Pixar style</h1>
+
+        <h2>Motivation</h2>
+        <p>When I was creating my personal website, I thought about the fastest and most fun way to introduce myself. The fastest way would be a few bullet points on my career highlights. But most fun? Definitely not. Everyone loves Pixar movies, and I do too. So I wondered: What if I could use video models to create a montage of my life?</p>
+
+        <h2>Implementation</h2>
+        <p>I was playing with the latest release of the Sora app and was blown away by the remix capabilities. It became obvious that the technology was ready. I just needed to write my life movie's script and direct my own film. With ChatGPT's help, I created 10 scenes that portray the arc of my 28 years and fed them into Sora. Since Sora is limited to 15-second videos, I stitched them together with CapCut.</p>
+
+        <h2>Sample output</h2>
+        <p>Here's an example video created using this process.</p>
+        <video controls>
+            <source src="../../Jacks Story Pixar Style.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <h2>Example prompts</h2>
+        <p>Here are sample prompts you can use as a starting point. Each scene has a video prompt and a narration prompt.</p>
+
+        <h3>Scene 1 - The Summer Factory</h3>
+        <pre><code>// Video prompt:
+Vibrant Pixar-style animation. Twelve-year-old Taiwanese boy named Jack in his father's small women's-shoe factory. The air shimmers at 35 degrees Celsius. Fans spin lazily, sewing machines clatter, dust floats in golden sunlight. Workers chat softly in Mandarin. Jack wipes sweat, carries shoe boxes, and hides an envelope labeled MacBook Fund. Camera slowly pans from steaming street to Jack's proud smile. Warm orange palette, subtle motion blur, ambient sound of leather and metal.
+
+// Narration:
+Deep, smooth baritone voice with gentle warmth-confident, intimate, like a movie trailer or luxury brand narrator. Speak slowly, with slight pauses that let emotion breathe: "Jack grew up in the thick heat of a small shoe factory in Taiwan. At twelve, he stacked boxes taller than himself as the scent of leather and glue filled the air and the old fans spun slow circles above his head. Every coin he earned for his father's shop went into his MacBook fund."</code></pre>
+
+        <h3>Scene 2 - The Spark of Code</h3>
+        <pre><code>// Video prompt:
+Vibrant Pixar-style animation. Jack's dim bedroom. Neon light leaks from Taipei streets through curtains. A silver laptop glows on the desk, reflecting in his eyes. Posters of white male founder heroes and circuit diagrams cover the wall. Jack types code as rain taps the window. Inspirational speeches flicker on screen. Camera circles slowly around him, showing energy and solitude. Cool blue and amber lighting, cinematic lens flare.
+
+// Narration:
+Same narrator style as Scene 1: "That laptop changed everything. Nights in Taipei turned into tiny silicon valleys in his room. He watched his heroes speak, learned English by rewinding every sentence, and filled notebooks with lines of code. He dreamt of building something with code that could impact millions."</code></pre>
+
+        <h3>Scene 3 - Dream School</h3>
+        <pre><code>// Video prompt:
+Vibrant Pixar-style animation. Morning at National Tsing Hua University. Cherry blossoms drift through sunbeams. Students ride bikes past futuristic glass halls. Jack, in a hoodie and backpack, walks under the stone arch smiling. Cut to him in a bright computer lab, screens reflecting lines of code. Camera cranes up showing the whole campus framed by mountains. Lively orchestral music, soft pastel colors.
+
+// Narration:
+Deep baritone narration: "Years later, Jack's dream came true. He studied computer science at National Tsing Hua University. Between late-night debugging, he found joy in creation itself-discovering that code was not just logic, it was a language for imagination."</code></pre>
+
+        <h3>Scene 4 - The Leap of Faith</h3>
+        <pre><code>// Video prompt:
+Vibrant Pixar-style animation. Cozy Taipei cafe with wooden walls, sunlight through windows. Jack and a close friend pitch to two investors. Laptops open, mock-ups displayed. One investor nods, smiles, and slides a check across the table. The boys cheer quietly. Coffee steam rises, scooters pass outside. Camera glides around them, golden afternoon light fills the room. Background chatter, upbeat string score.
+
+// Narration:
+Deep baritone narration: "After his first year of college, Jack made a wild decision-to pause school and build his own company. In a tiny cafe, he pitched to investors and secured fifty thousand dollars. It became his first real vote of confidence, and he started building with his co-founder, Frank."</code></pre>
+
+        <h3>Scene 5 - The App That Traveled</h3>
+        <pre><code>// Video prompt:
+Vibrant Pixar-style travel montage: Jack backpacking alone across Europe-Eiffel Tower, Swiss Alps, Italian piazzas. He struggles to take self-portraits by strangers, then sketches an app on a napkin. Transition to him coding in hostels, interface coming alive on his phone. The app is named "Frismo". App Store ranking climbs to top three, confetti animation bursts, Apple feature banner flashes. Warm global palette, dynamic transitions.
+
+// Narration:
+Deep baritone narration: "His startup idea came from the frustration of blurry selfies and kind strangers cutting off his head in photos while he backpacked through Europe. So he built a camera app that saw what he saw. It went viral-ranked third on the App Store with half a million downloads."</code></pre>
+
+        <h3>Scene 6 - When Dreams Stall</h3>
+        <pre><code>// Video prompt:
+Vibrant Pixar-style animation. Nighttime in Taipei. Jack sits alone at his desk, eyes on analytics graphs falling flat. Coffee cups pile up. Outside, rain streaks the window, city lights blur. A single small plant on the desk sways under the fan. Camera zooms out slowly until Jack is a tiny figure surrounded by blue glow. Somber piano and rain sounds.
+
+// Narration:
+Deep baritone narration: "But downloads did not mean dollars. The charts that once climbed now refused to move. He tried subscriptions, ads, partnerships-nothing stuck. Yet somewhere behind that tired face was a quiet voice whispering: this, too, is part of the story."</code></pre>
+
+        <h3>Scene 7 - The McKinsey Chapter</h3>
+        <pre><code>// Video prompt:
+Vibrant Pixar-style animation. Sleek office montage. Jack, now older in a suit, enters McKinsey inside Taipei 101. Cut to planes taking off, skyscrapers of Shanghai, Munich, and New York. Scenes of him guiding factory workers, presenting dashboards, shaking hands with clients. Cool blue-silver palette, crisp motion transitions, inspiring orchestral rhythm.
+
+// Narration:
+Deep baritone narration: "To understand how great businesses survive, Jack joined McKinsey-a place where questions mattered more than answers. From Taipei's factories to Germany's plants to boardrooms in New York, he learned that business was not just numbers-it was about people."</code></pre>
+
+        <h3>Scene 8 - The Growth Within</h3>
+        <pre><code>// Video prompt:
+Vibrant Pixar-style animation. Warm golden office lighting. Jack leads a presentation; mentors nod approvingly. Late-night collaboration scenes, sticky notes, global video calls. Camera pans around the table showing teamwork and laughter. Sunset shines through blinds. Tone: mature, grateful, cinematic.
+
+// Narration:
+Deep baritone narration: "Four years passed. Jack carried laptops across airports, notebooks filled with frameworks, and stories of leaders who never gave up. Mentors taught him to think from first principles, to stay calm when plans fell apart, and to act with integrity when no one was watching. Those lessons became part of his spine."</code></pre>
+
+        <h3>Scene 9 - The West Coast Dream</h3>
+        <pre><code>// Video prompt:
+Vibrant Pixar-style animation. Sunset over the Golden Gate Bridge. Jack and his wife walk hand-in-hand with luggage in San Francisco airport, wind brushing their faces. Cut to their cozy apartment-boxes everywhere, two coffee mugs by a big window overlooking the skyline. Camera pans slowly from the city to their smiling faces. Warm golden tones, soft romantic score.
+
+// Narration:
+Deep baritone narration: "Together, Jack and his wife crossed the Pacific to begin again in San Francisco. Two suitcases, one dream. Deep down, Jack still wanted to build-and he wanted to build with the best and brightest in the world."</code></pre>
+
+        <h3>Scene 10 - The Builder's Heart</h3>
+        <pre><code>// Video prompt:
+Vibrant Pixar-style animation. Morning at UC Berkeley campus. Students walk under eucalyptus trees. Jack in class, sunlight flickering through blinds. Quick cuts: whiteboarding AI flowcharts with founders at a cafe, coding prototypes glowing with holographic overlays, city skyline at night. Final shot: Jack gazes out the window, reflection of the Bay in his glasses. Blue-gold color grade, crescendoing orchestral finale.
+
+// Narration:
+Deep baritone narration: "Now, Jack spends his days at Berkeley and his nights tinkering with AI. He talks to founders and rediscovers the joy of building something people want."</code></pre>
+    </div>
+</body>
+</html>

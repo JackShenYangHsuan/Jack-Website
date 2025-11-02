@@ -436,6 +436,43 @@
             }
         }
 
+        .scroll-arrow {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: 2px solid #000000;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            z-index: 10;
+        }
+
+        .scroll-arrow:hover {
+            transform: translateX(-50%) translateY(4px);
+            background: #000000;
+        }
+
+        .scroll-arrow:hover svg {
+            stroke: #ffffff;
+        }
+
+        .scroll-arrow svg {
+            width: 24px;
+            height: 24px;
+            stroke: #000000;
+            stroke-width: 2;
+            fill: none;
+            transition: stroke 0.3s ease;
+        }
+
         footer {
             max-width: 1000px;
             margin: 60px auto 80px;
@@ -474,6 +511,17 @@
         }
 
         @media (max-width: 768px) {
+            .scroll-arrow {
+                width: 44px;
+                height: 44px;
+                bottom: 30px;
+            }
+
+            .scroll-arrow svg {
+                width: 20px;
+                height: 20px;
+            }
+
             .portfolio-section {
                 padding: 20px 15px;
             }
@@ -596,65 +644,6 @@
             }
         }
 
-        /* Scroll indicator */
-        .scroll-indicator {
-            position: fixed;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 5;
-            opacity: 0.6;
-            transition: opacity 0.3s;
-            cursor: pointer;
-        }
-
-        .scroll-indicator:hover {
-            opacity: 1;
-        }
-
-        .scroll-indicator.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .scroll-arrow {
-            width: 30px;
-            height: 30px;
-            border-bottom: 2px solid #000000;
-            border-right: 2px solid #000000;
-            transform: rotate(45deg);
-            animation: scrollBounce 2s infinite;
-        }
-
-        @keyframes scrollBounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0) rotate(45deg);
-            }
-            40% {
-                transform: translateY(-10px) rotate(45deg);
-            }
-            60% {
-                transform: translateY(-5px) rotate(45deg);
-            }
-        }
-
-        /* Tinkering section - scrolls up to cover portfolio */
-        .tinkering-section {
-            position: relative;
-            margin-top: 100vh;
-            background: #ffffff;
-            z-index: 10;
-            min-height: 100vh;
-            width: 100%;
-            box-shadow: 0 -16px 64px rgba(0, 0, 0, 0.06), 0 -4px 24px rgba(0, 0, 0, 0.04);
-        }
-
-        .tinkering-section iframe {
-            width: 100%;
-            min-height: 100vh;
-            border: none;
-            display: block;
-        }
     </style>
 </head>
 <body>
@@ -691,17 +680,13 @@
                 </div>
             </div>
         </footer>
+        
+        <a href="/tinkering" class="scroll-arrow" aria-label="View AI Experiments">
+            <svg viewBox="0 0 24 24">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </a>
     </div>
-
-    <!-- Scroll Indicator -->
-    <div class="scroll-indicator" id="scrollIndicator">
-        <div class="scroll-arrow"></div>
-    </div>
-
-    <!-- Tinkering Section - Scrolls up to cover portfolio -->
-    <section class="tinkering-section">
-        <iframe src="/tinkering" id="tinkeringFrame"></iframe>
-    </section>
 
     <!-- Modal -->
     <div class="modal-overlay" id="modal">
@@ -836,9 +821,9 @@
                 e.preventDefault();
                 const key = this.getAttribute('data-tooltip');
 
-                // Scroll to tinkering section
+                // Navigate to tinkering page
                 if (key === 'Tinkering with AI') {
-                    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                    window.location.href = '/tinkering';
                     return;
                 }
                 // Navigate to blog page
@@ -935,50 +920,6 @@
             }
         });
 
-        // Scroll indicator functionality
-        const scrollIndicator = document.getElementById('scrollIndicator');
-        const tinkeringFrame = document.getElementById('tinkeringFrame');
-        let hasScrolledToTinkering = false;
-
-        // Click to scroll down
-        scrollIndicator.addEventListener('click', function() {
-            window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
-        });
-
-        // Hide indicator when user scrolls and manage back button visibility
-        window.addEventListener('scroll', function() {
-            const scrollY = window.scrollY;
-            const viewportHeight = window.innerHeight;
-
-            // Hide scroll indicator when scrolled down
-            if (scrollY > 100) {
-                scrollIndicator.classList.add('hidden');
-            } else {
-                scrollIndicator.classList.remove('hidden');
-            }
-
-            // Track if user has scrolled into tinkering section
-            if (scrollY > viewportHeight * 0.5) {
-                hasScrolledToTinkering = true;
-            }
-
-            // Send message to iframe about back button visibility
-            // Show back button when user has scrolled down and is now in the tinkering section near top
-            if (tinkeringFrame.contentWindow) {
-                if (hasScrolledToTinkering && scrollY >= viewportHeight && scrollY < viewportHeight + 200) {
-                    tinkeringFrame.contentWindow.postMessage({ action: 'showBackButton', show: true }, '*');
-                } else {
-                    tinkeringFrame.contentWindow.postMessage({ action: 'showBackButton', show: false }, '*');
-                }
-            }
-        });
-
-        // Intercept clicks on back link in iframe
-        window.addEventListener('message', function(event) {
-            if (event.data === 'scrollToTop') {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        });
     </script>
 </body>
 </html>

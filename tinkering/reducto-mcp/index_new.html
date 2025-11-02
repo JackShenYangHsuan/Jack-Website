@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a MCP Server for Document Processing - Jack Shen</title>
+    <meta name="description" content="Building a production MCP server to connect AI agents to OCR APIs">
+    
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #222222;
+            line-height: 1.5;
+            padding: 50px 20px 80px;
+        }
+
+        a { color: inherit; }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #666666;
+            text-decoration: none;
+            font-size: 12px;
+            margin-bottom: 30px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #000000;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            color: #000000;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 400;
+            margin-top: 36px;
+            margin-bottom: 14px;
+            color: #000000;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 14px;
+            color: #222222;
+        }
+
+        ul, ol {
+            margin-left: 18px;
+            margin-bottom: 14px;
+        }
+
+        li {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 5px;
+            color: #222222;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        code {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            background: #f5f0e8;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #333333;
+        }
+
+        pre {
+            background: #f5f0e8;
+            border-radius: 8px;
+            padding: 14px 16px;
+            overflow-x: auto;
+            margin: 14px 0;
+            border: 1px solid #e8e0d5;
+        }
+
+        pre code {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #333333;
+            background: none;
+            padding: 0;
+        }
+
+        .meta {
+            color: #666666;
+            font-size: 12px;
+            margin-bottom: 18px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .tag-list {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            background: #f5f0e8;
+            color: #666666;
+            border: 1px solid #e8e0d5;
+        }
+
+        .hero-image {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+        }
+
+        .hero-image img {
+            max-width: 180px;
+            max-height: 180px;
+        }
+
+        .highlight-box {
+            background: #f5f0e8;
+            border-left: 3px solid #666666;
+            padding: 14px 16px;
+            margin: 14px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .architecture-diagram {
+            background: #f5f0e8;
+            border: 1px solid #e8e0d5;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin: 14px 0;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 11px;
+            overflow-x: auto;
+            line-height: 1.4;
+        }
+
+        .demo-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #000000;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-top: 14px;
+        }
+
+        .demo-link:hover {
+            background: #1a1a1a;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 40px 16px 60px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            p, li {
+                font-size: 13px;
+            }
+
+            pre {
+                padding: 12px 14px;
+            }
+
+            pre code {
+                font-size: 10px;
+            }
+
+            .hero-image {
+                padding: 40px 20px;
+            }
+
+            .hero-image img {
+                max-width: 140px;
+                max-height: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="/tinkering">← Back</a>
+
+        <h1>Building a MCP Server for Document Processing</h1>
+
+        <div class="meta">
+            <span>📅 October 2025</span>
+            <span>⏱️ Under 2 hours</span>
+            <span>🚀 Deployed to Vercel</span>
+        </div>
+
+        <div class="tag-list">
+            <span class="tag">MCP</span>
+            <span class="tag">Reducto API</span>
+            <span class="tag">Gumloop</span>
+        </div>
+
+        <div class="hero-image">
+            <img src="../../Reducto MCP.png" alt="Reducto MCP Server">
+        </div>
+            <h2 id="motivation">Motivation</h2>
+            <p>I needed a reliable OCR and document parsing tool for my personal OS. GPT sometimes misses details, especially with handwriting. I learned that Reducto is best in class for this. Rather than calling Reducto's API directly from each workflow, I wanted a standardized MCP interface that any AI agent could use. I also wanted to integrate it with my Gumloop agents so I could call it directly from Slack.</p>
+
+            <h2 id="implementation">Implementation</h2>
+            <p>You can turn any API into an MCP. The way I think about MCPs is they're basically API calls with a reasoning brain. Instead of structured requests, you interact with MCPs in natural language and they decide how to interface with other services.</p>
+
+            <p>This Reducto MCP takes my request in natural language (like "parse this document") and converts it into Reducto API calls. It handles authentication and error handling, then returns the result.</p>
+
+            <p>To run this in my Gumloop agent, I had to deploy the MCP server on Vercel so Gumloop could call it. The server is live here: <a href="https://reducto-mcp-server.vercel.app/" target="_blank">https://reducto-mcp-server.vercel.app/</a></p>
+            </div>
+        </article>
+    </div>
+
+    <script>
+        // Sidebar active state on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelectorAll('.sidebar-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, {
+            rootMargin: '-100px 0px -66%',
+            threshold: 0
+        });
+
+        // Observe all h2 sections
+        document.querySelectorAll('h2[id]').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scroll for sidebar links
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

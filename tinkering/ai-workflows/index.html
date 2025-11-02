@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delegate Tasks to AI interns (agents) - Tinkering with AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #222222;
+            line-height: 1.5;
+            padding: 50px 20px 80px;
+        }
+
+        a { color: inherit; }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #666666;
+            text-decoration: none;
+            font-size: 12px;
+            margin-bottom: 30px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #000000;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            color: #000000;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 400;
+            margin-top: 36px;
+            margin-bottom: 14px;
+            color: #000000;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 14px;
+            color: #222222;
+        }
+
+        ul, ol {
+            margin-left: 18px;
+            margin-bottom: 14px;
+        }
+
+        li {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 5px;
+            color: #222222;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        .intro-text {
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .subtitle-with-logos {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 18px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle-with-logos strong {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .subtitle-with-logos .tool-logos {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .subtitle-with-logos .tool-logos img {
+            height: 16px;
+            width: 16px;
+            object-fit: contain;
+        }
+
+        .prompt-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666666;
+            margin-top: 16px;
+            margin-bottom: 6px;
+        }
+
+        pre {
+            background: #f5f0e8;
+            border-radius: 8px;
+            padding: 14px 16px;
+            overflow-x: auto;
+            margin: 14px 0;
+            border: 1px solid #e8e0d5;
+        }
+
+        code {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #333333;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 40px 16px 60px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            .intro-text {
+                font-size: 14px;
+            }
+
+            p, li {
+                font-size: 13px;
+            }
+
+            pre {
+                padding: 12px 14px;
+            }
+
+            code {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="/tinkering">← Back</a>
+
+        <h1>Delegate Tasks to AI interns (agents)</h1>
+
+        <p class="intro-text"><strong>Agents Are Like Interns</strong></p>
+
+        <p class="intro-text">Give them tools, context, and instructions. They figure out the rest.</p>
+
+        <p class="intro-text">I use them to automate tasks I know how to do but don't want to spend time on.<br>Here is my current setup:</p>
+
+        <h2>One-off workflows: Perplexity Comet</h2>
+
+        <p><strong>Example use cases:</strong></p>
+        <ul>
+            <li>Finding discounts code at checkout (life saver): it searches through the web and applies every code it could find and gives you the best deal</li>
+            <li>Scraping websites: Extract pricing, product descriptions, feature lists from competitor pages</li>
+        </ul>
+
+        <p><strong>Key benefits:</strong></p>
+        <ul>
+            <li>Zero setup—spin it up instantly</li>
+            <li>Works with login-required tools—log in once, then let it execute</li>
+            <li>No configuration needed for one-time tasks</li>
+        </ul>
+
+        <h2>Recurring workflows: Gumloop with Slack</h2>
+
+        <p>I built a personal operating system with Slack as the control center. Each channel houses specialized agents with MCP connections to GSuite, Exa (for web search), and Apollo (for contact).</p>
+
+        <p>I have 2 channels in my personal Slack (still expanding):</p>
+
+        <h3>#job-openings (1 agent)</h3>
+        <ul>
+            <li>Consolidates job postings from 4 Berkeley Slack channels (past 48hrs)</li>
+            <li>Searches LinkedIn for Summer 2026 MBA internships in PM/operations/GTM</li>
+            <li>Delivers: Company + Role + Description + Contact/Link</li>
+            <li>Eliminates daily manual searching and reading through messy slack channels</li>
+        </ul>
+
+        <div class="prompt-label">My prompt:</div>
+        <pre><code>You are a helpful agent that gathers job posting messages within the past 48hrs.
+Step 1: In below Slack channels. And summarizes them into bullet points of {Company + Role + Description + Contact person if interested}.
+Channel Names (ID):
+- careers_ftmba-2027 (C097TNG2YJ3)
+- careers_hirehaas (C01R6DQTZT6)
+- careers_tech-internships (CNPB9DQRH)
+- careers_your-career-community (CUUNCT6JX)
+
+Step 2: Search on LinkedIn Summer 2026 MBA internships, 2026 summer internships, internships in the product management, operations, GTM field. Summarize in {Company + Role + Description + application link} format.
+
+Step 3: Consolidate step 2 and step 3 and share with me</code></pre>
+
+        <h3>#network (3 agents managing professional network)</h3>
+
+        <div class="subtitle-with-logos">
+                <strong>Add network</strong>
+                <span style="color: #94a3b8; font-size: 14px; font-weight: 500;">(Tool use:</span>
+                <div class="tool-logos">
+                    <img src="../../Apollo Logo.svg" alt="Apollo">
+                    <img src="../../Exa AI Logo.jpeg" alt="Exa">
+                    <img src="../../Gmail_Icon.png" alt="Gmail">
+                    <img src="../../Google Sheet Logo.png" alt="Google Sheet">
+            </div>
+            <span style="color: #94a3b8; font-size: 14px; font-weight: 500;">)</span>
+        </div>
+        <ul>
+            <li>Input: LinkedIn URL + context about how we met and other info</li>
+            <li>Agent researches: work experience, education, posts, press coverage</li>
+            <li>Finds email via Apollo</li>
+            <li>Drafts personalized follow-up email</li>
+            <li>Adds complete profile to my Google Sheet database</li>
+        </ul>
+
+        <div class="prompt-label">My prompt:</div>
+        <pre><code>You are a helpful assistant that helps research background of a person and draft a personalized email in my tone.
+Step 1: Ask for person's LinkedIn URL and information about this person
+Step 2: Research person's LinkedIn work experience, education, posts
+Step 3: Research the person's email from Apollo
+Step 4: Research any press coverage / blog posts / public information about this person
+Step 5: Summarize in concise bullet points
+Step 6: Draft a cold outreach email based on how I met the person and highlight their background
+Step 3: Based on the information I gave you and your research, put all information in the Google Sheet based on the columns (Name, Background, Contact Date, How we met, Comments, Background research (agent))
+This is the Google Sheet link to the database: https://docs.google.com/spreadsheets/d/1rI1zc0qYzEJSa09Wv7TXFUqzWPmWaYpjR2re5BMC8Fk/edit?usp=sharing
+
+You have access to the following tools:
+1. Gmail: Use this to draft my email
+2. Apollo: Use this to find person's email
+3. Exa: Use this to find all background information (including LinkedIn and public websites) of the person
+4. Google Sheet: Use this to read/write information</code></pre>
+
+        <div class="subtitle-with-logos">
+            <strong>Update network</strong>
+            <span style="color: #94a3b8; font-size: 14px; font-weight: 500;">(Tool use:</span>
+            <div class="tool-logos">
+                <img src="../../Google Sheet Logo.png" alt="Google Sheet">
+            </div>
+            <span style="color: #94a3b8; font-size: 14px; font-weight: 500;">)</span>
+        </div>
+        <ul>
+            <li>Input: Contact name + new information to log</li>
+            <li>Agent finds person in database, clarifies if needed</li>
+            <li>Appends new data without replacing existing info</li>
+        </ul>
+
+        <div class="prompt-label">My prompt:</div>
+        <pre><code>You are a helpful assistant that helps me maintain my professional network database.
+Step 1: Ask me the name of this contact
+Step 2: Find the person in the database. clarify with me if I'm not being specific enough or there are duplicate names
+Step 2: Ask me what information I'd like to log down about this contact
+Step 3: Based on the information I gave you, put all information in the Google Sheet based on the columns (Name, Background, Contact	Date, How we met, Comments). Make sure you only append new data to the cells, do not replace any existing info. Make sure you're adding data to the right row of the contact. Do not skip rows.
+
+This is the Google Sheet link to the database: https://docs.google.com/spreadsheets/d/1rI1zc0qYzEJSa09Wv7TXFUqzWPmWaYpjR2re5BMC8Fk/edit?usp=sharing
+
+You have access to the following tools:
+1. Google Sheet: Use this to read/write information</code></pre>
+
+        <div class="subtitle-with-logos">
+            <strong>Find network</strong>
+            <span style="color: #94a3b8; font-size: 14px; font-weight: 500;">(Tool use:</span>
+            <div class="tool-logos">
+                <img src="../../Google Sheet Logo.png" alt="Google Sheet">
+                <img src="../../Gmail_Icon.png" alt="Gmail">
+                <img src="../../Google Calendar Logo.png" alt="Google Calendar">
+                <img src="../../Exa AI Logo.jpeg" alt="Exa">
+            </div>
+            <span style="color: #94a3b8; font-size: 14px; font-weight: 500;">)</span>
+        </div>
+        <ul>
+            <li>Input: Keywords (e.g., "people from Google", "met 2 months ago")</li>
+            <li>Agent searches database for matches</li>
+            <li>Researches recent updates: job changes, LinkedIn posts, company news</li>
+            <li>Checks Gmail/Calendar for last interaction</li>
+            <li>Delivers: Connections + relevance + research + last contact date</li>
+        </ul>
+
+        <div class="prompt-label">My prompt:</div>
+        <pre><code>You are a helpful assistant that helps me find relevant connections in my network database and gives me the connection's recent update.
+Step 1: Ask what relevant background or any information that I'd like to search within my network database
+Step 2: Search within my Google Sheet database and pull out relevant connections
+Step 3: Research they're most recent job changes / LinkedIn posts / company news / personal updates. Include dates and links where possible.
+Step 4: Find in my Gmail and Google Calendar when was my last interaction with connection
+Step 5: List out the connections, reason they are relevant, research, last interaction
+
+This is the Google Sheet link to the database: https://docs.google.com/spreadsheets/d/1rI1zc0qYzEJSa09Wv7TXFUqzWPmWaYpjR2re5BMC8Fk/edit?usp=sharing
+
+You have access to the following tools:
+1. Google Sheet: Use this to read information from my network database
+2. Gmail: Use this to find my latest interaction
+3. Google Calendar: Use this to find my latest interaction
+4. Exa: Use this to find latest information (including LinkedIn and public websites) of the person</code></pre>
+
+        <p><strong>What's magical:</strong> a single interface to command infinite agents without juggling multiple tools.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create vlogs from your calendar event - Tinkering with AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #e8e8e8;
+            color: #222222;
+            line-height: 1.5;
+            padding: 50px 20px 80px;
+        }
+
+        a { color: inherit; }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #666666;
+            text-decoration: none;
+            font-size: 12px;
+            margin-bottom: 30px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #000000;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            color: #000000;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 400;
+            margin-top: 36px;
+            margin-bottom: 14px;
+            color: #000000;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+
+        h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 18px;
+            margin-bottom: 8px;
+            color: #000000;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 14px;
+            color: #222222;
+        }
+
+        ul, ol {
+            margin-left: 18px;
+            margin-bottom: 14px;
+        }
+
+        li {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 5px;
+            color: #222222;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        code {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            background: #f5f0e8;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #333333;
+        }
+
+        pre {
+            background: #f5f0e8;
+            border-radius: 8px;
+            padding: 14px 16px;
+            overflow-x: auto;
+            margin: 14px 0;
+            border: 1px solid #e8e0d5;
+        }
+
+        pre code {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #333333;
+            background: none;
+            padding: 0;
+        }
+
+        .try-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #000000;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-bottom: 24px;
+        }
+
+        .try-button:hover {
+            background: #1a1a1a;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+padding: 40px 16px 60px;
+            }
+
+            h1 {
+font-size: 28px;
+            }
+
+            h2 {
+font-size: 20px;
+            }
+
+            p, li {
+font-size: 13px;
+            }
+
+            pre {
+padding: 12px 14px;
+            }
+
+            pre code {
+font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="/tinkering">← Back</a>
+
+        <h1>Create vlogs from your calendar event</h1>
+
+        <a href="https://daystory.vercel.app/" target="_blank" class="try-button">Try It Now →</a>
+
+        <p>A step-by-step walkthrough of building a web app that transforms Google Calendar events into Pixar-style video vlogs using GPT-4o and Sora.</p>
+
+        <h2>The idea</h2>
+<p>After creating my life story as a Pixar movie, I wanted to make it easier for anyone to do the same with their daily calendar events. DayStory reads your Google Calendar, writes a narrative script with GPT-4o, and generates a cinematic video with Sora—all in one flow.</p>
+
+<p>The goal was simple: pick any day, choose a character style, and get a short video that tells your day like a movie trailer.</p>
+
+        <h2>Architecture overview</h2>
+        <p>The app is built as a full-stack Next.js application with the following flow:</p>
+
+<ol>
+    <li><strong>Authentication:</strong> User signs in with Google OAuth, granting read-only calendar access</li>
+    <li><strong>Calendar sync:</strong> Fetch events for a date range and display in an interactive calendar</li>
+    <li><strong>Day selection:</strong> User picks a day and selects one of five Pixar character archetypes</li>
+    <li><strong>Script generation:</strong> GPT-4o writes a 30-50 word narration script based on events</li>
+    <li><strong>Video generation:</strong> Sora creates a 10-15 second Pixar-style video (or uses mock assets during testing)</li>
+    <li><strong>Video gallery:</strong> Store and replay videos in Firebase, with download and share options</li>
+</ol>
+            
+
+            
+<h2>Tech stack</h2>
+
+<div class="tech-stack">
+    <div class="tech-card">
+        <h4>Frontend</h4>
+        <p>Next.js 14 (App Router), React 18, Tailwind CSS, TypeScript</p>
+    </div>
+    <div class="tech-card">
+        <h4>Backend</h4>
+        <p>Next.js API Routes, NextAuth.js for OAuth</p>
+    </div>
+    <div class="tech-card">
+        <h4>Database & Storage</h4>
+        <p>Firebase Firestore, Firebase Storage</p>
+    </div>
+    <div class="tech-card">
+        <h4>AI Services</h4>
+        <p>OpenAI GPT-4o for scripts, Sora for video generation</p>
+    </div>
+    <div class="tech-card">
+        <h4>External APIs</h4>
+        <p>Google Calendar API v3</p>
+    </div>
+    <div class="tech-card">
+        <h4>Deployment</h4>
+        <p>Vercel (hosting + CDN)</p>
+    </div>
+</div>
+            
+
+            
+<h2>Step 1: Initial setup</h2>
+
+<h3>Project scaffold</h3>
+<p>Started with a Next.js 14 project using the App Router and TypeScript:</p>
+
+<ul>
+    <li>Set up folder structure: <code>app/</code>, <code>components/</code>, <code>lib/</code>, <code>types/</code></li>
+    <li>Configured Tailwind CSS for styling</li>
+    <li>Created environment variable template for secrets</li>
+</ul>
+
+<h3>Environment variables</h3>
+<p>Defined required secrets upfront to avoid setup issues later:</p>
+<ul>
+    <li><code>GOOGLE_CLIENT_ID</code> and <code>GOOGLE_CLIENT_SECRET</code> (OAuth)</li>
+    <li><code>NEXTAUTH_SECRET</code> (session encryption)</li>
+    <li><code>OPENAI_API_KEY</code> (GPT-4o and Sora)</li>
+    <li><code>FIREBASE_PROJECT_ID</code>, <code>FIREBASE_PRIVATE_KEY</code> (database)</li>
+</ul>
+            
+
+            
+<h2>Step 2: Google OAuth</h2>
+
+<h3>Setting up OAuth credentials</h3>
+<ol>
+    <li>Created a Google Cloud project and enabled the Google Calendar API</li>
+    <li>Set up OAuth 2.0 credentials with redirect URI: <code>http://localhost:3000/api/auth/callback/google</code></li>
+    <li>Requested <code>calendar.readonly</code> scope to read events without modifying them</li>
+</ol>
+
+<h3>NextAuth.js integration</h3>
+<p>Used NextAuth.js to handle the OAuth flow cleanly:</p>
+<ul>
+    <li>Configured Google provider with client credentials</li>
+    <li>Stored OAuth access tokens securely in session</li>
+    <li>Added middleware to protect dashboard routes</li>
+</ul>
+
+<p>The result: a seamless sign-in experience with minimal code.</p>
+            
+
+            
+<h2>Step 3: Calendar sync</h2>
+
+<h3>Google Calendar API integration</h3>
+<p>Built a calendar service module to fetch events:</p>
+<ul>
+    <li>Used the access token from NextAuth to call <code>calendar.events.list</code></li>
+    <li>Fetched events for a 90-day past and 30-day future window</li>
+    <li>Parsed event data (title, start time, end time, location, description)</li>
+</ul>
+
+<h3>Displaying the calendar</h3>
+<p>Created an interactive calendar UI where users can:</p>
+<ul>
+    <li>See all events grouped by day</li>
+    <li>Click on a specific day to view event details</li>
+    <li>Add optional personal notes to provide context</li>
+</ul>
+
+<h3>Optimization</h3>
+<p>Implemented incremental sync using Google's sync tokens to avoid re-fetching unchanged data.</p>
+            
+
+            
+<h2>Step 4: Script generation with GPT-4o</h2>
+
+<h3>Prompt engineering</h3>
+<p>Crafted a structured prompt template that feeds GPT-4o:</p>
+<ul>
+    <li>User's name and chosen character archetype</li>
+    <li>List of calendar events with times and descriptions</li>
+    <li>Optional user note for personalization</li>
+    <li>Instructions to write a 30-50 word Pixar-style narration</li>
+</ul>
+
+<h3>Character archetypes</h3>
+<p>Designed five distinct personalities to match Pixar movie styles:</p>
+<ul>
+    <li><strong>Adventurous Explorer</strong> (Up-inspired)</li>
+    <li><strong>Creative Dreamer</strong> (Inside Out-inspired)</li>
+    <li><strong>Curious Scientist</strong> (Wall-E-inspired)</li>
+    <li><strong>Kindhearted Friend</strong> (Toy Story-inspired)</li>
+    <li><strong>Determined Hero</strong> (Turning Red-inspired)</li>
+</ul>
+
+<h3>API call</h3>
+<p>Made a simple request to OpenAI's Chat Completions endpoint with <code>temperature: 0.8</code> for creative variety.</p>
+            
+
+            
+<h2>Step 5: Video generation pipeline</h2>
+
+<h3>Sora video prompt</h3>
+<p>Built a detailed Sora prompt template that includes:</p>
+<ul>
+    <li>Character name and visual style</li>
+    <li>Scene descriptions for each calendar event</li>
+    <li>Pixar-specific visual details (color palette, lighting, camera movements)</li>
+    <li>Narration script and voice type</li>
+    <li>End card with user's name and date</li>
+</ul>
+
+<h3>Mock video system</h3>
+<p>Since Sora API access wasn't immediately available, created a fallback system:</p>
+<ul>
+    <li>Pre-generated sample videos for each character archetype</li>
+    <li>Automatic detection: if Sora API key is missing, use mock assets</li>
+    <li>Allowed for end-to-end testing without waiting on API access</li>
+</ul>
+
+<h3>Firebase storage</h3>
+<p>Uploaded videos to Firebase Storage and stored metadata in Firestore:</p>
+<ul>
+    <li>Video URL and thumbnail</li>
+    <li>Generation timestamp and processing time</li>
+    <li>Share token for public links</li>
+</ul>
+
+<h3>Video gallery</h3>
+<p>Built a gallery page where users can:</p>
+<ul>
+    <li>Browse all generated videos</li>
+    <li>Replay videos inline</li>
+    <li>Download as MP4 or share via unique link</li>
+</ul>
+            
+
+            
+<h2>Challenges encountered</h2>
+
+<h3>1. OAuth token refresh</h3>
+<p>Google OAuth tokens expire after an hour. Had to implement automatic token refresh using NextAuth's built-in refresh flow to avoid disrupting the user experience.</p>
+
+<h3>2. Calendar API rate limits</h3>
+<p>Google Calendar API has strict rate limits. Solved this by:</p>
+<ul>
+    <li>Caching calendar data in Firestore for 5 minutes</li>
+    <li>Using incremental sync with sync tokens</li>
+    <li>Batching requests when fetching multiple days</li>
+</ul>
+
+<h3>3. Prompt engineering for Sora</h3>
+<p>Getting consistent Pixar-style output required extensive iteration. Key learnings:</p>
+<ul>
+    <li>Be extremely specific about visual style, color palette, and lighting</li>
+    <li>Reference exact Pixar movies for style consistency</li>
+    <li>Include camera movements (crane shots, dolly moves) for cinematic feel</li>
+</ul>
+
+<h3>4. Video generation time</h3>
+<p>Sora can take 2-5 minutes to generate a video. Added:</p>
+<ul>
+    <li>Async job queue for video generation</li>
+    <li>Real-time status updates using Firebase listeners</li>
+    <li>Email notifications when video is ready</li>
+</ul>
+            
+
+            
+<h2>Key takeaways</h2>
+
+<h3>What worked well</h3>
+<ul>
+    <li><strong>Next.js API Routes:</strong> Made it easy to build a full-stack app without separate backend</li>
+    <li><strong>NextAuth.js:</strong> Handled OAuth complexity cleanly</li>
+    <li><strong>Mock video fallback:</strong> Allowed testing end-to-end flow without Sora access</li>
+    <li><strong>Firebase:</strong> Simple setup for database and file storage</li>
+    <li><strong>Prompt templates:</strong> Structured prompts with clear sections made outputs more consistent</li>
+</ul>
+
+<h3>What I'd do differently</h3>
+<ul>
+    <li><strong>Video processing queue:</strong> Should have used a proper job queue (Bull MQ) from the start instead of retrofitting it</li>
+    <li><strong>Error handling:</strong> Add more graceful degradation when APIs fail</li>
+    <li><strong>Testing:</strong> Write integration tests for OAuth and Calendar API earlier</li>
+    <li><strong>Prompt versioning:</strong> Track prompt changes in Git to compare quality across iterations</li>
+</ul>
+
+<h3>Cost considerations</h3>
+<p>Per video costs breakdown:</p>
+<ul>
+    <li>GPT-4o script generation: ~$0.01</li>
+    <li>Sora video generation: ~$1.00-$2.00 (estimated)</li>
+    <li>Firebase storage (30 days): ~$0.02</li>
+    <li><strong>Total per video: ~$1.05-$2.05</strong></li>
+</ul>
+<p>Freemium model (2 free videos/month, $9.99 for unlimited) makes sense at these costs.</p>
+
+<h3>Next steps</h3>
+<ul>
+    <li>Add multi-day story compilation (combine week or month into one video)</li>
+    <li>Allow custom character uploads</li>
+    <li>Add background music selection</li>
+    <li>Build mobile app (React Native)</li>
+    <li>Integrate with Outlook and Apple Calendar</li>
+</ul>
+            
+        </article>
+    </div>
+
+    <script>
+        const navLinks = Array.from(document.querySelectorAll('.sidebar-link'));
+        const sections = navLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+
+        if (navLinks.length && sections.length) {
+            navLinks[0].classList.add('active');
+
+            const observer = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+    if (!entry.isIntersecting) {
+        return;
+    }
+    const index = sections.indexOf(entry.target);
+    if (index === -1) {
+        return;
+    }
+    navLinks.forEach(link => link.classList.remove('active'));
+    navLinks[index].classList.add('active');
+});
+            }, {
+rootMargin: '-50% 0px -50% 0px',
+threshold: 0
+            });
+
+            sections.forEach(section => observer.observe(section));
+        }
+    </script>
+</body>
+</html>
