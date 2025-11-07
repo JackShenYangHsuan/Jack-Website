@@ -603,12 +603,9 @@
 
         <!-- Video Modal -->
         <div id="videoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 9999; justify-content: center; align-items: center;">
-            <div style="position: relative; width: 90%; max-width: 1200px;">
+            <div style="position: relative; width: 90%; max-width: 1200px; aspect-ratio: 16 / 9;">
                 <button onclick="closeVideoModal()" style="position: absolute; top: -40px; right: 0; background: transparent; border: none; color: white; font-size: 32px; cursor: pointer; padding: 0; line-height: 1;">&times;</button>
-                <video id="modalVideo" controls style="width: 100%; border-radius: 8px;">
-                    <source src="/Command Center.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
+                <iframe id="modalVideo" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width: 100%; height: 100%; border-radius: 8px; border: none;"></iframe>
             </div>
         </div>
 
@@ -691,18 +688,17 @@
 
         function openVideoModal() {
             const modal = document.getElementById('videoModal');
-            const video = document.getElementById('modalVideo');
+            const iframe = document.getElementById('modalVideo');
+            iframe.src = 'https://www.youtube.com/embed/BGmVL73kLDM?autoplay=1';
             modal.style.display = 'flex';
-            video.play();
             document.body.style.overflow = 'hidden';
         }
 
         function closeVideoModal() {
             const modal = document.getElementById('videoModal');
-            const video = document.getElementById('modalVideo');
+            const iframe = document.getElementById('modalVideo');
             modal.style.display = 'none';
-            video.pause();
-            video.currentTime = 0;
+            iframe.src = '';
             document.body.style.overflow = 'auto';
         }
 
