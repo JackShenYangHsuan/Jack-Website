@@ -85,14 +85,20 @@
             color: #000000;
         }
 
-        .tldr-section p {
+        .tldr-section ul {
+            list-style: disc;
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .tldr-section li {
             font-size: 14px;
             line-height: 1.7;
             color: #374151;
             margin-bottom: 12px;
         }
 
-        .tldr-section p:last-child {
+        .tldr-section li:last-child {
             margin-bottom: 0;
         }
 
@@ -146,15 +152,17 @@
 
         <div class="tldr-section">
             <h3>TL;DR</h3>
-            <p>The goal is to reimagine how McKinsey consultants could work "AI-natively," shifting time from data crunching to client counseling by automating analytical tasks through an AI-driven "Command Center."</p>
+            <ul>
+                <li>The goal is to reimagine how McKinsey consultants could work "AI-natively," shifting time from data crunching to client counseling by automating analytical tasks through an AI-driven "Command Center."</li>
 
-            <p>The Command Center web app mirrors McKinsey's project structure: (1) Project Context (objectives, constraints), (2) Main Deck (final insights), (3) Agents (AI team members handling research, modeling, synthesis), and (4) Logistics (tools like Uber Eats ordering).</p>
+                <li>The Command Center web app mirrors McKinsey's project structure: (1) Project Context (objectives, constraints), (2) Main Deck (final insights), (3) Agents (AI team members handling research, modeling, synthesis), and (4) Logistics (tools like Uber Eats ordering).</li>
 
-            <p>Each AI Agent acts like an analyst or associate, following four phases—set objective/workplan, clarify with manager, execute using tools (e.g., Exa for search, GPT for modeling, Reducto for document parsing), and synthesize insights into the main deck.</p>
+                <li>Each AI Agent acts like an analyst or associate, following four phases—set objective/workplan, clarify with manager, execute using tools (e.g., Exa for search, GPT for modeling, Reducto for document parsing), and synthesize insights into the main deck.</li>
 
-            <p>The workflow allows multiple agents to run in parallel, generating insights that feed an automatically built executive summary, test hypotheses, and simulate how consulting teams coordinate across research, synthesis, and validation loops.</p>
+                <li>The workflow allows multiple agents to run in parallel, generating insights that feed an automatically built executive summary, test hypotheses, and simulate how consulting teams coordinate across research, synthesis, and validation loops.</li>
 
-            <p>The vision is a proof of concept for a future "AI-native consulting operating model," where knowledge workers use customizable APIs, toolkits, and prompt templates to automate research, modeling, and insight generation—freeing humans to focus on relationship-driven work.</p>
+                <li>The vision is a proof of concept for a future "AI-native consulting operating model," where knowledge workers use customizable APIs, toolkits, and prompt templates to automate research, modeling, and insight generation—freeing humans to focus on relationship-driven work.</li>
+            </ul>
         </div>
 
         <p>Four years at McKinsey taught me consulting is two jobs: analysis and client counseling.</p>
