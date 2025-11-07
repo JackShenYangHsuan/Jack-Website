@@ -466,6 +466,29 @@
         </div>
 
         <div class="articles">
+            <div class="article-card" data-difficulty="verylong" data-tech="agents,exa,mcp,gpt,firebase,railway">
+                <div class="card-hero">
+                    <img src="../Command Center Logo.png" alt="Command Center" class="card-icon">
+                </div>
+                <div class="card-content">
+                    <div class="card-tags">
+                        <span class="tag difficulty verylong">&gt;24hrs</span>
+                        <span class="tag">Agents</span>
+                        <span class="tag">Exa</span>
+                        <span class="tag">MCP</span>
+                        <span class="tag">GPT-4o</span>
+                        <span class="tag">Firebase</span>
+                        <span class="tag">Railway</span>
+                    </div>
+                    <h2>What if McKinsey consultants work AI-natively</h2>
+                    <p>Multi-agent orchestration system that automates analysis while keeping consultants focused on client counseling.</p>
+                    <div style="display: flex; gap: 12px;">
+                        <button onclick="openVideoModal()" class="card-action" style="background: #000000; color: #ffffff; border: none;">Watch Demo</button>
+                        <a href="/tinkering/command-center" class="card-action">Learn More</a>
+                    </div>
+                </div>
+            </div>
+
             <div class="article-card card-blue" data-difficulty="medium" data-tech="gpt,sora,firebase">
                 <div class="card-hero">
                     <img src="../DayStory Logo.png" alt="DayStory app">
@@ -576,25 +599,16 @@
                     <span class="card-action">Learn More</span>
                 </div>
             </a>
+        </div>
 
-            <div class="article-card" data-difficulty="verylong" data-tech="agents,exa,mcp,gpt,firebase,railway">
-                <div class="card-hero">
-                    <img src="../Command Center Logo.png" alt="Command Center" class="card-icon">
-                </div>
-                <div class="card-content">
-                    <div class="card-tags">
-                        <span class="tag difficulty verylong">&gt;24hrs</span>
-                        <span class="tag">Agents</span>
-                        <span class="tag">Exa</span>
-                        <span class="tag">MCP</span>
-                        <span class="tag">GPT-4o</span>
-                        <span class="tag">Firebase</span>
-                        <span class="tag">Railway</span>
-                    </div>
-                    <h2>What if McKinsey consultants work AI-natively</h2>
-                    <p>Multi-agent orchestration system that automates analysis while keeping consultants focused on client counseling.</p>
-                    <a href="/tinkering/command-center" class="card-action">Learn More</a>
-                </div>
+        <!-- Video Modal -->
+        <div id="videoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 9999; justify-content: center; align-items: center;">
+            <div style="position: relative; width: 90%; max-width: 1200px;">
+                <button onclick="closeVideoModal()" style="position: absolute; top: -40px; right: 0; background: transparent; border: none; color: white; font-size: 32px; cursor: pointer; padding: 0; line-height: 1;">&times;</button>
+                <video id="modalVideo" controls style="width: 100%; border-radius: 8px;">
+                    <source src="/Command Center.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
             </div>
         </div>
 
@@ -675,6 +689,36 @@
             });
         }
 
+        function openVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            modal.style.display = 'flex';
+            video.play();
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            modal.style.display = 'none';
+            video.pause();
+            video.currentTime = 0;
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside the video
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVideoModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVideoModal();
+            }
+        });
 
     </script>
 </body>
