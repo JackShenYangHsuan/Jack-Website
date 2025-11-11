@@ -69,10 +69,19 @@
             color: #000000;
         }
 
+        .title-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
         .page-title {
             font-size: 38px;
             font-weight: 600;
-            margin-bottom: 12px;
+            margin-bottom: 0;
             line-height: 1.1;
         }
 
@@ -161,6 +170,35 @@
 
         .article-card.hidden {
             display: none;
+        }
+
+        .total-hours {
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            margin: 0;
+            padding: 8px 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        .total-hours .number {
+            color: #10b981;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .total-hours::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            margin-right: 8px;
         }
 
         .articles {
@@ -426,7 +464,12 @@
 <body>
     <div class="container">
         <a href="/" class="back-link" id="backLink">← Back</a>
-        <h1 class="page-title">Tinkering with AI</h1>
+        <div class="title-container">
+            <h1 class="page-title">Tinkering with AI</h1>
+            <div class="total-hours">
+                Total vibe building hours: <span class="number" id="totalHours">0</span> hrs
+            </div>
+        </div>
         <p class="page-subtitle">Personal projects exploring my creativity and AI's limits. Built with Claude Code, Droid, and Codex. Experiments only, not for commercialization.</p>
 
         <div class="quote-box">
@@ -466,13 +509,13 @@
         </div>
 
         <div class="articles">
-            <div class="article-card" data-difficulty="verylong" data-tech="agents,exa,mcp,gpt,firebase,railway">
+            <div class="article-card" data-difficulty="verylong" data-tech="agents,exa,mcp,gpt,firebase,railway" data-hours="30">
                 <div class="card-hero">
                     <img src="../Command Center Logo.png" alt="Command Center" class="card-icon">
                 </div>
                 <div class="card-content">
                     <div class="card-tags">
-                        <span class="tag difficulty verylong">&gt;24hrs</span>
+                        <span class="tag difficulty verylong">30hrs</span>
                         <span class="tag">Agents</span>
                         <span class="tag">Exa</span>
                         <span class="tag">MCP</span>
@@ -489,13 +532,13 @@
                 </div>
             </div>
 
-            <div class="article-card card-blue" data-difficulty="medium" data-tech="gpt,sora,firebase">
+            <div class="article-card card-blue" data-difficulty="medium" data-tech="gpt,sora,firebase" data-hours="5">
                 <div class="card-hero">
                     <img src="../DayStory Logo.png" alt="DayStory app">
                 </div>
                 <div class="card-content">
                     <div class="card-tags">
-                        <span class="tag difficulty medium">2-10hrs</span>
+                        <span class="tag difficulty medium">5hrs</span>
                         <span class="tag">GPT-4o</span>
                         <span class="tag">Sora</span>
                         <span class="tag">Firebase</span>
@@ -509,13 +552,13 @@
                 </div>
             </div>
 
-            <a class="article-card" href="/tinkering/ai-workflows" data-difficulty="quick" data-tech="mcp,agents,gumloop">
+            <a class="article-card" href="/tinkering/ai-workflows" data-difficulty="quick" data-tech="mcp,agents,gumloop" data-hours="1">
                 <div class="card-hero">
 <img src="../100 Interns Logo.png" alt="Manage 100 AI interns" class="card-icon" />
                 </div>
                 <div class="card-content">
                     <div class="card-tags">
-                        <span class="tag difficulty">&lt;2hrs</span>
+                        <span class="tag difficulty">1hr</span>
                         <span class="tag">MCP</span>
                         <span class="tag">Agents</span>
                         <span class="tag">Gumloop</span>
@@ -526,13 +569,13 @@
                 </div>
             </a>
 
-            <div class="article-card" data-difficulty="quick" data-tech="mcp,python,vercel,reducto">
+            <div class="article-card" data-difficulty="quick" data-tech="mcp,python,vercel,reducto" data-hours="1">
                 <div class="card-hero">
                     <img src="../Reducto MCP.png" alt="Reducto MCP Server" class="card-icon">
                 </div>
                 <div class="card-content">
                     <div class="card-tags">
-                        <span class="tag difficulty">&lt;2hrs</span>
+                        <span class="tag difficulty">1hr</span>
                         <span class="tag">MCP</span>
                         <span class="tag">Reducto</span>
                     </div>
@@ -545,13 +588,13 @@
                 </div>
             </div>
 
-            <div class="article-card" data-difficulty="quick" data-tech="gpt,whisper,canvas">
+            <div class="article-card" data-difficulty="quick" data-tech="gpt,whisper,canvas" data-hours="1">
                 <div class="card-hero">
                     <img src="../Prompt-Director-Logo.png" alt="Prompt Director" class="card-icon">
                 </div>
                 <div class="card-content">
                     <div class="card-tags">
-                        <span class="tag difficulty">&lt;2hrs</span>
+                        <span class="tag difficulty">1hr</span>
                         <span class="tag">GPT-4o</span>
                         <span class="tag">Whisper</span>
                     </div>
@@ -564,13 +607,13 @@
                 </div>
             </div>
 
-            <div class="article-card" data-difficulty="medium" data-tech="fastapi,gpt,pinecone,rag">
+            <div class="article-card" data-difficulty="medium" data-tech="fastapi,gpt,pinecone,rag" data-hours="3">
                 <div class="card-hero">
                     <img src="../RAG PDF Logo.png" alt="RAG PDF Chat">
                 </div>
                 <div class="card-content">
                     <div class="card-tags">
-                        <span class="tag difficulty medium">2-10hrs</span>
+                        <span class="tag difficulty medium">3hrs</span>
                         <span class="tag">GPT-4</span>
                         <span class="tag">Pinecone</span>
                         <span class="tag">RAG</span>
@@ -584,13 +627,13 @@
                 </div>
             </div>
 
-            <a class="article-card card-pink" href="/tinkering/create-your-life-movie" data-difficulty="quick" data-tech="gpt-5,sora">
+            <a class="article-card card-pink" href="/tinkering/create-your-life-movie" data-difficulty="quick" data-tech="gpt-5,sora" data-hours="1">
                 <div class="card-hero">
                     <img src="../Pixar Hero image.png" alt="Pixar style movie">
                 </div>
                 <div class="card-content">
                     <div class="card-tags">
-                        <span class="tag difficulty">&lt;2hrs</span>
+                        <span class="tag difficulty">1hr</span>
                         <span class="tag">GPT-5</span>
                         <span class="tag">Sora</span>
                     </div>
@@ -662,29 +705,48 @@
         });
 
         function applyFilters() {
+            let totalHours = 0;
             cards.forEach(card => {
                 const cardDifficulty = card.getAttribute('data-difficulty');
                 const cardTechs = card.getAttribute('data-tech').split(',');
 
                 // Check difficulty match
-                const difficultyMatch = activeFilters.difficulty.has('all') || 
+                const difficultyMatch = activeFilters.difficulty.has('all') ||
                     activeFilters.difficulty.has(cardDifficulty);
 
                 // Check tech match
-                const techMatch = activeFilters.tech.has('all') || 
-                    cardTechs.some(tech => 
-                        Array.from(activeFilters.tech).some(activeTech => 
+                const techMatch = activeFilters.tech.has('all') ||
+                    cardTechs.some(tech =>
+                        Array.from(activeFilters.tech).some(activeTech =>
                             tech.toLowerCase().includes(activeTech.toLowerCase())
                         )
                     );
 
                 if (difficultyMatch && techMatch) {
                     card.classList.remove('hidden');
+                    const hours = parseFloat(card.getAttribute('data-hours')) || 0;
+                    totalHours += hours;
                 } else {
                     card.classList.add('hidden');
                 }
             });
+
+            // Update total hours display
+            document.getElementById('totalHours').textContent = Math.round(totalHours);
         }
+
+        // Calculate initial total hours on page load
+        function calculateInitialTotal() {
+            let totalHours = 0;
+            cards.forEach(card => {
+                const hours = parseFloat(card.getAttribute('data-hours')) || 0;
+                totalHours += hours;
+            });
+            document.getElementById('totalHours').textContent = Math.round(totalHours);
+        }
+
+        // Run on page load
+        calculateInitialTotal();
 
         function openVideoModal() {
             const modal = document.getElementById('videoModal');
