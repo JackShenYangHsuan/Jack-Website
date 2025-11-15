@@ -1,17 +1,23 @@
 # Terminal Music Player - Quick Start
 
-## Installation (3 Steps)
+## Installation (4 Steps)
 
 ### 1. Install the App
 Drag **Terminal Music Player.app** to **Applications** folder
 
-### 2. Install Dependencies
+### 2. Remove Quarantine
+Open Terminal and run:
+```bash
+sudo xattr -cr /Applications/TerminalMusicPlayer.app
+```
+
+### 3. Install Dependencies
 Open Terminal and run:
 ```bash
 brew install yt-dlp jq
 ```
 
-### 3. Install Hooks
+### 4. Install Hooks
 Open Terminal and run:
 ```bash
 cd "/Volumes/Terminal Music Player Installer/Installation Scripts"

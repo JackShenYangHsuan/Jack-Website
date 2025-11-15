@@ -39,7 +39,7 @@ struct RunningSession: Identifiable, Codable {
     let startTime: String
     let cpuUsage: Double
     var isActive: Bool {
-        cpuUsage > 8.0  // Consider active if CPU > 8%
+        cpuUsage > 10.0  // Consider active if CPU > 10%
     }
 }
 

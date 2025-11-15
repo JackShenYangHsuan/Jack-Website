@@ -1,20 +1,17 @@
-// swift-tools-version:5.7
+// swift-tools-version: 5.9
 import PackageDescription
 
 let package = Package(
     name: "TerminalMusicPlayer",
     platforms: [
-        .macOS(.v12)
+        .macOS(.v13)
     ],
+    dependencies: [],
     targets: [
         .executableTarget(
             name: "TerminalMusicPlayer",
+            dependencies: [],
             path: "Sources"
-        ),
-        .testTarget(
-            name: "TerminalMusicPlayerTests",
-            dependencies: ["TerminalMusicPlayer"],
-            path: "Tests/TerminalMusicPlayerTests"
         )
     ]
 )

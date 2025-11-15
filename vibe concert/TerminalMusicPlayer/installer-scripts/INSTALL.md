@@ -8,7 +8,17 @@ Welcome! This app plays music automatically when you start Claude Code sessions.
 
 Drag **Terminal Music Player.app** to your **Applications** folder.
 
-### 2. Install Dependencies
+### 2. Remove Quarantine (Prevent "App is Damaged" Error)
+
+Open Terminal and run:
+
+```bash
+sudo xattr -cr /Applications/TerminalMusicPlayer.app
+```
+
+This removes the quarantine flag that macOS adds to downloaded apps, preventing the "app is damaged" error.
+
+### 3. Install Dependencies
 
 Open Terminal and run:
 
@@ -18,7 +28,7 @@ brew install yt-dlp jq
 
 If you don't have Homebrew, install it first from [https://brew.sh](https://brew.sh)
 
-### 3. Run Dependency Checker (Optional)
+### 4. Run Dependency Checker (Optional)
 
 Open Terminal and run:
 
@@ -29,7 +39,7 @@ cd "/Volumes/Terminal Music Player Installer/Installation Scripts"
 
 Or right-click **Check Dependencies** → **Open** → Click **Open** in the dialog.
 
-### 4. Install Claude Code Hooks
+### 5. Install Claude Code Hooks
 
 **Option A: Using Terminal (Recommended)**
 
@@ -51,7 +61,7 @@ This will:
 - Update your Claude Code settings
 - Enable automatic session detection
 
-### 5. Launch the App
+### 6. Launch the App
 
 Open **Terminal Music Player** from your Applications folder.
 
