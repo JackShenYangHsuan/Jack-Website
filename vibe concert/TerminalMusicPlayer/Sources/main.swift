@@ -38,8 +38,106 @@ struct RunningSession: Identifiable, Codable {
     let projectName: String
     let startTime: String
     let cpuUsage: Double
-    var isActive: Bool {
-        cpuUsage > 10.0  // Consider active if CPU > 10%
+    let cpuTime: TimeInterval  // Cumulative CPU time in seconds
+    let rss: Int  // Memory in KB
+    var isActive: Bool
+}
+
+// MARK: - Activity Detector
+class ActivityDetector {
+    private var previousCPUTime: [Int: TimeInterval] = [:]
+    private var lastHistoryModTime: Date?
+    private let historyPath: String
+
+    init() {
+        let homeDir = FileManager.default.homeDirectoryForCurrentUser.path
+        self.historyPath = "\(homeDir)/.claude/history.jsonl"
+    }
+
+    func isSessionActive(pid: Int, cpuTime: TimeInterval, rss: Int) -> Bool {
+        var score = 0
+
+        // Signal 1: History file modified in last 5 seconds (40 points)
+        if let modTime = getHistoryModTime(),
+           Date().timeIntervalSince(modTime) < 5.0 {
+            score += 40
+            logToFile("Activity signal - History file: +40 (modified \(Date().timeIntervalSince(modTime))s ago)")
+        }
+
+        // Signal 2: Network connections (30 points)
+        if hasNetworkConnections(pid: pid) {
+            score += 30
+            logToFile("Activity signal - Network: +30")
+        }
+
+        // Signal 3: CPU time delta (20 points)
+        if let prevTime = previousCPUTime[pid] {
+            let delta = cpuTime - prevTime
+            if delta > 0.1 {
+                score += 20
+                logToFile("Activity signal - CPU time delta: +20 (delta: \(delta)s)")
+            }
+        }
+        previousCPUTime[pid] = cpuTime
+
+        // Signal 4: Memory baseline (10 points)
+        if rss > 150_000 {
+            score += 10
+            logToFile("Activity signal - Memory: +10 (RSS: \(rss)KB)")
+        }
+
+        let isActive = score >= 50
+        logToFile("PID \(pid) activity score: \(score)/100 -> \(isActive ? "ACTIVE" : "IDLE")")
+        return isActive
+    }
+
+    private func getHistoryModTime() -> Date? {
+        do {
+            let attrs = try FileManager.default.attributesOfItem(atPath: historyPath)
+            let modTime = attrs[.modificationDate] as? Date
+            return modTime
+        } catch {
+            logToFile("Could not read history file mod time: \(error)")
+            return nil
+        }
+    }
+
+    private func hasNetworkConnections(pid: Int) -> Bool {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/sbin/lsof")
+        process.arguments = ["-p", "\(pid)", "-a", "-i"]
+
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        process.standardError = Pipe()
+
+        do {
+            try process.run()
+
+            // Set a timeout of 0.5 seconds
+            let timeoutDate = Date().addingTimeInterval(0.5)
+            while process.isRunning && Date() < timeoutDate {
+                Thread.sleep(forTimeInterval: 0.01)
+            }
+
+            if process.isRunning {
+                process.terminate()
+                logToFile("lsof timeout for PID \(pid)")
+                return false
+            }
+
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            if let output = String(data: data, encoding: .utf8) {
+                let lines = output.components(separatedBy: .newlines)
+                // Look for ESTABLISHED connections
+                let establishedCount = lines.filter { $0.contains("ESTABLISHED") }.count
+                return establishedCount > 0
+            }
+        } catch {
+            logToFile("lsof error: \(error)")
+        }
+
+        return false
     }
 }
 
@@ -47,12 +145,13 @@ struct RunningSession: Identifiable, Codable {
 class SessionMonitor: ObservableObject {
     @Published var runningSessions: [RunningSession] = []
     private var monitorTimer: Timer?
+    private let activityDetector = ActivityDetector()
 
     weak var player: YouTubePlayer?
 
     func startMonitoring(player: YouTubePlayer) {
         self.player = player
-        logToFile("SessionMonitor: Started monitoring")
+        logToFile("SessionMonitor: Started monitoring with ActivityDetector")
 
         checkRunningProcesses()
 
@@ -93,20 +192,36 @@ class SessionMonitor: ObservableObject {
                     guard !trimmedLine.isEmpty else { continue }
 
                     let components = trimmedLine.split(separator: " ", omittingEmptySubsequences: true)
+                    // ps aux format: USER PID %CPU %MEM VSZ RSS TT STAT STARTED TIME COMMAND
                     if components.count >= 11,
                        let pid = Int(components[1]),
-                       let cpuUsage = Double(components[2]) {
+                       let cpuUsage = Double(components[2]),
+                       let rss = Int(components[5]) {
 
                         let workingDir = "Claude Code"
                         let projectName = "claude-\(pid)"
                         let startTime = String(components[8])
+                        let timeStr = String(components[9])  // TIME field (e.g., "6:15.21")
+
+                        // Parse TIME field to seconds
+                        let cpuTime = self.parseCPUTime(timeStr)
+
+                        // Use ActivityDetector to determine if session is active
+                        let isActive = self.activityDetector.isSessionActive(
+                            pid: pid,
+                            cpuTime: cpuTime,
+                            rss: rss
+                        )
 
                         sessions.append(RunningSession(
                             pid: pid,
                             workingDirectory: workingDir,
                             projectName: projectName,
                             startTime: startTime,
-                            cpuUsage: cpuUsage
+                            cpuUsage: cpuUsage,
+                            cpuTime: cpuTime,
+                            rss: rss,
+                            isActive: isActive
                         ))
                     }
                 }
@@ -118,8 +233,7 @@ class SessionMonitor: ObservableObject {
                     let hasActiveSessions = sessions.contains { $0.isActive }
 
                     // Debug logging
-                    let cpuValues = sessions.map { $0.cpuUsage }
-                    logToFile("CPU values: \(cpuValues), hasActive: \(hasActiveSessions), isPlaying: \(self.player?.isPlaying ?? false)")
+                    logToFile("Sessions: \(sessions.count), hasActive: \(hasActiveSessions), isPlaying: \(self.player?.isPlaying ?? false)")
 
                     if hasActiveSessions && !(self.player?.isPlaying ?? false) {
                         logToFile("ACTION: Starting playback")
@@ -134,6 +248,50 @@ class SessionMonitor: ObservableObject {
                 logToFile("Error checking running processes: \(error)")
             }
         }
+    }
+
+    private func parseCPUTime(_ timeStr: String) -> TimeInterval {
+        // Parse TIME format: "MM:SS.CC" or "HH:MM:SS" or "D-HH:MM:SS"
+        // Examples: "6:15.21", "1:23:45", "2-03:45:12"
+
+        var totalSeconds: TimeInterval = 0
+
+        // Check for day format (e.g., "2-03:45:12")
+        if timeStr.contains("-") {
+            let parts = timeStr.split(separator: "-")
+            if parts.count == 2,
+               let days = Int(parts[0]) {
+                totalSeconds += TimeInterval(days * 86400)
+                let timePart = String(parts[1])
+                totalSeconds += parseTimeComponent(timePart)
+            }
+        } else {
+            totalSeconds = parseTimeComponent(timeStr)
+        }
+
+        return totalSeconds
+    }
+
+    private func parseTimeComponent(_ timeStr: String) -> TimeInterval {
+        let parts = timeStr.split(separator: ":")
+        var seconds: TimeInterval = 0
+
+        if parts.count == 3 {
+            // HH:MM:SS format
+            if let hours = Int(parts[0]),
+               let minutes = Int(parts[1]),
+               let secs = Double(parts[2]) {
+                seconds = TimeInterval(hours * 3600 + minutes * 60) + secs
+            }
+        } else if parts.count == 2 {
+            // MM:SS.CC format
+            if let minutes = Int(parts[0]),
+               let secs = Double(parts[1]) {
+                seconds = TimeInterval(minutes * 60) + secs
+            }
+        }
+
+        return seconds
     }
 }
 
@@ -425,8 +583,8 @@ struct NSTextFieldWrapper: NSViewRepresentable {
 
 // MARK: - ContentView
 struct ContentView: View {
-    @StateObject private var player = YouTubePlayer()
-    @StateObject private var sessionMonitor = SessionMonitor()
+    @ObservedObject var player: YouTubePlayer
+    @ObservedObject var sessionMonitor: SessionMonitor
     @State private var isEditing = false
     @State private var editingURL = ""
 
@@ -596,9 +754,6 @@ struct ContentView: View {
             .padding(.bottom, 8)
         }
         .frame(width: 400, height: 550)
-        .onAppear {
-            sessionMonitor.startMonitoring(player: player)
-        }
     }
 }
 
@@ -606,21 +761,33 @@ struct ContentView: View {
 class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem!
     var popover: NSPopover!
-    
+    var player: YouTubePlayer!
+    var sessionMonitor: SessionMonitor!
+
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Initialize player and monitor
+        player = YouTubePlayer()
+        sessionMonitor = SessionMonitor()
+
+        // Start monitoring immediately
+        sessionMonitor.startMonitoring(player: player)
+
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        
+
         if let button = statusItem.button {
             let circleImage = createCircleIcon()
             button.image = circleImage
             button.action = #selector(togglePopover)
             button.target = self
         }
-        
+
         popover = NSPopover()
         popover.contentSize = NSSize(width: 400, height: 550)
         popover.behavior = .transient
-        popover.contentViewController = NSHostingController(rootView: ContentView())
+
+        // Pass the shared instances to ContentView
+        let contentView = ContentView(player: player, sessionMonitor: sessionMonitor)
+        popover.contentViewController = NSHostingController(rootView: contentView)
     }
     
     @objc func togglePopover() {
