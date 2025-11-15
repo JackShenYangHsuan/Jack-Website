@@ -335,12 +335,12 @@ class YouTubePlayer: NSObject, ObservableObject {
             statusMessage = "Error: yt-dlp not installed"
         }
 
-        // Now set URL (this will trigger didSet which calls fetchVideoTitle)
+        // Load saved URL if available, otherwise user must enter one
         if let savedURL = UserDefaults.standard.string(forKey: "savedYouTubeURL") {
             youtubeURL = savedURL
         } else {
-            // Default to Lofi Girl - reliable and popular coding music
-            youtubeURL = "https://www.youtube.com/watch?v=jfKfPfyJRdk"
+            // No default - user must enter YouTube URL
+            youtubeURL = ""
         }
     }
 
@@ -404,14 +404,20 @@ class YouTubePlayer: NSObject, ObservableObject {
         }
 
         // Prevent multiple simultaneous downloads
-        guard !isLoading && !isPlaying else {
-            logToFile("Already loading or playing, ignoring duplicate play() call")
+        // Prevent duplicate downloads only - allow URL changes even while playing
+        guard !isLoading else {
+            logToFile("Already loading, ignoring duplicate play() call")
             return
         }
 
-        // If player exists and is for the SAME URL, just resume it
-        // This is the critical fix: only reuse player if URL matches
-        if let player = audioPlayer, loadedURL == youtubeURL {
+        // If already playing the SAME URL, don't reload
+        if isPlaying && loadedURL == youtubeURL {
+            logToFile("Already playing same URL, ignoring duplicate play() call")
+            return
+        }
+
+        // If player exists and is for the SAME URL (but paused), just resume it
+        if let player = audioPlayer, loadedURL == youtubeURL, !isPlaying {
             player.play()
             isPlaying = true
             statusMessage = "Playing"
@@ -425,6 +431,7 @@ class YouTubePlayer: NSObject, ObservableObject {
             audioPlayer?.stop()
             audioPlayer = nil
             loadedURL = nil
+            isPlaying = false  // Reset playback state for new URL
         }
 
         // Mark as loading to prevent duplicate calls
