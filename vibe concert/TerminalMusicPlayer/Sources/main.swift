@@ -147,6 +147,12 @@ class SessionMonitor: ObservableObject {
     private var monitorTimer: Timer?
     private let activityDetector = ActivityDetector()
 
+    // Debouncing: prevent rapid play/pause toggling from transient signals
+    private var consecutiveActiveCount = 0
+    private var consecutiveIdleCount = 0
+    private let activationThreshold = 2  // Must be active 2 seconds before playing
+    private let deactivationThreshold = 3  // Must be idle 3 seconds before pausing
+
     weak var player: YouTubePlayer?
 
     func startMonitoring(player: YouTubePlayer) {
@@ -229,17 +235,29 @@ class SessionMonitor: ObservableObject {
                 DispatchQueue.main.async {
                     self.runningSessions = sessions
 
-                    // Auto play/pause based on session activity
+                    // Auto play/pause based on session activity with debouncing
                     let hasActiveSessions = sessions.contains { $0.isActive }
 
-                    // Debug logging
-                    logToFile("Sessions: \(sessions.count), hasActive: \(hasActiveSessions), isPlaying: \(self.player?.isPlaying ?? false)")
+                    // Track consecutive active/idle states to prevent rapid toggling
+                    if hasActiveSessions {
+                        self.consecutiveActiveCount += 1
+                        self.consecutiveIdleCount = 0
+                    } else {
+                        self.consecutiveIdleCount += 1
+                        self.consecutiveActiveCount = 0
+                    }
 
-                    if hasActiveSessions && !(self.player?.isPlaying ?? false) {
-                        logToFile("ACTION: Starting playback")
+                    // Debug logging
+                    logToFile("Sessions: \(sessions.count), hasActive: \(hasActiveSessions), active:\(self.consecutiveActiveCount), idle:\(self.consecutiveIdleCount), isPlaying: \(self.player?.isPlaying ?? false)")
+
+                    // Only start playback after sustained activity (prevents 1-second blips)
+                    if self.consecutiveActiveCount >= self.activationThreshold && !(self.player?.isPlaying ?? false) {
+                        logToFile("ACTION: Starting playback (sustained activity for \(self.consecutiveActiveCount)s)")
                         self.player?.play()
-                    } else if !hasActiveSessions && (self.player?.isPlaying ?? false) {
-                        logToFile("ACTION: Pausing playback")
+                    }
+                    // Only pause after sustained idle period (prevents pausing during brief pauses in typing)
+                    else if self.consecutiveIdleCount >= self.deactivationThreshold && (self.player?.isPlaying ?? false) {
+                        logToFile("ACTION: Pausing playback (sustained idle for \(self.consecutiveIdleCount)s)")
                         self.player?.pause()
                     }
                 }
