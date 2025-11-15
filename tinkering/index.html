@@ -278,6 +278,41 @@
             border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
+        .dogfooding-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dogfooding-badge img {
+            width: 32px;
+            height: 32px;
+            display: block;
+        }
+
+        .legend-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 10px 14px 8px 14px;
+            background: #f9fafb;
+            margin-bottom: 0px;
+            font-size: 12px;
+            color: #475569;
+        }
+
+        .legend-box img {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
         .card-tags {
             display: flex;
             flex-wrap: wrap;
@@ -506,10 +541,21 @@
                     <button class="filter-btn" data-filter="tech" data-value="reducto">Reducto</button>
                 </div>
             </div>
+            <div class="filter-group">
+                <div class="filter-label">Dogfooding</div>
+                <div class="filter-buttons">
+                    <button class="filter-btn" data-filter="dogfooding" data-value="true">Show Only</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="legend-box">
+            <img src="../dogfooding.png" alt="Dogfooding">
+            <span><strong>Dogfooding:</strong> Tools that I use in my daily workflow</span>
         </div>
 
         <div class="articles">
-            <div class="article-card" data-difficulty="verylong" data-tech="agents,exa,mcp,gpt,firebase,railway" data-hours="30">
+            <div class="article-card" data-difficulty="verylong" data-tech="agents,exa,mcp,gpt" data-hours="30">
                 <div class="card-hero">
                     <img src="../Command Center Logo.png" alt="Command Center" class="card-icon">
                 </div>
@@ -520,8 +566,6 @@
                         <span class="tag">Exa</span>
                         <span class="tag">MCP</span>
                         <span class="tag">GPT-4o</span>
-                        <span class="tag">Firebase</span>
-                        <span class="tag">Railway</span>
                     </div>
                     <h2>What if McKinsey consultants work AI-natively</h2>
                     <p>Multi-agent orchestration system that automates analysis while keeping consultants focused on client counseling.</p>
@@ -531,6 +575,56 @@
                     </div>
                 </div>
             </div>
+
+            <a class="article-card" href="/tinkering/gmail-auto-label" data-difficulty="long" data-tech="gpt" data-hours="15" data-dogfooding="true">
+                <span class="dogfooding-badge"><img src="../dogfooding.png" alt="Dogfooding"></span>
+                <div class="card-hero">
+                    <img src="../Gmail auto label assistant.png" alt="Gmail auto-label assistant" class="card-icon">
+                </div>
+                <div class="card-content">
+                    <div class="card-tags">
+                        <span class="tag difficulty long">15hrs</span>
+                        <span class="tag">GPT-4o</span>
+                    </div>
+                    <h2>Gmail auto-label assistant</h2>
+                    <p>Intelligent email labelling system that identifies sent vs received emails and applies custom rules.</p>
+                    <span class="card-action">Learn More</span>
+                </div>
+            </a>
+
+            <a class="article-card" href="/tinkering/claude-code-music" data-difficulty="medium" data-tech="mac" data-hours="6" data-dogfooding="true">
+                <span class="dogfooding-badge"><img src="../dogfooding.png" alt="Dogfooding"></span>
+                <div class="card-hero">
+                    <img src="../claude code music player.png" alt="Claude Code Music Player" class="card-icon">
+                </div>
+                <div class="card-content">
+                    <div class="card-tags">
+                        <span class="tag difficulty medium">6hrs</span>
+                        <span class="tag">Mac</span>
+                    </div>
+                    <h2>Music that plays with Claude Code</h2>
+                    <p>Mac app that monitors Claude Code's CPU usage - music plays during execution, silence signals completion.</p>
+                    <span class="card-action">Learn More</span>
+                </div>
+            </a>
+
+            <a class="article-card" href="/tinkering/ai-workflows" data-difficulty="quick" data-tech="mcp,agents,gumloop" data-hours="1" data-dogfooding="true">
+                <span class="dogfooding-badge"><img src="../dogfooding.png" alt="Dogfooding"></span>
+                <div class="card-hero">
+<img src="../100 Interns Logo.png" alt="Manage 100 AI interns" class="card-icon" />
+                </div>
+                <div class="card-content">
+                    <div class="card-tags">
+                        <span class="tag difficulty">1hr</span>
+                        <span class="tag">MCP</span>
+                        <span class="tag">Agents</span>
+                        <span class="tag">Gumloop</span>
+                    </div>
+                    <h2>Delegate Tasks to AI interns (agents)</h2>
+                    <p>A personal OS with infinite specialized agents controlled though Slack</p>
+                    <span class="card-action">Learn More</span>
+                </div>
+            </a>
 
             <div class="article-card card-blue" data-difficulty="medium" data-tech="gpt,sora,firebase" data-hours="5">
                 <div class="card-hero">
@@ -553,23 +647,6 @@
                 </div>
             </div>
 
-            <a class="article-card" href="/tinkering/ai-workflows" data-difficulty="quick" data-tech="mcp,agents,gumloop" data-hours="1">
-                <div class="card-hero">
-<img src="../100 Interns Logo.png" alt="Manage 100 AI interns" class="card-icon" />
-                </div>
-                <div class="card-content">
-                    <div class="card-tags">
-                        <span class="tag difficulty">1hr</span>
-                        <span class="tag">MCP</span>
-                        <span class="tag">Agents</span>
-                        <span class="tag">Gumloop</span>
-                    </div>
-                    <h2>Delegate Tasks to AI interns (agents)</h2>
-                    <p>A personal OS with infinite specialized agents controlled though Slack</p>
-                    <span class="card-action">Learn More</span>
-                </div>
-            </a>
-
             <div class="article-card" data-difficulty="quick" data-tech="mcp,python,vercel,reducto" data-hours="1">
                 <div class="card-hero">
                     <img src="../Reducto MCP.png" alt="Reducto MCP Server" class="card-icon">
@@ -589,7 +666,8 @@
                 </div>
             </div>
 
-            <div class="article-card" data-difficulty="quick" data-tech="gpt,whisper,canvas" data-hours="1">
+            <div class="article-card" data-difficulty="quick" data-tech="gpt,whisper,canvas" data-hours="1" data-dogfooding="true">
+                <span class="dogfooding-badge"><img src="../dogfooding.png" alt="Dogfooding"></span>
                 <div class="card-hero">
                     <img src="../Prompt-Director-Logo.png" alt="Prompt Director" class="card-icon">
                 </div>
@@ -643,38 +721,6 @@
                     <span class="card-action">Learn More</span>
                 </div>
             </a>
-
-            <a class="article-card" href="/tinkering/claude-code-music" data-difficulty="quick" data-tech="python,mac" data-hours="2">
-                <div class="card-hero">
-                    <img src="../claude code music player.png" alt="Claude Code Music Player" class="card-icon">
-                </div>
-                <div class="card-content">
-                    <div class="card-tags">
-                        <span class="tag difficulty">2hrs</span>
-                        <span class="tag">Python</span>
-                        <span class="tag">Mac</span>
-                    </div>
-                    <h2>Music that plays with Claude Code</h2>
-                    <p>Mac app that monitors Claude Code's CPU usage - music plays during execution, silence signals completion.</p>
-                    <span class="card-action">Learn More</span>
-                </div>
-            </a>
-
-            <a class="article-card" href="/tinkering/gmail-auto-label" data-difficulty="medium" data-tech="gpt,python" data-hours="4">
-                <div class="card-hero">
-                    <div style="font-size: 48px; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">📧</div>
-                </div>
-                <div class="card-content">
-                    <div class="card-tags">
-                        <span class="tag difficulty medium">4hrs</span>
-                        <span class="tag">GPT-4</span>
-                        <span class="tag">Python</span>
-                    </div>
-                    <h2>Gmail auto-label assistant</h2>
-                    <p>Intelligent email labelling system that identifies sent vs received emails and applies custom rules.</p>
-                    <span class="card-action">Learn More</span>
-                </div>
-            </a>
         </div>
 
         <!-- Video Modal -->
@@ -691,7 +737,8 @@
     <script>
         let activeFilters = {
             difficulty: new Set(['all']),
-            tech: new Set(['all'])
+            tech: new Set(['all']),
+            dogfooding: false
         };
 
         const filterButtons = document.querySelectorAll('.filter-btn');
@@ -701,6 +748,14 @@
             button.addEventListener('click', function() {
                 const filterType = this.getAttribute('data-filter');
                 const filterValue = this.getAttribute('data-value');
+
+                // Handle dogfooding toggle
+                if (filterType === 'dogfooding') {
+                    activeFilters.dogfooding = !activeFilters.dogfooding;
+                    this.classList.toggle('active');
+                    applyFilters();
+                    return;
+                }
 
                 // Handle "All" button
                 if (filterValue === 'all') {
@@ -714,7 +769,7 @@
                 } else {
                     // Remove "All" if selecting specific filters
                     activeFilters[filterType].delete('all');
-                    document.querySelector(`[data-filter="${filterType}"][data-value="all"]`).classList.remove('active');
+                    document.querySelector(`[data-filter="${filterType}"][data-value="all"]`)?.classList.remove('active');
 
                     // Toggle the clicked filter
                     if (activeFilters[filterType].has(filterValue)) {
@@ -728,7 +783,7 @@
                     // If no filters selected, revert to "All"
                     if (activeFilters[filterType].size === 0) {
                         activeFilters[filterType].add('all');
-                        document.querySelector(`[data-filter="${filterType}"][data-value="all"]`).classList.add('active');
+                        document.querySelector(`[data-filter="${filterType}"][data-value="all"]`)?.classList.add('active');
                     }
                 }
 
@@ -742,6 +797,7 @@
             cards.forEach(card => {
                 const cardDifficulty = card.getAttribute('data-difficulty');
                 const cardTechs = card.getAttribute('data-tech').split(',');
+                const cardDogfooding = card.getAttribute('data-dogfooding') === 'true';
 
                 // Check difficulty match
                 const difficultyMatch = activeFilters.difficulty.has('all') ||
@@ -755,7 +811,10 @@
                         )
                     );
 
-                if (difficultyMatch && techMatch) {
+                // Check dogfooding match
+                const dogfoodingMatch = !activeFilters.dogfooding || cardDogfooding;
+
+                if (difficultyMatch && techMatch && dogfoodingMatch) {
                     card.classList.remove('hidden');
                     const hours = parseFloat(card.getAttribute('data-hours')) || 0;
                     totalHours += hours;

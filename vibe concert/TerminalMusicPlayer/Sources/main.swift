@@ -429,7 +429,17 @@ class YouTubePlayer: NSObject, ObservableObject {
         // Mark as loading to prevent duplicate calls
         isLoading = true
 
-        // Otherwise download and setup new player
+        // Clean up old music files to ensure we play the latest download
+        let tempDir = NSTemporaryDirectory()
+        if let oldFiles = try? FileManager.default.contentsOfDirectory(atPath: tempDir) {
+            for file in oldFiles where file.hasPrefix("music_") {
+                let fullPath = tempDir + file
+                try? FileManager.default.removeItem(atPath: fullPath)
+                logToFile("Cleaned up old music file: \(file)")
+            }
+        }
+
+        // Download new music file
         let tempPath = NSTemporaryDirectory() + "music_\(UUID().uuidString)"
 
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
