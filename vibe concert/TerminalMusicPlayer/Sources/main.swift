@@ -383,6 +383,46 @@ class YouTubePlayer: NSObject, ObservableObject {
     }
 }
 
+// MARK: - NSTextField Wrapper for proper keyboard shortcut support
+struct NSTextFieldWrapper: NSViewRepresentable {
+    @Binding var text: String
+    var placeholder: String
+
+    func makeNSView(context: Context) -> NSTextField {
+        let textField = NSTextField()
+        textField.stringValue = text
+        textField.delegate = context.coordinator
+        textField.placeholderString = placeholder
+        textField.bezelStyle = .roundedBezel
+        textField.font = .systemFont(ofSize: 13)
+        return textField
+    }
+
+    func updateNSView(_ nsView: NSTextField, context: Context) {
+        if nsView.stringValue != text {
+            nsView.stringValue = text
+        }
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, NSTextFieldDelegate {
+        var parent: NSTextFieldWrapper
+
+        init(_ parent: NSTextFieldWrapper) {
+            self.parent = parent
+        }
+
+        func controlTextDidChange(_ notification: Notification) {
+            if let textField = notification.object as? NSTextField {
+                parent.text = textField.stringValue
+            }
+        }
+    }
+}
+
 // MARK: - ContentView
 struct ContentView: View {
     @StateObject private var player = YouTubePlayer()
@@ -399,15 +439,15 @@ struct ContentView: View {
             // URL input/display section
             if isEditing {
                 HStack {
-                    TextField("YouTube URL", text: $editingURL)
-                        .textFieldStyle(.roundedBorder)
-                    
+                    NSTextFieldWrapper(text: $editingURL, placeholder: "YouTube URL")
+                        .frame(height: 22)
+
                     Button("Save") {
                         player.youtubeURL = editingURL
                         isEditing = false
                     }
                     .buttonStyle(.borderedProminent)
-                    
+
                     Button("Cancel") {
                         editingURL = player.youtubeURL
                         isEditing = false

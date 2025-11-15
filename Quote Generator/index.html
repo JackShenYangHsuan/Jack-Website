@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Transform YouTube videos into shareable Instagram quote cards using AI">
+    <meta name="keywords" content="YouTube, Instagram, quote cards, AI, DALL-E, social media">
+    <meta name="author" content="Jack Shen">
+    <title>YouTube Quote Card Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>YouTube Quote Card Generator</h1>
+            <p class="subtitle">Transform YouTube videos into shareable Instagram quote cards using AI</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Input Section -->
+        <section class="input-section">
+            <form id="quote-form">
+                <div class="form-group">
+                    <label for="youtube-url">YouTube Video URL</label>
+                    <input
+                        type="url"
+                        id="youtube-url"
+                        name="youtube-url"
+                        placeholder="https://www.youtube.com/watch?v=..."
+                        required
+                        autocomplete="off"
+                    >
+                </div>
+                <button type="submit" id="generate-btn" class="btn-primary">
+                    Extract Quotes
+                </button>
+            </form>
+            <p class="hint">Paste any YouTube video URL. We'll extract the best quotes and create stunning cards!</p>
+        </section>
+
+        <!-- Quote Selection Section -->
+        <section id="quote-selection-section" class="quote-selection-section hidden">
+            <div class="section-header">
+                <h2>Select Your Favorite Quotes (3-5)</h2>
+                <p class="selection-counter" id="selection-counter">0/5 quotes selected</p>
+            </div>
+
+            <div id="quote-list" class="quote-list">
+                <!-- Quotes will be dynamically inserted here -->
+            </div>
+
+            <div class="button-group">
+                <button id="back-to-url-btn" class="btn-secondary">← Back</button>
+                <button id="next-to-style-btn" class="btn-primary" disabled>Next: Choose Style →</button>
+            </div>
+        </section>
+
+        <!-- Style Selection Section -->
+        <section id="style-selection-section" class="style-selection-section hidden">
+            <div class="section-header">
+                <h2>Choose Your Design Style</h2>
+                <p class="subtitle">Select one style to apply to all your quote cards</p>
+            </div>
+
+            <div id="style-options" class="style-options">
+                <div class="style-card" data-style="Modern Minimal">
+                    <input type="radio" id="style-minimal" name="style" value="Modern Minimal">
+                    <label for="style-minimal">
+                        <div class="style-preview minimal-preview"></div>
+                        <h3>Modern Minimal</h3>
+                        <p>Clean white background with elegant typography and subtle geometric accents</p>
+                    </label>
+                </div>
+
+                <div class="style-card" data-style="Bold Gradient">
+                    <input type="radio" id="style-gradient" name="style" value="Bold Gradient">
+                    <label for="style-gradient">
+                        <div class="style-preview gradient-preview"></div>
+                        <h3>Bold Gradient</h3>
+                        <p>Vibrant colorful gradients with dynamic modern design</p>
+                    </label>
+                </div>
+
+                <div class="style-card" data-style="Dark Mode Elegant">
+                    <input type="radio" id="style-dark" name="style" value="Dark Mode Elegant">
+                    <label for="style-dark">
+                        <div class="style-preview dark-preview"></div>
+                        <h3>Dark Mode Elegant</h3>
+                        <p>Sophisticated dark background with gold or teal accents</p>
+                    </label>
+                </div>
+
+                <div class="style-card" data-style="Magazine Style">
+                    <input type="radio" id="style-magazine" name="style" value="Magazine Style">
+                    <label for="style-magazine">
+                        <div class="style-preview magazine-preview"></div>
+                        <h3>Magazine Style</h3>
+                        <p>Editorial design with bold fonts and high-end publication look</p>
+                    </label>
+                </div>
+
+                <div class="style-card" data-style="Tech Startup">
+                    <input type="radio" id="style-tech" name="style" value="Tech Startup">
+                    <label for="style-tech">
+                        <div class="style-preview tech-preview"></div>
+                        <h3>Tech Startup</h3>
+                        <p>Modern tech aesthetic with bright colors and clean typography</p>
+                    </label>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button id="back-to-quotes-btn" class="btn-secondary">← Back to Quotes</button>
+                <button id="generate-cards-btn" class="btn-primary" disabled>Generate Cards →</button>
+            </div>
+        </section>
+
+        <!-- Loading Section -->
+        <section id="loading-section" class="loading-section hidden">
+            <div class="loader"></div>
+            <p id="loading-text">Processing your video...</p>
+            <div class="progress-steps">
+                <div class="step" id="step-transcript">
+                    <span class="step-icon">⏳</span>
+                    <span class="step-text">Extracting transcript</span>
+                </div>
+                <div class="step" id="step-quotes">
+                    <span class="step-icon">⏳</span>
+                    <span class="step-text">Selecting quotes</span>
+                </div>
+                <div class="step" id="step-images">
+                    <span class="step-icon">⏳</span>
+                    <span class="step-text">Generating images</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Error Section -->
+        <section id="error-section" class="error-section hidden">
+            <div class="error-box">
+                <span class="error-icon">⚠️</span>
+                <p id="error-message"></p>
+                <button id="retry-btn" class="btn-secondary">Try Again</button>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="results-section" class="results-section hidden">
+            <div class="results-header">
+                <h2>Your Quote Cards Are Ready!</h2>
+                <p id="processing-time"></p>
+                <button id="download-all-btn" class="btn-primary">Download All Cards</button>
+            </div>
+
+            <div id="gallery" class="gallery">
+                <!-- Quote cards will be dynamically inserted here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Built by Jack Shen • Powered by OpenAI GPT-4 & DALL-E 3</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
