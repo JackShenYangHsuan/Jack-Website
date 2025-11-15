@@ -302,30 +302,16 @@ class YouTubePlayer: NSObject, ObservableObject {
             // Save the new URL
             UserDefaults.standard.set(youtubeURL, forKey: "savedYouTubeURL")
 
-            // Check if we were playing before URL change
-            let wasPlaying = isPlaying
-
-            // Stop current playback completely - critical fix for URL switching
-            audioPlayer?.stop()
-            audioPlayer = nil
-            isPlaying = false
-            isLoading = false
+            // Clear loaded URL - next play() will detect change and download new music
+            loadedURL = nil
 
             // Clear cached data
             cachedAudioFile = nil
             videoTitle = nil
-            statusMessage = "Ready"
 
             // Fetch new video title
             if !youtubeURL.isEmpty {
                 fetchVideoTitle()
-
-                // If music was playing, automatically start the new URL
-                if wasPlaying {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                        self?.play()
-                    }
-                }
             }
         }
     }
@@ -337,6 +323,7 @@ class YouTubePlayer: NSObject, ObservableObject {
     private var cachedAudioFile: String?
     private var ytdlpPath: String?
     private var isLoading: Bool = false  // Prevent multiple simultaneous downloads
+    private var loadedURL: String?  // Track which URL is currently loaded in audioPlayer
 
     override init() {
         super.init()
@@ -422,12 +409,22 @@ class YouTubePlayer: NSObject, ObservableObject {
             return
         }
 
-        // If player exists and is paused, just resume
-        if let player = audioPlayer {
+        // If player exists and is for the SAME URL, just resume it
+        // This is the critical fix: only reuse player if URL matches
+        if let player = audioPlayer, loadedURL == youtubeURL {
             player.play()
             isPlaying = true
             statusMessage = "Playing"
+            logToFile("Resuming playback for same URL: \(youtubeURL)")
             return
+        }
+
+        // If URL changed, clear the old player and download new music
+        if loadedURL != youtubeURL {
+            logToFile("URL changed from \(loadedURL ?? "nil") to \(youtubeURL), downloading new music")
+            audioPlayer?.stop()
+            audioPlayer = nil
+            loadedURL = nil
         }
 
         // Mark as loading to prevent duplicate calls
@@ -540,8 +537,9 @@ class YouTubePlayer: NSObject, ObservableObject {
             audioPlayer?.prepareToPlay()
             audioPlayer?.play()
             isPlaying = true
+            loadedURL = youtubeURL  // Track which URL is now loaded
             statusMessage = "Playing"
-            logToFile("Playback started successfully")
+            logToFile("Playback started successfully for URL: \(youtubeURL)")
         } catch {
             statusMessage = "Failed: \(error.localizedDescription)"
             isPlaying = false
