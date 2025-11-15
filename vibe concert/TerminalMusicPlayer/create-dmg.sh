@@ -39,6 +39,7 @@ chmod +x "$DMG_DIR/Installation Scripts/Install Hooks"
 chmod +x "$DMG_DIR/Installation Scripts/Check Dependencies"
 
 # Copy documentation
+cp installer-scripts/QUICK_START.md "$DMG_DIR/START HERE.md"
 cp installer-scripts/INSTALL.md "$DMG_DIR/Installation Guide.md"
 cp README.md "$DMG_DIR/"
 
@@ -79,15 +80,15 @@ tell application "Finder"
         set viewOptions to the icon view options of container window
         set arrangement of viewOptions to not arranged
         set icon size of viewOptions to 72
+        delay 1
         set position of item "$BUNDLE_NAME" of container window to {150, 200}
         set position of item "Applications" of container window to {450, 200}
         set position of item "Installation Scripts" of container window to {150, 320}
-        set position of item "Installation Guide.md" of container window to {300, 320}
-        set position of item "README.md" of container window to {450, 320}
+        delay 1
         close
         open
         update without registering applications
-        delay 2
+        delay 1
     end tell
 end tell
 EOF

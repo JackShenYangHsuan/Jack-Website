@@ -20,11 +20,31 @@ If you don't have Homebrew, install it first from [https://brew.sh](https://brew
 
 ### 3. Run Dependency Checker (Optional)
 
-Double-click **Check Dependencies** to verify everything is installed correctly.
+Open Terminal and run:
+
+```bash
+cd "/Volumes/Terminal Music Player Installer/Installation Scripts"
+./Check\ Dependencies
+```
+
+Or right-click **Check Dependencies** → **Open** → Click **Open** in the dialog.
 
 ### 4. Install Claude Code Hooks
 
-Double-click **Install Hooks** to set up automatic music playback.
+**Option A: Using Terminal (Recommended)**
+
+Open Terminal and run:
+
+```bash
+cd "/Volumes/Terminal Music Player Installer/Installation Scripts"
+./Install\ Hooks
+```
+
+**Option B: Bypass Gatekeeper**
+
+Right-click **Install Hooks** → **Open** → Click **Open** in the dialog
+
+---
 
 This will:
 - Create hook scripts in `~/.claude/hooks/`
