@@ -8,6 +8,8 @@
 	<string>TerminalMusicPlayer</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.jackshen.TerminalMusicPlayer</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
