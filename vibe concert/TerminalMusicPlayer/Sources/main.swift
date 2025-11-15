@@ -249,7 +249,7 @@ class YouTubePlayer: NSObject, ObservableObject {
             let process = Process()
             process.executableURL = URL(fileURLWithPath: ytdlpPath)
             process.arguments = [
-                "-f", "bestaudio",  // Get best audio quality
+                "-f", "140",  // Format 140 is M4A/AAC audio (always available on YouTube)
                 "-o", tempPath,
                 "--no-cache-dir",
                 "--no-playlist",
