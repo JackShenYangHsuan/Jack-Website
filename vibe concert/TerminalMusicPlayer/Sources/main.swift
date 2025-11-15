@@ -314,24 +314,24 @@ class YouTubePlayer: NSObject, ObservableObject {
     private var audioPlayer: AVAudioPlayer?
     private var cachedAudioFile: String?
     private var ytdlpPath: String?
+    private var isLoading: Bool = false  // Prevent multiple simultaneous downloads
 
     override init() {
         super.init()
-        if let savedURL = UserDefaults.standard.string(forKey: "savedYouTubeURL") {
-            youtubeURL = savedURL
-        } else {
-            youtubeURL = "https://www.youtube.com/watch?v=mQstYKoZ5O8&list=RDmQstYKoZ5O8&start_radio=1"
-        }
 
-        // Find yt-dlp path
+        // Find yt-dlp path FIRST before setting URL
         ytdlpPath = findYtDlpPath()
         if ytdlpPath == nil {
             logToFile("ERROR: yt-dlp not found in PATH")
             statusMessage = "Error: yt-dlp not installed"
         }
 
-        if !youtubeURL.isEmpty {
-            fetchVideoTitle()
+        // Now set URL (this will trigger didSet which calls fetchVideoTitle)
+        if let savedURL = UserDefaults.standard.string(forKey: "savedYouTubeURL") {
+            youtubeURL = savedURL
+        } else {
+            // Default to Lofi Girl - reliable and popular coding music
+            youtubeURL = "https://www.youtube.com/watch?v=jfKfPfyJRdk"
         }
     }
 
@@ -394,13 +394,22 @@ class YouTubePlayer: NSObject, ObservableObject {
             return
         }
 
+        // Prevent multiple simultaneous downloads
+        guard !isLoading && !isPlaying else {
+            logToFile("Already loading or playing, ignoring duplicate play() call")
+            return
+        }
+
         // If player exists and is paused, just resume
-        if let player = audioPlayer, !isPlaying {
+        if let player = audioPlayer {
             player.play()
             isPlaying = true
             statusMessage = "Playing"
             return
         }
+
+        // Mark as loading to prevent duplicate calls
+        isLoading = true
 
         // Otherwise download and setup new player
         let tempPath = NSTemporaryDirectory() + "music_\(UUID().uuidString)"
@@ -466,11 +475,13 @@ class YouTubePlayer: NSObject, ObservableObject {
                                 self.cachedAudioFile = downloadedPath
                                 DispatchQueue.main.async {
                                     self.startPlayback(audioPath: downloadedPath)
+                                    self.isLoading = false
                                 }
                             } else {
                                 DispatchQueue.main.async {
                                     self.statusMessage = "File too small: \(fileSize) bytes"
                                     self.isPlaying = false
+                                    self.isLoading = false
                                 }
                             }
                         }
@@ -478,6 +489,7 @@ class YouTubePlayer: NSObject, ObservableObject {
                         DispatchQueue.main.async {
                             self.statusMessage = "Download failed: file not found"
                             self.isPlaying = false
+                            self.isLoading = false
                         }
                     }
                 } catch {
@@ -485,12 +497,14 @@ class YouTubePlayer: NSObject, ObservableObject {
                     DispatchQueue.main.async {
                         self.statusMessage = "Error: \(error.localizedDescription)"
                         self.isPlaying = false
+                        self.isLoading = false
                     }
                 }
             } catch {
                 DispatchQueue.main.async {
                     self.statusMessage = "Error: \(error.localizedDescription)"
                     self.isPlaying = false
+                    self.isLoading = false
                 }
             }
         }
@@ -505,9 +519,12 @@ class YouTubePlayer: NSObject, ObservableObject {
             audioPlayer?.play()
             isPlaying = true
             statusMessage = "Playing"
+            logToFile("Playback started successfully")
         } catch {
             statusMessage = "Failed: \(error.localizedDescription)"
             isPlaying = false
+            isLoading = false
+            logToFile("Playback failed: \(error.localizedDescription)")
         }
     }
     
@@ -518,32 +535,70 @@ class YouTubePlayer: NSObject, ObservableObject {
     }
     
     private func fetchVideoTitle() {
-        guard let ytdlpPath = ytdlpPath else { return }
+        guard let ytdlpPath = ytdlpPath else {
+            return
+        }
 
         DispatchQueue.global(qos: .utility).async { [weak self] in
             guard let self = self else { return }
 
             let process = Process()
             process.executableURL = URL(fileURLWithPath: ytdlpPath)
-            process.arguments = ["--get-title", "--no-playlist", self.youtubeURL]
+            // Try to get title - may fail due to bot detection, but that's OK
+            // We'll show the URL as fallback if title fetch fails
+            process.arguments = [
+                "--get-title",
+                "--no-playlist",
+                "--no-check-certificates",  // Skip cert validation for speed
+                "--no-warnings",
+                self.youtubeURL
+            ]
 
             let pipe = Pipe()
+            let errorPipe = Pipe()
             process.standardOutput = pipe
+            process.standardError = errorPipe
 
             do {
                 try process.run()
                 process.waitUntilExit()
 
                 let data = pipe.fileHandleForReading.readDataToEndOfFile()
+                let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+
+                if process.terminationStatus != 0 {
+                    // Title fetch failed (likely bot detection) - that's OK, we'll show URL instead
+                    if let errorOutput = String(data: errorData, encoding: .utf8), !errorOutput.isEmpty {
+                        // Only log first line of error to avoid spam
+                        let firstErrorLine = errorOutput.components(separatedBy: .newlines).first ?? ""
+                        logToFile("yt-dlp title fetch failed (expected for some videos): \(firstErrorLine)")
+                    }
+
+                    // Clear title on error - UI will show URL instead
+                    DispatchQueue.main.async {
+                        self.videoTitle = nil
+                    }
+                    return
+                }
+
                 if let output = String(data: data, encoding: .utf8) {
                     let title = output.components(separatedBy: .newlines).first?.trimmingCharacters(in: .whitespacesAndNewlines)
 
                     DispatchQueue.main.async {
-                        self.videoTitle = title
+                        if let title = title, !title.isEmpty {
+                            self.videoTitle = title
+                            logToFile("Fetched video title: \(title)")
+                        } else {
+                            self.videoTitle = nil
+                            logToFile("Empty title returned for: \(self.youtubeURL)")
+                        }
                     }
                 }
             } catch {
-                // Ignore title fetch errors
+                logToFile("Failed to fetch video title: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    self.videoTitle = nil
+                }
             }
         }
     }
@@ -633,9 +688,12 @@ struct ContentView: View {
                                 .font(.system(size: 13))
                                 .foregroundColor(.secondary)
                         } else {
-                            Text("Loading title...")
-                                .font(.system(size: 13))
+                            // Show URL as fallback if title unavailable
+                            Text(player.youtubeURL)
+                                .lineLimit(2)
+                                .font(.system(size: 11))
                                 .foregroundColor(.secondary)
+                                .opacity(0.8)
                         }
                     }
                     
