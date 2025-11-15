@@ -299,11 +299,33 @@ class SessionMonitor: ObservableObject {
 class YouTubePlayer: NSObject, ObservableObject {
     @Published var youtubeURL: String = "" {
         didSet {
+            // Save the new URL
             UserDefaults.standard.set(youtubeURL, forKey: "savedYouTubeURL")
+
+            // Check if we were playing before URL change
+            let wasPlaying = isPlaying
+
+            // Stop current playback completely - critical fix for URL switching
+            audioPlayer?.stop()
+            audioPlayer = nil
+            isPlaying = false
+            isLoading = false
+
+            // Clear cached data
             cachedAudioFile = nil
             videoTitle = nil
+            statusMessage = "Ready"
+
+            // Fetch new video title
             if !youtubeURL.isEmpty {
                 fetchVideoTitle()
+
+                // If music was playing, automatically start the new URL
+                if wasPlaying {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                        self?.play()
+                    }
+                }
             }
         }
     }
