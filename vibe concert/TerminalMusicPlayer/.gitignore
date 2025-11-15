@@ -1,0 +1,21 @@
+# Build artifacts
+.build/
+build/
+*.dmg
+
+# Xcode
+*.xcodeproj
+*.xcworkspace
+DerivedData/
+*.swiftpm
+
+# macOS
+.DS_Store
+*.app
+
+# Icon generation
+AppIcon.iconset/
+
+# DMG creation temp files
+dmg-contents/
+*.dmg.temp.dmg

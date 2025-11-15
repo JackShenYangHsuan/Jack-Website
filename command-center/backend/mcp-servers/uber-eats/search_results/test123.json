@@ -1,0 +1,6 @@
+{
+  "request_id": "test123",
+  "result": "Error: 'NoneType' object is not subscriptable",
+  "timestamp": "2025-11-07T13:43:40.792818",
+  "status": "error"
+}
