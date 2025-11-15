@@ -1,8 +1,21 @@
-.DS_Store
-/.build
-/Packages
-xcuserdata/
+# Build artifacts
+.build/
+build/
+*.dmg
+
+# Xcode
+*.xcodeproj
+*.xcworkspace
 DerivedData/
-.swiftpm/configuration/registries.json
-.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
-.netrc
+*.swiftpm
+
+# macOS
+.DS_Store
+*.app
+
+# Icon generation
+AppIcon.iconset/
+
+# DMG creation temp files
+dmg-contents/
+*.dmg.temp.dmg
