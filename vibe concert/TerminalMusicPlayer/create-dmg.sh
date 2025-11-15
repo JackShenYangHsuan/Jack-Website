@@ -35,6 +35,10 @@ ln -s /Applications "$DMG_DIR/Applications"
 cp installer-scripts/Install.command "$DMG_DIR/"
 chmod +x "$DMG_DIR/Install.command"
 
+# Copy quarantine removal script to top level (REQUIRED FIRST STEP)
+cp installer-scripts/Remove-Quarantine.command "$DMG_DIR/"
+chmod +x "$DMG_DIR/Remove-Quarantine.command"
+
 # Copy installation scripts
 mkdir -p "$DMG_DIR/Installation Scripts"
 cp installer-scripts/install-hooks.sh "$DMG_DIR/Installation Scripts/Install Hooks"
@@ -86,16 +90,19 @@ tell application "Finder"
         set icon size of viewOptions to 72
         delay 2
         try
-            set position of item "Install.command" of container window to {300, 120}
+            set position of item "Remove-Quarantine.command" of container window to {300, 80}
         end try
         try
-            set position of item "$BUNDLE_NAME" of container window to {150, 250}
+            set position of item "Install.command" of container window to {300, 160}
         end try
         try
-            set position of item "Applications" of container window to {450, 250}
+            set position of item "$BUNDLE_NAME" of container window to {150, 280}
         end try
         try
-            set position of item "Installation Scripts" of container window to {300, 350}
+            set position of item "Applications" of container window to {450, 280}
+        end try
+        try
+            set position of item "Installation Scripts" of container window to {300, 380}
         end try
         delay 2
         close

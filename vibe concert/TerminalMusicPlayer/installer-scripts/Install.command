@@ -15,6 +15,22 @@ APP_NAME="TerminalMusicPlayer.app"
 APP_PATH="/Applications/$APP_NAME"
 DMG_APP_PATH="$DMG_ROOT/$APP_NAME"
 
+# Pre-flight check: Detect if still quarantined
+if xattr -l "$DMG_APP_PATH" 2>/dev/null | grep -q "com.apple.quarantine"; then
+    echo "⚠️  QUARANTINE DETECTED"
+    echo ""
+    echo "macOS has quarantined this DMG. You must remove it first!"
+    echo ""
+    echo "Please run this first:"
+    echo "  1. Close this window"
+    echo "  2. Double-click 'Remove-Quarantine.command'"
+    echo "  3. Enter your password"
+    echo "  4. Then run this installer again"
+    echo ""
+    read -p "Press Enter to exit..."
+    exit 1
+fi
+
 # Step 1: Copy app to Applications
 echo "Step 1/4: Installing app to /Applications..."
 if [ -d "$APP_PATH" ]; then

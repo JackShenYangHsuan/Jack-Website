@@ -2,6 +2,24 @@
 
 Welcome! This app plays music automatically when you start Claude Code sessions.
 
+## ⚠️ IMPORTANT: First Time Setup (macOS Security)
+
+**Before installing, you MUST remove macOS quarantine:**
+
+Since this app is not signed with an Apple Developer ID, macOS will show a "damaged" error when you try to run the installer. This is normal for unsigned apps downloaded from the internet.
+
+**Do this FIRST:**
+
+1. **Open the DMG** - Double-click the downloaded DMG file
+2. **Double-click Remove-Quarantine.command**
+3. **Enter your password** when prompted
+4. **Wait for "Success!"** message
+5. **Now proceed** with installation below
+
+This is a one-time step that removes macOS quarantine from the installer files.
+
+---
+
 ## 📦 Quick Installation (Recommended)
 
 ### Option A: One-Click Installer
