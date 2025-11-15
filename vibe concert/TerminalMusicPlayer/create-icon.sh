@@ -7,9 +7,9 @@ set -e
 
 ICONSET_DIR="AppIcon.iconset"
 OUTPUT_ICON="AppIcon.icns"
-SOURCE_PNG="../../Claude Music Player.png"
+SOURCE_PNG="../../Claude Music Player Mac App.png"
 
-echo "🎨 Creating app icon from Claude Music Player.png..."
+echo "🎨 Creating app icon from Claude Music Player Mac App.png..."
 
 # Check if source PNG exists
 if [ ! -f "$SOURCE_PNG" ]; then
@@ -51,4 +51,4 @@ iconutil -c icns "$ICONSET_DIR" -o "$OUTPUT_ICON"
 rm -rf "$ICONSET_DIR"
 
 echo "✅ Icon created: $OUTPUT_ICON"
-echo "   (Generated from Claude Music Player.png)"
+echo "   (Generated from Claude Music Player Mac App.png)"
