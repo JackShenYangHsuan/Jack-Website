@@ -237,7 +237,7 @@ class YouTubePlayer: NSObject, ObservableObject {
         }
 
         // Otherwise download and setup new player
-        let tempPath = NSTemporaryDirectory() + "music_\(UUID().uuidString).m4a"
+        let tempPath = NSTemporaryDirectory() + "music_\(UUID().uuidString)"
 
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
@@ -249,8 +249,7 @@ class YouTubePlayer: NSObject, ObservableObject {
             let process = Process()
             process.executableURL = URL(fileURLWithPath: ytdlpPath)
             process.arguments = [
-                "-x",  // Extract audio
-                "--audio-format", "m4a",  // Convert to M4A (AAC)
+                "-f", "bestaudio",  // Get best audio quality
                 "-o", tempPath,
                 "--no-cache-dir",
                 "--no-playlist",
@@ -271,28 +270,54 @@ class YouTubePlayer: NSObject, ObservableObject {
                 logToFile("yt-dlp exit status: \(process.terminationStatus)")
                 logToFile("yt-dlp output: \(output)")
 
-                // Check if file exists and has reasonable size
+                // Find the downloaded file (yt-dlp adds extension)
                 let fileManager = FileManager.default
-                if fileManager.fileExists(atPath: tempPath) {
-                    if let attrs = try? fileManager.attributesOfItem(atPath: tempPath),
-                       let fileSize = attrs[.size] as? Int {
-                        logToFile("Downloaded file size: \(fileSize) bytes")
+                let tempDir = NSTemporaryDirectory()
 
-                        if fileSize > 1_000_000 { // At least 1MB
-                            self.cachedAudioFile = tempPath
-                            DispatchQueue.main.async {
-                                self.startPlayback(audioPath: tempPath)
-                            }
-                        } else {
-                            DispatchQueue.main.async {
-                                self.statusMessage = "File too small: \(fileSize) bytes"
-                                self.isPlaying = false
+                do {
+                    let files = try fileManager.contentsOfDirectory(atPath: tempDir)
+                    let musicFiles = files.filter { $0.hasPrefix("music_") && !$0.hasSuffix(".part") }
+
+                    // Sort by modification date, get most recent
+                    let sortedFiles = musicFiles.compactMap { fileName -> (String, Date)? in
+                        let fullPath = tempDir + fileName
+                        guard let attrs = try? fileManager.attributesOfItem(atPath: fullPath),
+                              let modDate = attrs[.modificationDate] as? Date else {
+                            return nil
+                        }
+                        return (fullPath, modDate)
+                    }.sorted { $0.1 > $1.1 }
+
+                    if let downloadedFile = sortedFiles.first {
+                        let downloadedPath = downloadedFile.0
+                        logToFile("Found downloaded file: \(downloadedPath)")
+
+                        if let attrs = try? fileManager.attributesOfItem(atPath: downloadedPath),
+                           let fileSize = attrs[.size] as? Int {
+                            logToFile("Downloaded file size: \(fileSize) bytes")
+
+                            if fileSize > 1_000_000 { // At least 1MB
+                                self.cachedAudioFile = downloadedPath
+                                DispatchQueue.main.async {
+                                    self.startPlayback(audioPath: downloadedPath)
+                                }
+                            } else {
+                                DispatchQueue.main.async {
+                                    self.statusMessage = "File too small: \(fileSize) bytes"
+                                    self.isPlaying = false
+                                }
                             }
                         }
+                    } else {
+                        DispatchQueue.main.async {
+                            self.statusMessage = "Download failed: file not found"
+                            self.isPlaying = false
+                        }
                     }
-                } else {
+                } catch {
+                    logToFile("Error finding downloaded file: \(error)")
                     DispatchQueue.main.async {
-                        self.statusMessage = "Download failed: file not found"
+                        self.statusMessage = "Error: \(error.localizedDescription)"
                         self.isPlaying = false
                     }
                 }
