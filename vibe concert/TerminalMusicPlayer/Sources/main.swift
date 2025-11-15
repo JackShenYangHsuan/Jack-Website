@@ -448,8 +448,28 @@ struct ContentView: View {
                 }
             }
             .padding(.bottom, 8)
+
+            // Divider
+            Divider()
+                .padding(.horizontal)
+
+            // Quit button
+            Button(action: {
+                NSApplication.shared.terminate(nil)
+            }) {
+                HStack {
+                    Image(systemName: "power")
+                    Text("Quit")
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
+            }
+            .buttonStyle(.bordered)
+            .tint(.red)
+            .padding(.horizontal)
+            .padding(.bottom, 8)
         }
-        .frame(width: 400, height: 500)
+        .frame(width: 400, height: 550)
         .onAppear {
             sessionMonitor.startMonitoring(player: player)
         }
@@ -472,7 +492,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         popover = NSPopover()
-        popover.contentSize = NSSize(width: 400, height: 500)
+        popover.contentSize = NSSize(width: 400, height: 550)
         popover.behavior = .transient
         popover.contentViewController = NSHostingController(rootView: ContentView())
     }
