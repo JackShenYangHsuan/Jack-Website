@@ -299,9 +299,6 @@ class SessionMonitor: ObservableObject {
 class YouTubePlayer: NSObject, ObservableObject {
     @Published var youtubeURL: String = "" {
         didSet {
-            // Save the new URL
-            UserDefaults.standard.set(youtubeURL, forKey: "savedYouTubeURL")
-
             // Clear loaded URL - next play() will detect change and download new music
             loadedURL = nil
 
@@ -335,13 +332,8 @@ class YouTubePlayer: NSObject, ObservableObject {
             statusMessage = "Error: yt-dlp not installed"
         }
 
-        // Load saved URL if available, otherwise user must enter one
-        if let savedURL = UserDefaults.standard.string(forKey: "savedYouTubeURL") {
-            youtubeURL = savedURL
-        } else {
-            // No default - user must enter YouTube URL
-            youtubeURL = ""
-        }
+        // Always start with empty URL - user must enter YouTube URL manually
+        youtubeURL = ""
     }
 
     private func findYtDlpPath() -> String? {
