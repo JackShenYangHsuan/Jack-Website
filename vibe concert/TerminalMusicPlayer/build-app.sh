@@ -42,6 +42,31 @@ if [ -f "AppIcon.icns" ]; then
     cp AppIcon.icns "$APP_DIR/Contents/Resources/"
 fi
 
+# Bundle dependencies (yt-dlp and jq)
+echo "Bundling dependencies..."
+mkdir -p "$APP_DIR/Contents/Resources/bin"
+
+# Download yt-dlp
+echo "  Downloading yt-dlp..."
+curl -L -s https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_macos \
+    -o "$APP_DIR/Contents/Resources/bin/yt-dlp"
+chmod +x "$APP_DIR/Contents/Resources/bin/yt-dlp"
+
+# Download jq (detect architecture)
+echo "  Downloading jq..."
+ARCH=$(uname -m)
+if [ "$ARCH" = "arm64" ]; then
+    JQ_BINARY="jq-macos-arm64"
+else
+    JQ_BINARY="jq-macos-amd64"
+fi
+
+curl -L -s "https://github.com/jqlang/jq/releases/latest/download/$JQ_BINARY" \
+    -o "$APP_DIR/Contents/Resources/bin/jq"
+chmod +x "$APP_DIR/Contents/Resources/bin/jq"
+
+echo "✅ Dependencies bundled"
+
 # Set bundle permissions
 echo "Setting permissions..."
 chmod -R 755 "$APP_DIR"

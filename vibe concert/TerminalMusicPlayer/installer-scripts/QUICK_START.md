@@ -1,30 +1,20 @@
 # Terminal Music Player - Quick Start
 
-## Installation (4 Steps)
+## Installation (2 Steps!)
 
-### 1. Install the App
-Drag **Terminal Music Player.app** to **Applications** folder
+### 1. Open the DMG
+Double-click the downloaded DMG file
 
-### 2. Remove Quarantine
-Open Terminal and run:
-```bash
-sudo xattr -cr /Applications/TerminalMusicPlayer.app
-```
+### 2. Run the Installer
+Double-click **Install.command** and follow the prompts
 
-### 3. Install Dependencies
-Open Terminal and run:
-```bash
-brew install yt-dlp jq
-```
+**That's it!** The installer will:
+- ✅ Install the app to Applications
+- ✅ Remove security restrictions (requires password)
+- ✅ Set up Claude Code hooks
+- ✅ Launch the app automatically
 
-### 4. Install Hooks
-Open Terminal and run:
-```bash
-cd "/Volumes/Terminal Music Player Installer/Installation Scripts"
-./Install\ Hooks
-```
-
-**That's it!** Launch the app and you'll see a white circle in your menu bar.
+The app includes bundled dependencies (yt-dlp & jq), so no Homebrew required!
 
 ---
 

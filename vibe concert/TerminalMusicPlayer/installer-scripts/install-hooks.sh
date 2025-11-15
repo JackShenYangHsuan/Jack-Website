@@ -37,10 +37,16 @@ LOG_FILE="/tmp/claude_music_hook.log"
 WORKING_DIR="$PWD"
 PROJECT_NAME=$(basename "$WORKING_DIR")
 
+# Find jq (check bundled version first)
+JQ_PATH="/Applications/TerminalMusicPlayer.app/Contents/Resources/bin/jq"
+if [ ! -f "$JQ_PATH" ]; then
+    JQ_PATH=$(which jq 2>/dev/null)
+fi
+
 # Look for music assignment in .claude/music.json
 MUSIC_URL=""
-if [ -f ".claude/music.json" ]; then
-    MUSIC_URL=$(jq -r '.youtubeURL // ""' .claude/music.json 2>/dev/null || echo "")
+if [ -f ".claude/music.json" ] && [ -n "$JQ_PATH" ]; then
+    MUSIC_URL=$("$JQ_PATH" -r '.youtubeURL // ""' .claude/music.json 2>/dev/null || echo "")
 fi
 
 # Generate session ID
@@ -70,9 +76,15 @@ cat > "$HOOKS_DIR/music-session-stop.sh" << 'HOOK_STOP'
 SESSION_FILE="/tmp/claude_music_session.json"
 LOG_FILE="/tmp/claude_music_hook.log"
 
+# Find jq (check bundled version first)
+JQ_PATH="/Applications/TerminalMusicPlayer.app/Contents/Resources/bin/jq"
+if [ ! -f "$JQ_PATH" ]; then
+    JQ_PATH=$(which jq 2>/dev/null)
+fi
+
 # Update session status to stopped
-if [ -f "$SESSION_FILE" ]; then
-    jq '.status = "stopped" | .timestamp = '$(date +%s) "$SESSION_FILE" > "$SESSION_FILE.tmp" && mv "$SESSION_FILE.tmp" "$SESSION_FILE"
+if [ -f "$SESSION_FILE" ] && [ -n "$JQ_PATH" ]; then
+    "$JQ_PATH" '.status = "stopped" | .timestamp = '$(date +%s) "$SESSION_FILE" > "$SESSION_FILE.tmp" && mv "$SESSION_FILE.tmp" "$SESSION_FILE"
 fi
 
 echo "[$(date)] Session stopped" >> "$LOG_FILE"
@@ -132,8 +144,14 @@ if [ ! -f "$SETTINGS_FILE" ]; then
 SETTINGS
     echo "✅ Created new settings.json with hooks"
 else
+    # Find jq (check bundled version first)
+    JQ_PATH="/Applications/TerminalMusicPlayer.app/Contents/Resources/bin/jq"
+    if [ ! -f "$JQ_PATH" ]; then
+        JQ_PATH=$(which jq 2>/dev/null)
+    fi
+
     # Check if jq is available for JSON manipulation
-    if ! command -v jq &> /dev/null; then
+    if [ -z "$JQ_PATH" ]; then
         echo "⚠️  Warning: jq not found. Please manually add hooks to $SETTINGS_FILE"
         echo ""
         echo "Add these lines to your settings.json:"
@@ -144,7 +162,7 @@ else
     else
         # Use jq to merge hooks into existing settings
         TMP_FILE=$(mktemp)
-        jq '.hooks.SessionStart = "~/.claude/hooks/music-session-start.sh" | .hooks.Stop = "~/.claude/hooks/music-session-stop.sh"' "$SETTINGS_FILE" > "$TMP_FILE"
+        "$JQ_PATH" '.hooks.SessionStart = "~/.claude/hooks/music-session-start.sh" | .hooks.Stop = "~/.claude/hooks/music-session-stop.sh"' "$SETTINGS_FILE" > "$TMP_FILE"
         mv "$TMP_FILE" "$SETTINGS_FILE"
         echo "✅ Updated existing settings.json with hooks"
     fi

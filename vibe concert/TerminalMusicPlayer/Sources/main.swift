@@ -336,14 +336,22 @@ class YouTubePlayer: NSObject, ObservableObject {
     }
 
     private func findYtDlpPath() -> String? {
-        // Common installation paths
+        // First, check bundled binary
+        if let resourcePath = Bundle.main.resourcePath {
+            let bundledPath = resourcePath + "/bin/yt-dlp"
+            if FileManager.default.fileExists(atPath: bundledPath) {
+                logToFile("Found bundled yt-dlp at: \(bundledPath)")
+                return bundledPath
+            }
+        }
+
+        // Then check common installation paths
         let commonPaths = [
             "/opt/homebrew/bin/yt-dlp",
             "/usr/local/bin/yt-dlp",
             "/usr/bin/yt-dlp"
         ]
 
-        // Check common paths first
         for path in commonPaths {
             if FileManager.default.fileExists(atPath: path) {
                 logToFile("Found yt-dlp at: \(path)")

@@ -31,6 +31,10 @@ cp -r "$BUILD_DIR/$BUNDLE_NAME" "$DMG_DIR/"
 # Create Applications symlink for drag-and-drop
 ln -s /Applications "$DMG_DIR/Applications"
 
+# Copy one-click installer to top level
+cp installer-scripts/Install.command "$DMG_DIR/"
+chmod +x "$DMG_DIR/Install.command"
+
 # Copy installation scripts
 mkdir -p "$DMG_DIR/Installation Scripts"
 cp installer-scripts/install-hooks.sh "$DMG_DIR/Installation Scripts/Install Hooks"
@@ -80,11 +84,20 @@ tell application "Finder"
         set viewOptions to the icon view options of container window
         set arrangement of viewOptions to not arranged
         set icon size of viewOptions to 72
-        delay 1
-        set position of item "$BUNDLE_NAME" of container window to {150, 200}
-        set position of item "Applications" of container window to {450, 200}
-        set position of item "Installation Scripts" of container window to {150, 320}
-        delay 1
+        delay 2
+        try
+            set position of item "Install.command" of container window to {300, 120}
+        end try
+        try
+            set position of item "$BUNDLE_NAME" of container window to {150, 250}
+        end try
+        try
+            set position of item "Applications" of container window to {450, 250}
+        end try
+        try
+            set position of item "Installation Scripts" of container window to {300, 350}
+        end try
+        delay 2
         close
         open
         update without registering applications

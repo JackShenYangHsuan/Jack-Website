@@ -2,13 +2,34 @@
 
 Welcome! This app plays music automatically when you start Claude Code sessions.
 
-## 📦 Installation Steps
+## 📦 Quick Installation (Recommended)
+
+### Option A: One-Click Installer
+
+1. **Open the DMG** - Double-click the downloaded DMG file
+2. **Run Installer** - Double-click **Install.command**
+3. **Enter Password** - When prompted (for security removal)
+4. **Done!** - App launches automatically
+
+The installer will:
+- ✅ Copy app to Applications folder
+- ✅ Remove quarantine/security restrictions
+- ✅ Install Claude Code hooks
+- ✅ Launch the app
+
+**No Homebrew needed!** Dependencies (yt-dlp & jq) are bundled inside the app.
+
+---
+
+## 📖 Manual Installation (Alternative)
+
+If you prefer manual installation or the installer doesn't work:
 
 ### 1. Install the App
 
 Drag **Terminal Music Player.app** to your **Applications** folder.
 
-### 2. Remove Quarantine (Prevent "App is Damaged" Error)
+### 2. Remove Quarantine
 
 Open Terminal and run:
 
@@ -16,32 +37,9 @@ Open Terminal and run:
 sudo xattr -cr /Applications/TerminalMusicPlayer.app
 ```
 
-This removes the quarantine flag that macOS adds to downloaded apps, preventing the "app is damaged" error.
+This prevents the "app is damaged" error on macOS.
 
-### 3. Install Dependencies
-
-Open Terminal and run:
-
-```bash
-brew install yt-dlp jq
-```
-
-If you don't have Homebrew, install it first from [https://brew.sh](https://brew.sh)
-
-### 4. Run Dependency Checker (Optional)
-
-Open Terminal and run:
-
-```bash
-cd "/Volumes/Terminal Music Player Installer/Installation Scripts"
-./Check\ Dependencies
-```
-
-Or right-click **Check Dependencies** → **Open** → Click **Open** in the dialog.
-
-### 5. Install Claude Code Hooks
-
-**Option A: Using Terminal (Recommended)**
+### 3. Install Claude Code Hooks
 
 Open Terminal and run:
 
@@ -50,22 +48,33 @@ cd "/Volumes/Terminal Music Player Installer/Installation Scripts"
 ./Install\ Hooks
 ```
 
-**Option B: Bypass Gatekeeper**
-
-Right-click **Install Hooks** → **Open** → Click **Open** in the dialog
-
----
+Or right-click **Install Hooks** → **Open** → Click **Open** in the dialog.
 
 This will:
 - Create hook scripts in `~/.claude/hooks/`
 - Update your Claude Code settings
 - Enable automatic session detection
 
-### 6. Launch the App
+### 4. Launch the App
 
 Open **Terminal Music Player** from your Applications folder.
 
 You should see a white circle in your menu bar ⚪
+
+---
+
+## 💡 About Dependencies
+
+This app requires **yt-dlp** (YouTube audio extraction) and **jq** (JSON processing).
+
+**Good news:** These are bundled inside the app! No installation needed.
+
+If you prefer to use system-installed versions via Homebrew:
+```bash
+brew install yt-dlp jq
+```
+
+The app will automatically use bundled versions if system versions aren't found.
 
 ## 🎵 Quick Start
 
