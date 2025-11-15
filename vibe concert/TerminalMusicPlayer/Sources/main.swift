@@ -710,6 +710,13 @@ struct ContentView: View {
                     NSTextFieldWrapper(text: $editingURL, placeholder: "YouTube URL")
                         .frame(height: 22)
 
+                    Button("Paste") {
+                        if let clipboardString = NSPasteboard.general.string(forType: .string) {
+                            editingURL = clipboardString
+                        }
+                    }
+                    .buttonStyle(.bordered)
+
                     Button("Save") {
                         player.youtubeURL = editingURL
                         isEditing = false
