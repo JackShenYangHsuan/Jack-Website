@@ -152,10 +152,11 @@ class YouTubePlayer: NSObject, ObservableObject {
     @Published var isPlaying: Bool = false
     @Published var statusMessage: String = "Ready"
     @Published var videoTitle: String?
-    
+
     private var audioPlayer: AVAudioPlayer?
     private var cachedAudioFile: String?
-    
+    private var ytdlpPath: String?
+
     override init() {
         super.init()
         if let savedURL = UserDefaults.standard.string(forKey: "savedYouTubeURL") {
@@ -163,12 +164,70 @@ class YouTubePlayer: NSObject, ObservableObject {
         } else {
             youtubeURL = "https://www.youtube.com/watch?v=mQstYKoZ5O8&list=RDmQstYKoZ5O8&start_radio=1"
         }
+
+        // Find yt-dlp path
+        ytdlpPath = findYtDlpPath()
+        if ytdlpPath == nil {
+            logToFile("ERROR: yt-dlp not found in PATH")
+            statusMessage = "Error: yt-dlp not installed"
+        }
+
         if !youtubeURL.isEmpty {
             fetchVideoTitle()
         }
     }
+
+    private func findYtDlpPath() -> String? {
+        // Common installation paths
+        let commonPaths = [
+            "/opt/homebrew/bin/yt-dlp",
+            "/usr/local/bin/yt-dlp",
+            "/usr/bin/yt-dlp"
+        ]
+
+        // Check common paths first
+        for path in commonPaths {
+            if FileManager.default.fileExists(atPath: path) {
+                logToFile("Found yt-dlp at: \(path)")
+                return path
+            }
+        }
+
+        // Try using 'which' to find it
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/which")
+        process.arguments = ["yt-dlp"]
+
+        let pipe = Pipe()
+        process.standardOutput = pipe
+
+        do {
+            try process.run()
+            process.waitUntilExit()
+
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            if let output = String(data: data, encoding: .utf8) {
+                let path = output.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !path.isEmpty && FileManager.default.fileExists(atPath: path) {
+                    logToFile("Found yt-dlp via 'which': \(path)")
+                    return path
+                }
+            }
+        } catch {
+            logToFile("Error running 'which yt-dlp': \(error)")
+        }
+
+        return nil
+    }
     
     func play() {
+        // Check if yt-dlp is available
+        guard let ytdlpPath = ytdlpPath else {
+            statusMessage = "Error: yt-dlp not found. Install with: brew install yt-dlp"
+            logToFile("Cannot play: yt-dlp not found")
+            return
+        }
+
         // If player exists and is paused, just resume
         if let player = audioPlayer, !isPlaying {
             player.play()
@@ -188,7 +247,7 @@ class YouTubePlayer: NSObject, ObservableObject {
             }
 
             let process = Process()
-            process.executableURL = URL(fileURLWithPath: "/opt/homebrew/bin/yt-dlp")
+            process.executableURL = URL(fileURLWithPath: ytdlpPath)
             process.arguments = [
                 "-x",  // Extract audio
                 "--audio-format", "m4a",  // Convert to M4A (AAC)
@@ -268,24 +327,26 @@ class YouTubePlayer: NSObject, ObservableObject {
     }
     
     private func fetchVideoTitle() {
+        guard let ytdlpPath = ytdlpPath else { return }
+
         DispatchQueue.global(qos: .utility).async { [weak self] in
             guard let self = self else { return }
-            
+
             let process = Process()
-            process.executableURL = URL(fileURLWithPath: "/opt/homebrew/bin/yt-dlp")
+            process.executableURL = URL(fileURLWithPath: ytdlpPath)
             process.arguments = ["--get-title", "--no-playlist", self.youtubeURL]
-            
+
             let pipe = Pipe()
             process.standardOutput = pipe
-            
+
             do {
                 try process.run()
                 process.waitUntilExit()
-                
+
                 let data = pipe.fileHandleForReading.readDataToEndOfFile()
                 if let output = String(data: data, encoding: .utf8) {
                     let title = output.components(separatedBy: .newlines).first?.trimmingCharacters(in: .whitespacesAndNewlines)
-                    
+
                     DispatchQueue.main.async {
                         self.videoTitle = title
                     }
