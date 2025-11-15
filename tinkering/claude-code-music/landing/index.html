@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Music Player - Music That Codes With You</title>
+    <link rel="stylesheet" href="https://vercel.com/geist/font.css">
+    <style>
+        :root {
+            --geist-background: #000;
+            --geist-foreground: #fff;
+            --geist-gray-100: #111;
+            --geist-gray-200: #1a1a1a;
+            --geist-gray-400: #3a3a3a;
+            --geist-gray-700: #a0a0a0;
+            --geist-gray-900: #ededed;
+            --geist-blue: #0070f3;
+            --geist-purple: #7928ca;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--geist-background);
+            color: var(--geist-foreground);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        code, pre {
+            font-family: 'Geist Mono', monospace;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .hero h1 {
+            font-size: clamp(48px, 8vw, 72px);
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            margin-bottom: 24px;
+            background: linear-gradient(to right, var(--geist-foreground), var(--geist-gray-700));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(18px, 3vw, 24px);
+            color: var(--geist-gray-700);
+            max-width: 600px;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--geist-foreground);
+            color: var(--geist-background);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--geist-gray-700);
+            border: 1px solid var(--geist-gray-400);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--geist-gray-700);
+            color: var(--geist-foreground);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 120px 0;
+            background: var(--geist-gray-100);
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 64px;
+            letter-spacing: -0.02em;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            padding: 32px;
+            background: var(--geist-gray-200);
+            border: 1px solid var(--geist-gray-400);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--geist-gray-700);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--geist-gray-700);
+            line-height: 1.6;
+        }
+
+        /* Installation Section */
+        .installation {
+            padding: 120px 0;
+        }
+
+        .install-steps {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .step {
+            margin-bottom: 40px;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--geist-gray-400);
+            color: var(--geist-foreground);
+            border-radius: 50%;
+            font-weight: 600;
+            margin-right: 16px;
+            font-size: 14px;
+        }
+
+        .step h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .step p {
+            color: var(--geist-gray-700);
+            margin-left: 48px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .code-block {
+            background: var(--geist-gray-100);
+            border: 1px solid var(--geist-gray-400);
+            border-radius: 8px;
+            padding: 16px;
+            margin-left: 48px;
+            margin-top: 12px;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            font-size: 13px;
+            color: var(--geist-gray-900);
+        }
+
+        .warning {
+            background: rgba(255, 100, 0, 0.1);
+            border: 1px solid rgba(255, 100, 0, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 24px 0;
+            font-size: 14px;
+        }
+
+        .warning strong {
+            color: #ff6400;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 120px 0;
+            text-align: center;
+            background: var(--geist-gray-100);
+        }
+
+        .cta-section h2 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            color: var(--geist-gray-700);
+            margin-bottom: 32px;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid var(--geist-gray-400);
+        }
+
+        .footer p {
+            font-size: 13px;
+            color: var(--geist-gray-700);
+        }
+
+        .footer a {
+            color: var(--geist-gray-700);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer a:hover {
+            color: var(--geist-foreground);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 70vh;
+                padding: 60px 0;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .features,
+            .installation,
+            .cta-section {
+                padding: 80px 0;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Music That Codes With You</h1>
+            <p>Automatically play the perfect soundtrack for each terminal session. Built for developers who love to code with music.</p>
+            <div class="cta-buttons">
+                <a href="../../../vibe%20concert/TerminalMusicPlayer/TerminalMusicPlayer-1.0.0.dmg" class="btn btn-primary" download>
+                    Download for macOS
+                </a>
+                <a href="https://github.com" class="btn btn-secondary">
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Built for Your Workflow</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Smart Session Detection</h3>
+                    <p>Automatically detects when you start coding in Claude Code and plays your assigned music. No manual controls needed.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎵</div>
+                    <h3>YouTube Integration</h3>
+                    <p>Play any YouTube video as background music. Perfect for lofi beats, ambient sounds, or your favorite coding playlist.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Menu Bar Control</h3>
+                    <p>Quick access from your macOS menu bar. Play, pause, or change tracks without interrupting your flow.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Section -->
+    <section class="installation">
+        <div class="container">
+            <h2 class="section-title">Installation</h2>
+
+            <div class="warning">
+                <strong>⚠️ Important:</strong> This app is not signed with an Apple Developer ID. You must remove macOS quarantine before installation.
+            </div>
+
+            <div class="install-steps">
+                <div class="step">
+                    <h3>
+                        <span class="step-number">1</span>
+                        Download and Open DMG
+                    </h3>
+                    <p>Download the DMG file and double-click to open it.</p>
+                </div>
+
+                <div class="step">
+                    <h3>
+                        <span class="step-number">2</span>
+                        Remove macOS Quarantine
+                    </h3>
+                    <p>Double-click <strong>Remove-Quarantine.command</strong> and enter your password when prompted.</p>
+                    <p style="margin-top: 8px; font-style: italic;">This one-time step is required because the app isn't signed. It removes macOS security restrictions.</p>
+                </div>
+
+                <div class="step">
+                    <h3>
+                        <span class="step-number">3</span>
+                        Run Installer
+                    </h3>
+                    <p>Double-click <strong>Install.command</strong> and follow the prompts. The installer will:</p>
+                    <div class="code-block">
+                        <code>✅ Install app to Applications<br>✅ Set up Claude Code hooks<br>✅ Launch the app automatically</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>
+                        <span class="step-number">4</span>
+                        Assign Music to Your Project
+                    </h3>
+                    <p>Navigate to your project directory and assign a YouTube URL:</p>
+                    <div class="code-block">
+                        <code>cd ~/your-project<br>~/.claude/hooks/assign-music.sh "https://www.youtube.com/watch?v=jfKfPfyJRdk"</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>
+                        <span class="step-number">5</span>
+                        Start Coding
+                    </h3>
+                    <p>Start Claude Code in your project:</p>
+                    <div class="code-block">
+                        <code>claude</code>
+                    </div>
+                    <p style="margin-top: 12px;">Music will play automatically! 🎵</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to enhance your coding sessions?</h2>
+            <p>Download Terminal Music Player and experience a smarter way to code with music.</p>
+            <a href="../../../vibe%20concert/TerminalMusicPlayer/TerminalMusicPlayer-1.0.0.dmg" class="btn btn-primary" download>
+                Download for macOS (36MB)
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>
+                Built by <a href="/">Jack Shen</a> •
+                <a href="../index.html">Back to Project Page</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
