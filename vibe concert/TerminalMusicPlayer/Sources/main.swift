@@ -204,8 +204,13 @@ class SessionMonitor: ObservableObject {
                        let cpuUsage = Double(components[2]),
                        let rss = Int(components[5]) {
 
-                        let workingDir = "Claude Code"
-                        let projectName = "claude-\(pid)"
+                        // Try to read session data from session file
+                        var workingDir = "Claude Code"
+                        var projectName = "claude-\(pid)"
+                        if let sessionData = self.readSessionFile() {
+                            workingDir = sessionData.workingDirectory
+                            projectName = sessionData.projectName
+                        }
                         let startTime = String(components[8])
                         let timeStr = String(components[9])  // TIME field (e.g., "6:15.21")
 
@@ -310,6 +315,23 @@ class SessionMonitor: ObservableObject {
         }
 
         return seconds
+    }
+
+    private func readSessionFile() -> ClaudeSession? {
+        let sessionFilePath = "/tmp/claude_music_session.json"
+        guard FileManager.default.fileExists(atPath: sessionFilePath) else {
+            return nil
+        }
+
+        do {
+            let data = try Data(contentsOf: URL(fileURLWithPath: sessionFilePath))
+            let decoder = JSONDecoder()
+            let session = try decoder.decode(ClaudeSession.self, from: data)
+            return session
+        } catch {
+            logToFile("Failed to read session file: \(error)")
+            return nil
+        }
     }
 }
 
