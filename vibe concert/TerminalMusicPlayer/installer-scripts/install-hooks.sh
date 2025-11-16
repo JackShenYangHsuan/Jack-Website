@@ -133,12 +133,32 @@ echo ""
 echo "⚙️  Updating Claude Code settings..."
 
 if [ ! -f "$SETTINGS_FILE" ]; then
-    # Create new settings file with hooks
+    # Create new settings file with hooks (new array format)
     cat > "$SETTINGS_FILE" << 'SETTINGS'
 {
   "hooks": {
-    "SessionStart": "~/.claude/hooks/music-session-start.sh",
-    "Stop": "~/.claude/hooks/music-session-stop.sh"
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/music-session-start.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/music-session-stop.sh"
+          }
+        ]
+      }
+    ]
   }
 }
 SETTINGS
@@ -156,13 +176,16 @@ else
         echo ""
         echo "Add these lines to your settings.json:"
         echo '  "hooks": {'
-        echo '    "SessionStart": "~/.claude/hooks/music-session-start.sh",'
-        echo '    "Stop": "~/.claude/hooks/music-session-stop.sh"'
+        echo '    "SessionStart": [{"matcher": "", "hooks": [{"type": "command", "command": "~/.claude/hooks/music-session-start.sh"}]}],'
+        echo '    "Stop": [{"matcher": "", "hooks": [{"type": "command", "command": "~/.claude/hooks/music-session-stop.sh"}]}]'
         echo '  }'
     else
-        # Use jq to merge hooks into existing settings
+        # Use jq to merge hooks into existing settings (new array format)
         TMP_FILE=$(mktemp)
-        "$JQ_PATH" '.hooks.SessionStart = "~/.claude/hooks/music-session-start.sh" | .hooks.Stop = "~/.claude/hooks/music-session-stop.sh"' "$SETTINGS_FILE" > "$TMP_FILE"
+        "$JQ_PATH" '
+          .hooks.SessionStart = [{"matcher": "", "hooks": [{"type": "command", "command": "~/.claude/hooks/music-session-start.sh"}]}] |
+          .hooks.Stop = [{"matcher": "", "hooks": [{"type": "command", "command": "~/.claude/hooks/music-session-stop.sh"}]}]
+        ' "$SETTINGS_FILE" > "$TMP_FILE"
         mv "$TMP_FILE" "$SETTINGS_FILE"
         echo "✅ Updated existing settings.json with hooks"
     fi
