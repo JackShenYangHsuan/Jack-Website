@@ -24,6 +24,7 @@ func logToFile(_ message: String) {
 // MARK: - Session Models
 struct ClaudeSession: Codable {
     let sessionId: String
+    let pid: Int
     let status: String
     let timestamp: Int
     let workingDirectory: String
@@ -204,10 +205,10 @@ class SessionMonitor: ObservableObject {
                        let cpuUsage = Double(components[2]),
                        let rss = Int(components[5]) {
 
-                        // Try to read session data from session file
+                        // Try to read session data from PID-specific session file
                         var workingDir = "Claude Code"
                         var projectName = "claude-\(pid)"
-                        if let sessionData = self.readSessionFile() {
+                        if let sessionData = self.readSessionFile(pid: pid) {
                             workingDir = sessionData.workingDirectory
                             projectName = sessionData.projectName
                         }
@@ -317,8 +318,9 @@ class SessionMonitor: ObservableObject {
         return seconds
     }
 
-    private func readSessionFile() -> ClaudeSession? {
-        let sessionFilePath = "/tmp/claude_music_session.json"
+    private func readSessionFile(pid: Int) -> ClaudeSession? {
+        // Read PID-specific session file
+        let sessionFilePath = "/tmp/claude_music_session_\(pid).json"
         guard FileManager.default.fileExists(atPath: sessionFilePath) else {
             return nil
         }
@@ -327,9 +329,16 @@ class SessionMonitor: ObservableObject {
             let data = try Data(contentsOf: URL(fileURLWithPath: sessionFilePath))
             let decoder = JSONDecoder()
             let session = try decoder.decode(ClaudeSession.self, from: data)
+
+            // Verify the PID matches (sanity check)
+            guard session.pid == pid else {
+                logToFile("PID mismatch: file has \(session.pid), expected \(pid)")
+                return nil
+            }
+
             return session
         } catch {
-            logToFile("Failed to read session file: \(error)")
+            logToFile("Failed to read session file for PID \(pid): \(error)")
             return nil
         }
     }

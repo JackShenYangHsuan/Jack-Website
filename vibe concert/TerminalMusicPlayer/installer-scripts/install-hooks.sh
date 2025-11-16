@@ -30,7 +30,8 @@ cat > "$HOOKS_DIR/music-session-start.sh" << 'HOOK_START'
 # Claude Code Hook: SessionStart
 # Notifies Terminal Music Player when a session starts
 
-SESSION_FILE="/tmp/claude_music_session.json"
+# Use PID-based session file to support multiple concurrent sessions
+SESSION_FILE="/tmp/claude_music_session_$PPID.json"
 LOG_FILE="/tmp/claude_music_hook.log"
 
 # Get current working directory and project name
@@ -52,10 +53,11 @@ fi
 # Generate session ID
 SESSION_ID=$(uuidgen)
 
-# Create session data
+# Create session data with PID for matching
 cat > "$SESSION_FILE" << EOF
 {
   "sessionId": "$SESSION_ID",
+  "pid": $PPID,
   "status": "active",
   "timestamp": $(date +%s),
   "workingDirectory": "$WORKING_DIR",
@@ -64,7 +66,7 @@ cat > "$SESSION_FILE" << EOF
 }
 EOF
 
-echo "[$(date)] Session started: $PROJECT_NAME (URL: $MUSIC_URL)" >> "$LOG_FILE"
+echo "[$(date)] Session started: $PROJECT_NAME (PID: $PPID, URL: $MUSIC_URL)" >> "$LOG_FILE"
 HOOK_START
 
 # Create music-session-stop.sh
@@ -73,21 +75,17 @@ cat > "$HOOKS_DIR/music-session-stop.sh" << 'HOOK_STOP'
 # Claude Code Hook: Stop
 # Notifies Terminal Music Player when a session stops
 
-SESSION_FILE="/tmp/claude_music_session.json"
+# Use PID-based session file (same as session-start)
+SESSION_FILE="/tmp/claude_music_session_$PPID.json"
 LOG_FILE="/tmp/claude_music_hook.log"
 
-# Find jq (check bundled version first)
-JQ_PATH="/Applications/TerminalMusicPlayer.app/Contents/Resources/bin/jq"
-if [ ! -f "$JQ_PATH" ]; then
-    JQ_PATH=$(which jq 2>/dev/null)
+# Delete the PID-specific session file to clean up
+if [ -f "$SESSION_FILE" ]; then
+    rm -f "$SESSION_FILE"
+    echo "[$(date)] Session stopped (PID: $PPID), file cleaned up" >> "$LOG_FILE"
+else
+    echo "[$(date)] Session stopped (PID: $PPID), file not found" >> "$LOG_FILE"
 fi
-
-# Update session status to stopped
-if [ -f "$SESSION_FILE" ] && [ -n "$JQ_PATH" ]; then
-    "$JQ_PATH" '.status = "stopped" | .timestamp = '$(date +%s) "$SESSION_FILE" > "$SESSION_FILE.tmp" && mv "$SESSION_FILE.tmp" "$SESSION_FILE"
-fi
-
-echo "[$(date)] Session stopped" >> "$LOG_FILE"
 HOOK_STOP
 
 # Create assign-music.sh
