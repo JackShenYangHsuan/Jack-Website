@@ -11,10 +11,12 @@ Since this app is not signed with an Apple Developer ID, macOS will show a "dama
 **Do this FIRST:**
 
 1. **Open the DMG** - Double-click the downloaded DMG file
-2. **Double-click Remove-Quarantine.command**
+2. **Right-click Remove-Quarantine.command** → Select **"Open"** → Click **"Open"** in the dialog
 3. **Enter your password** when prompted
 4. **Wait for "Success!"** message
 5. **Now proceed** with installation below
+
+💡 **Why right-click?** macOS blocks the script from running if you double-click it. Right-clicking and selecting "Open" bypasses this security check.
 
 This is a one-time step that removes macOS quarantine from the installer files.
 

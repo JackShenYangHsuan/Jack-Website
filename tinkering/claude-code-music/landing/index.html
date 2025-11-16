@@ -42,6 +42,30 @@
             padding: 0 24px;
         }
 
+        /* Header Section */
+        .header {
+            padding: 24px 0;
+            border-bottom: 1px solid var(--geist-gray-400);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
         /* Hero Section */
         .hero {
             min-height: 40vh;
@@ -227,8 +251,26 @@
             font-size: 14px;
         }
 
+        .install-steps .warning {
+            margin-left: 48px;
+        }
+
         .warning strong {
             color: #ff6400;
+        }
+
+        .info-box {
+            background: #e6f7ff;
+            border: 1px solid #91d5ff;
+            border-radius: 0;
+            padding: 12px;
+            margin: 16px 0;
+            margin-left: 48px;
+            font-size: 14px;
+        }
+
+        .info-box strong {
+            color: #0050b3;
         }
 
         /* CTA Section */
@@ -303,14 +345,24 @@
     </style>
 </head>
 <body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <img src="vibe-concert-icon.png" alt="Vibe Concert Logo" class="header-logo">
+                <h1 class="header-title">Vibe Concert</h1>
+            </div>
+        </div>
+    </header>
+
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
             <h1>Music That Vibe Codes With You</h1>
             <p>Automatically plays YouTube soundtrack while Claude Code is running.</p>
             <div class="cta-buttons">
-                <a href="../../../vibe%20concert/TerminalMusicPlayer/Vibe%20Concert.dmg" class="btn btn-primary" download>
-                    Download for macOS
+                <a href="#installation" class="btn btn-primary">
+                    Get Started
                 </a>
             </div>
         </div>
@@ -341,37 +393,50 @@
     </section>
 
     <!-- Installation Section -->
-    <section class="installation">
+    <section id="installation" class="installation">
         <div class="container">
             <h2 class="section-title">Installation</h2>
-
-            <div class="warning">
-                <strong>⚠️ Important:</strong> This app is not signed with an Apple Developer ID. You must remove macOS quarantine before installation.
-            </div>
 
             <div class="install-steps">
                 <div class="step">
                     <h3>
                         <span class="step-number">1</span>
-                        Download and Open DMG
+                        Run the Install Command
                     </h3>
-                    <p>Download the DMG file and double-click to open it.</p>
+                    <p>Open Terminal and run this command. The script will build and install Vibe Concert from source:</p>
+                    <div class="code-block">
+                        <code>curl -fsSL https://jackshen.co/install-vibe-concert.sh | bash</code>
+                    </div>
                 </div>
 
                 <div class="step">
                     <h3>
                         <span class="step-number">2</span>
-                        Remove Quarantine
+                        That's it!
                     </h3>
-                    <p>Double-click <strong>Remove-Quarantine.command</strong> and enter your password.</p>
+                    <p>The installer will automatically:</p>
+                    <ul style="margin-left: 48px; color: var(--geist-gray-700); font-size: 14px; line-height: 1.8;">
+                        <li>Check for Xcode Command Line Tools</li>
+                        <li>Download and build the app from source</li>
+                        <li>Install to /Applications (no security warnings!)</li>
+                        <li>Set up Claude Code hooks</li>
+                        <li>Launch the app</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <strong>💡 Why this works:</strong> Building from source bypasses macOS security restrictions. Since you're compiling the app yourself, there's no quarantine or Gatekeeper blocking!
                 </div>
 
                 <div class="step">
                     <h3>
                         <span class="step-number">3</span>
-                        Run Installer
+                        (Optional) Inspect Before Installing
                     </h3>
-                    <p>Double-click <strong>Install.command</strong> and you're done!</p>
+                    <p>Want to see what the script does first?</p>
+                    <div class="code-block">
+                        <code>curl -fsSL https://jackshen.co/install-vibe-concert.sh -o install.sh<br>cat install.sh<br>bash install.sh</code>
+                    </div>
                 </div>
             </div>
         </div>
@@ -380,11 +445,11 @@
     <!-- CTA Section -->
     <section class="cta-section">
         <div class="container">
-            <h2>Ready to bring more vibes to your vibe coding?</h2>
-            <p>Download Terminal Music Player and experience a smarter way to code with music.</p>
-            <a href="../../../vibe%20concert/TerminalMusicPlayer/Vibe%20Concert.dmg" class="btn btn-primary" download>
-                Download for macOS (36MB)
-            </a>
+            <h2>Ready to bring more vibes to your coding?</h2>
+            <p>Install Vibe Concert in one command and experience a smarter way to code with music.</p>
+            <div class="code-block" style="max-width: 600px; margin: 0 auto;">
+                <code>curl -fsSL https://jackshen.co/install-vibe-concert.sh | bash</code>
+            </div>
         </div>
     </section>
 
@@ -392,8 +457,7 @@
     <footer class="footer">
         <div class="container">
             <p>
-                Built by <a href="/">Jack Shen</a> •
-                <a href="../index.html">Back to Project Page</a>
+                Built by <a href="https://jackshen.co">Jack Shen</a>
             </p>
         </div>
     </footer>

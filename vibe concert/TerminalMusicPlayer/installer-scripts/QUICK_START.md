@@ -6,9 +6,9 @@
 Double-click the downloaded DMG file
 
 ### 2. Remove macOS Quarantine (REQUIRED)
-Double-click **Remove-Quarantine.command** and enter your password
+**Right-click** (or Control+click) **Remove-Quarantine.command** → Select **"Open"** → Click **"Open"** in the dialog → Enter your password
 
-⚠️ **This step is required!** macOS blocks unsigned apps. This one-time command fixes it.
+⚠️ **Important:** You must right-click and select "Open" (not double-click) because macOS blocks unsigned apps. This one-time command fixes it.
 
 ### 3. Run the Installer
 Double-click **Install.command** and follow the prompts
