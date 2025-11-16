@@ -7,13 +7,13 @@
     <link rel="stylesheet" href="https://vercel.com/geist/font.css">
     <style>
         :root {
-            --geist-background: #000;
-            --geist-foreground: #fff;
-            --geist-gray-100: #111;
-            --geist-gray-200: #1a1a1a;
-            --geist-gray-400: #3a3a3a;
-            --geist-gray-700: #a0a0a0;
-            --geist-gray-900: #ededed;
+            --geist-background: #fff;
+            --geist-foreground: #000;
+            --geist-gray-100: #fafafa;
+            --geist-gray-200: #f4f4f4;
+            --geist-gray-400: #e4e4e4;
+            --geist-gray-700: #666;
+            --geist-gray-900: #111;
             --geist-blue: #0070f3;
             --geist-purple: #7928ca;
         }
@@ -44,31 +44,28 @@
 
         /* Hero Section */
         .hero {
-            min-height: 85vh;
+            min-height: 60vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 80px 0;
+            padding: 40px 0;
         }
 
         .hero h1 {
             font-size: clamp(48px, 8vw, 72px);
             font-weight: 700;
             letter-spacing: -0.05em;
-            margin-bottom: 24px;
-            background: linear-gradient(to right, var(--geist-foreground), var(--geist-gray-700));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 16px;
+            color: var(--geist-foreground);
         }
 
         .hero p {
             font-size: clamp(18px, 3vw, 24px);
             color: var(--geist-gray-700);
             max-width: 600px;
-            margin-bottom: 40px;
+            margin-bottom: 24px;
             line-height: 1.5;
         }
 
@@ -83,7 +80,7 @@
             padding: 12px 24px;
             font-size: 14px;
             font-weight: 500;
-            border-radius: 8px;
+            border-radius: 0;
             border: none;
             cursor: pointer;
             text-decoration: none;
@@ -96,12 +93,11 @@
         .btn-primary {
             background: var(--geist-foreground);
             color: var(--geist-background);
-            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+            box-shadow: none;
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(255, 255, 255, 0.15);
+            opacity: 0.8;
         }
 
         .btn-secondary {
@@ -117,7 +113,7 @@
 
         /* Features Section */
         .features {
-            padding: 120px 0;
+            padding: 60px 0;
             background: var(--geist-gray-100);
         }
 
@@ -125,27 +121,26 @@
             font-size: 32px;
             font-weight: 700;
             text-align: center;
-            margin-bottom: 64px;
+            margin-bottom: 32px;
             letter-spacing: -0.02em;
         }
 
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 32px;
+            gap: 16px;
         }
 
         .feature-card {
-            padding: 32px;
+            padding: 24px;
             background: var(--geist-gray-200);
             border: 1px solid var(--geist-gray-400);
-            border-radius: 12px;
+            border-radius: 0;
             transition: all 0.2s ease;
         }
 
         .feature-card:hover {
             border-color: var(--geist-gray-700);
-            transform: translateY(-4px);
         }
 
         .feature-icon {
@@ -167,7 +162,7 @@
 
         /* Installation Section */
         .installation {
-            padding: 120px 0;
+            padding: 60px 0;
         }
 
         .install-steps {
@@ -176,7 +171,7 @@
         }
 
         .step {
-            margin-bottom: 40px;
+            margin-bottom: 20px;
         }
 
         .step-number {
@@ -211,7 +206,7 @@
         .code-block {
             background: var(--geist-gray-100);
             border: 1px solid var(--geist-gray-400);
-            border-radius: 8px;
+            border-radius: 0;
             padding: 16px;
             margin-left: 48px;
             margin-top: 12px;
@@ -224,11 +219,11 @@
         }
 
         .warning {
-            background: rgba(255, 100, 0, 0.1);
-            border: 1px solid rgba(255, 100, 0, 0.3);
-            border-radius: 8px;
-            padding: 16px;
-            margin: 24px 0;
+            background: #fff4e6;
+            border: 1px solid #ffa940;
+            border-radius: 0;
+            padding: 12px;
+            margin: 16px 0;
             font-size: 14px;
         }
 
@@ -238,22 +233,22 @@
 
         /* CTA Section */
         .cta-section {
-            padding: 120px 0;
+            padding: 60px 0;
             text-align: center;
             background: var(--geist-gray-100);
         }
 
         .cta-section h2 {
-            font-size: 40px;
+            font-size: 32px;
             font-weight: 700;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             letter-spacing: -0.03em;
         }
 
         .cta-section p {
-            font-size: 18px;
+            font-size: 16px;
             color: var(--geist-gray-700);
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
 
         /* Footer */
@@ -281,8 +276,8 @@
         /* Responsive */
         @media (max-width: 768px) {
             .hero {
-                min-height: 70vh;
-                padding: 60px 0;
+                min-height: 50vh;
+                padding: 30px 0;
             }
 
             .cta-buttons {
@@ -298,7 +293,7 @@
             .features,
             .installation,
             .cta-section {
-                padding: 80px 0;
+                padding: 40px 0;
             }
 
             .feature-grid {
