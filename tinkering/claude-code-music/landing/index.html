@@ -235,11 +235,38 @@
             margin-left: 48px;
             margin-top: 12px;
             overflow-x: auto;
+            position: relative;
         }
 
         .code-block code {
             font-size: 13px;
             color: var(--geist-gray-900);
+            display: block;
+            padding-right: 50px;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--geist-background);
+            border: 1px solid var(--geist-gray-400);
+            border-radius: 0;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--geist-gray-700);
+            transition: all 0.2s ease;
+        }
+
+        .copy-button:hover {
+            border-color: var(--geist-gray-700);
+            color: var(--geist-foreground);
+        }
+
+        .copy-button.copied {
+            color: #10b981;
+            border-color: #10b981;
         }
 
         .warning {
@@ -406,6 +433,7 @@
                     <p>Open Terminal and run this one-line command:</p>
                     <div class="code-block">
                         <code>curl -fsSL https://jackshen.co/install-vibe-concert.sh | bash</code>
+                        <button class="copy-button" onclick="copyToClipboard(this, 'curl -fsSL https://jackshen.co/install-vibe-concert.sh | bash')">Copy</button>
                     </div>
                 </div>
 
@@ -422,10 +450,6 @@
                         <li>✅ Set up Claude Code hooks automatically</li>
                         <li>✅ Launch the app in your menu bar</li>
                     </ul>
-                </div>
-
-                <div class="info-box">
-                    <strong>💡 Why this works:</strong> Building from source bypasses macOS security restrictions. Since you're compiling the app yourself, there's no quarantine or Gatekeeper blocking!
                 </div>
 
                 <div class="step">
@@ -449,7 +473,7 @@
                 <div class="step">
                     <h3>
                         <span class="step-number">4</span>
-                        Updating or Reinstalling
+                        (Optional) Updating or Reinstalling
                     </h3>
                     <p>To update to the latest version or reinstall:</p>
                     <div class="code-block">
@@ -490,5 +514,22 @@
             </p>
         </div>
     </footer>
+
+    <script>
+        function copyToClipboard(button, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+    </script>
 </body>
 </html>
