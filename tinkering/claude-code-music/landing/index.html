@@ -401,9 +401,9 @@
                 <div class="step">
                     <h3>
                         <span class="step-number">1</span>
-                        Run the Install Command
+                        Quick Install
                     </h3>
-                    <p>Open Terminal and run this command. The script will build and install Vibe Concert from source:</p>
+                    <p>Open Terminal and run this one-line command:</p>
                     <div class="code-block">
                         <code>curl -fsSL https://jackshen.co/install-vibe-concert.sh | bash</code>
                     </div>
@@ -412,15 +412,15 @@
                 <div class="step">
                     <h3>
                         <span class="step-number">2</span>
-                        That's it!
+                        What Happens Next
                     </h3>
                     <p>The installer will automatically:</p>
                     <ul style="margin-left: 48px; color: var(--geist-gray-700); font-size: 14px; line-height: 1.8;">
-                        <li>Check for Xcode Command Line Tools</li>
-                        <li>Download and build the app from source</li>
-                        <li>Install to /Applications (no security warnings!)</li>
-                        <li>Set up Claude Code hooks</li>
-                        <li>Launch the app</li>
+                        <li>✅ Check for Xcode Command Line Tools (installs if needed)</li>
+                        <li>✅ Download and build the app from source (~1.8MB)</li>
+                        <li>✅ Install to /Applications (no security warnings!)</li>
+                        <li>✅ Set up Claude Code hooks automatically</li>
+                        <li>✅ Launch the app in your menu bar</li>
                     </ul>
                 </div>
 
@@ -431,9 +431,38 @@
                 <div class="step">
                     <h3>
                         <span class="step-number">3</span>
+                        Start Using It
+                    </h3>
+                    <p>After installation, start a Claude Code session:</p>
+                    <div class="code-block">
+                        <code>cd ~/your-project<br>claude</code>
+                    </div>
+                    <p>Click the menu bar icon (◯) to see your active session with:</p>
+                    <ul style="margin-left: 48px; color: var(--geist-gray-700); font-size: 14px; line-height: 1.8;">
+                        <li>Project name and working directory</li>
+                        <li>Real-time CPU and memory usage</li>
+                        <li>Activity status (Active/Idle)</li>
+                        <li>Music assignment for the project</li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <h3>
+                        <span class="step-number">4</span>
+                        Updating or Reinstalling
+                    </h3>
+                    <p>To update to the latest version or reinstall:</p>
+                    <div class="code-block">
+                        <code># Remove existing installation<br>pkill TerminalMusicPlayer<br>sudo rm -rf /Applications/TerminalMusicPlayer.app<br>rm -f /tmp/claude_music_session*.json<br><br># Fresh install<br>curl -fsSL https://jackshen.co/install-vibe-concert.sh | bash</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>
+                        <span class="step-number">5</span>
                         (Optional) Inspect Before Installing
                     </h3>
-                    <p>Want to see what the script does first?</p>
+                    <p>Want to review the installation script first?</p>
                     <div class="code-block">
                         <code>curl -fsSL https://jackshen.co/install-vibe-concert.sh -o install.sh<br>cat install.sh<br>bash install.sh</code>
                     </div>
