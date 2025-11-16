@@ -7,12 +7,12 @@ set -e
 
 APP_NAME="Terminal Music Player"
 BUNDLE_NAME="TerminalMusicPlayer.app"
-DMG_NAME="TerminalMusicPlayer-1.0.0.dmg"
-VOLUME_NAME="Terminal Music Player Installer"
+DMG_NAME="Vibe Concert.dmg"
+VOLUME_NAME="Vibe Concert"
 DMG_DIR="dmg-contents"
 BUILD_DIR="build"
 
-echo "📀 Creating Terminal Music Player DMG installer..."
+echo "📀 Creating Vibe Concert DMG installer..."
 echo ""
 
 # Step 1: Build the app
