@@ -173,7 +173,7 @@ class SessionMonitor: ObservableObject {
 
             let process = Process()
             process.executableURL = URL(fileURLWithPath: "/bin/sh")
-            process.arguments = ["-c", "ps aux | grep ' claude ' | grep -v grep"]
+            process.arguments = ["-c", "ps aux | grep ' claude' | grep -v grep"]
 
             let pipe = Pipe()
             process.standardOutput = pipe
