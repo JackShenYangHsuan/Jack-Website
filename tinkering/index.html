@@ -576,6 +576,26 @@
                 </div>
             </div>
 
+            <div class="article-card" data-difficulty="medium" data-tech="gpt" data-hours="10" data-dogfooding="true">
+                <span class="dogfooding-badge"><img src="../dogfooding.png" alt="Dogfooding"></span>
+                <div class="card-hero">
+                    <img src="../Vision Quest Logo.png" alt="Vision Quest" class="card-icon">
+                </div>
+                <div class="card-content">
+                    <div class="card-tags">
+                        <span class="tag difficulty medium">10hrs</span>
+                        <span class="tag">GPT-4o</span>
+                    </div>
+                    <h2>Vision Quest: dream sheet with 64-cell roadmap</h2>
+                    <p>Turn your goals into a Shohei Ohtani-style matrix. Break down dreams into systems, visualize progress, iterate weekly.</p>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <a href="https://jackshen.co/visionquest" target="_blank" class="card-action" style="background: #000000; color: #ffffff;">Try It Now</a>
+                        <a href="javascript:void(0);" onclick="openVisionQuestVideoModal()" class="card-action" style="background: #000000; color: #ffffff;">Watch Demo</a>
+                        <a href="/tinkering/vision-quest" class="card-action">Learn More</a>
+                    </div>
+                </div>
+            </div>
+
             <div class="article-card" data-difficulty="medium" data-tech="mac" data-hours="6" data-dogfooding="true">
                 <span class="dogfooding-badge"><img src="../dogfooding.png" alt="Dogfooding"></span>
                 <div class="card-hero">
@@ -863,6 +883,14 @@
             const modal = document.getElementById('videoModal');
             const iframe = document.getElementById('modalVideo');
             iframe.src = 'https://www.youtube.com/embed/b6_m9SNVrDw?autoplay=1';
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function openVisionQuestVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const iframe = document.getElementById('modalVideo');
+            iframe.src = 'https://www.youtube.com/embed/SKd2vLienC0?autoplay=1';
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
