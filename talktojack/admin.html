@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recordings Dashboard - Talk to Jack</title>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+        :root {
+            --black: #000000;
+            --gray-900: #171717;
+            --gray-800: #262626;
+            --gray-700: #404040;
+            --gray-600: #525252;
+            --gray-400: #737373;
+            --gray-200: #e5e5e5;
+            --gray-100: #f5f5f5;
+            --white: #ffffff;
+            --beige: #1a1f29;
+            --accent: #3B82F6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--beige);
+            color: var(--white);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Lock Screen */
+        .lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--beige);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .lock-screen.hidden {
+            display: none;
+        }
+
+        .lock-box {
+            background: var(--gray-800);
+            border: 1px solid var(--gray-700);
+            padding: 48px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .lock-box h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .lock-box input {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            border: 1px solid var(--gray-700);
+            background: var(--gray-900);
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 16px;
+        }
+
+        .lock-box input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .lock-box button {
+            width: 100%;
+            padding: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.2s;
+        }
+
+        .lock-box button:hover {
+            background: #2563eb;
+        }
+
+        .lock-error {
+            color: #ef4444;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+
+        .lock-error.hidden {
+            display: none;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            padding: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--gray-700);
+        }
+
+        h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stats {
+            display: flex;
+            gap: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--gray-400);
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-value {
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        /* Table */
+        .table-container {
+            background: var(--gray-800);
+            border: 1px solid var(--gray-700);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray-400);
+            background: var(--gray-900);
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-700);
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--gray-700);
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .email-cell {
+            font-weight: 500;
+        }
+
+        .date-cell {
+            color: var(--gray-400);
+            font-size: 13px;
+        }
+
+        .size-cell {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--gray-400);
+        }
+
+        /* Audio Player */
+        .play-btn {
+            background: var(--gray-700);
+            border: 1px solid var(--gray-600);
+            color: var(--white);
+            padding: 8px 16px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .play-btn:hover {
+            background: var(--gray-600);
+            border-color: var(--gray-400);
+        }
+
+        .play-btn.playing {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* Audio Player Bar */
+        .audio-player-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--gray-900);
+            border-top: 1px solid var(--gray-700);
+            padding: 16px 32px;
+            display: none;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .audio-player-bar.active {
+            display: flex;
+        }
+
+        .now-playing {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--gray-400);
+        }
+
+        .now-playing strong {
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        audio {
+            flex: 1;
+            height: 32px;
+        }
+
+        .close-player {
+            background: transparent;
+            border: 1px solid var(--gray-700);
+            color: var(--gray-400);
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .close-player:hover {
+            border-color: var(--gray-400);
+            color: var(--white);
+        }
+
+        /* Loading */
+        .loading-state {
+            text-align: center;
+            padding: 64px;
+            color: var(--gray-400);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--gray-700);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 64px;
+            color: var(--gray-400);
+        }
+
+        .empty-state h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--white);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard {
+                padding: 16px;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .stats {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            th, td {
+                padding: 12px;
+            }
+
+            .audio-player-bar {
+                flex-direction: column;
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Lock Screen -->
+    <div class="lock-screen" id="lock-screen">
+        <div class="lock-box">
+            <h2>Admin Access</h2>
+            <input type="password" id="password-input" placeholder="Enter password" onkeypress="if(event.key === 'Enter') authenticate()">
+            <button onclick="authenticate()">Unlock</button>
+            <div class="lock-error hidden" id="lock-error">Invalid password</div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <header>
+            <h1>Recordings Dashboard</h1>
+            <div class="stats">
+                <div class="stat">
+                    Total: <span class="stat-value" id="total-count">-</span>
+                </div>
+                <div class="stat">
+                    Size: <span class="stat-value" id="total-size">-</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Date</th>
+                        <th>Size</th>
+                        <th>Play</th>
+                    </tr>
+                </thead>
+                <tbody id="recordings-table">
+                    <tr>
+                        <td colspan="4">
+                            <div class="loading-state">
+                                <div class="spinner"></div>
+                                <div>Loading recordings...</div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Audio Player Bar -->
+    <div class="audio-player-bar" id="audio-player">
+        <div class="now-playing">
+            Now playing: <strong id="now-playing-email">-</strong>
+        </div>
+        <audio id="audio-element" controls></audio>
+        <button class="close-player" onclick="closePlayer()">Close</button>
+    </div>
+
+    <script>
+        // Configuration
+        const ADMIN_PASSWORD = 'talktojack2024'; // Change this or use env var
+
+        let db = null;
+        let currentlyPlaying = null;
+
+        // Firebase Configuration (same as main app)
+        const firebaseConfig = {
+            apiKey: "AIzaSyB6tFk2Mu7o5kC-Rmtug6K7FewV8EWzs2U",
+            authDomain: "replica-recordings.firebaseapp.com",
+            projectId: "replica-recordings",
+            storageBucket: "replica-recordings.firebasestorage.app",
+            messagingSenderId: "333324634480",
+            appId: "1:333324634480:web:6712f972600979a81927b5",
+            measurementId: "G-26LJR5CKWT"
+        };
+
+        // Initialize Firebase
+        function initFirebase() {
+            try {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                db = firebase.firestore();
+                console.log('Firebase initialized');
+                return true;
+            } catch (error) {
+                console.error('Firebase init error:', error);
+                return false;
+            }
+        }
+
+        // Authentication
+        function authenticate() {
+            const input = document.getElementById('password-input');
+            const error = document.getElementById('lock-error');
+            const password = input.value;
+
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('lock-screen').classList.add('hidden');
+                document.getElementById('dashboard').classList.add('active');
+                initFirebase();
+                loadRecordings();
+            } else {
+                error.classList.remove('hidden');
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        // Load recordings from Firestore
+        async function loadRecordings() {
+            try {
+                const snapshot = await db.collection('replicaIntakeRecordings')
+                    .orderBy('createdAt', 'desc')
+                    .get();
+
+                const recordings = [];
+                let totalSize = 0;
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    recordings.push({ id: doc.id, ...data });
+                    totalSize += data.size || 0;
+                });
+
+                // Update stats
+                document.getElementById('total-count').textContent = recordings.length;
+                document.getElementById('total-size').textContent = formatSize(totalSize);
+
+                // Render table
+                renderTable(recordings);
+
+            } catch (error) {
+                console.error('Error loading recordings:', error);
+                document.getElementById('recordings-table').innerHTML = `
+                    <tr>
+                        <td colspan="4">
+                            <div class="empty-state">
+                                <h3>Error loading recordings</h3>
+                                <p>${error.message}</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Render table
+        function renderTable(recordings) {
+            const tbody = document.getElementById('recordings-table');
+
+            if (recordings.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4">
+                            <div class="empty-state">
+                                <h3>No recordings yet</h3>
+                                <p>Recordings will appear here after conversations</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = recordings.map(rec => `
+                <tr>
+                    <td class="email-cell">${escapeHtml(rec.userEmail || 'Unknown')}</td>
+                    <td class="date-cell">${formatDate(rec.createdAt)}</td>
+                    <td class="size-cell">${formatSize(rec.size)}</td>
+                    <td>
+                        <button class="play-btn" onclick="playRecording('${rec.id}', '${escapeHtml(rec.recordingUrl)}', '${escapeHtml(rec.userEmail || 'Unknown')}')">
+                            <span>Play</span>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Play recording
+        function playRecording(id, url, email) {
+            const audioPlayer = document.getElementById('audio-player');
+            const audioElement = document.getElementById('audio-element');
+            const nowPlayingEmail = document.getElementById('now-playing-email');
+
+            // Update currently playing
+            if (currentlyPlaying) {
+                const prevBtn = document.querySelector(`[onclick*="${currentlyPlaying}"]`);
+                if (prevBtn) prevBtn.classList.remove('playing');
+            }
+
+            currentlyPlaying = id;
+            const currentBtn = document.querySelector(`[onclick*="${id}"]`);
+            if (currentBtn) currentBtn.classList.add('playing');
+
+            // Show player and play
+            audioPlayer.classList.add('active');
+            nowPlayingEmail.textContent = email;
+            audioElement.src = url;
+            audioElement.play();
+
+            // Add padding to dashboard for player bar
+            document.getElementById('dashboard').style.paddingBottom = '100px';
+
+            // Handle end
+            audioElement.onended = () => {
+                if (currentBtn) currentBtn.classList.remove('playing');
+                currentlyPlaying = null;
+            };
+        }
+
+        // Close player
+        function closePlayer() {
+            const audioPlayer = document.getElementById('audio-player');
+            const audioElement = document.getElementById('audio-element');
+
+            audioElement.pause();
+            audioElement.src = '';
+            audioPlayer.classList.remove('active');
+            document.getElementById('dashboard').style.paddingBottom = '32px';
+
+            if (currentlyPlaying) {
+                const currentBtn = document.querySelector(`[onclick*="${currentlyPlaying}"]`);
+                if (currentBtn) currentBtn.classList.remove('playing');
+                currentlyPlaying = null;
+            }
+        }
+
+        // Format date
+        function formatDate(timestamp) {
+            if (!timestamp) return '-';
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Format file size
+        function formatSize(bytes) {
+            if (!bytes) return '-';
+            const mb = bytes / (1024 * 1024);
+            if (mb >= 1) {
+                return mb.toFixed(2) + ' MB';
+            }
+            const kb = bytes / 1024;
+            return kb.toFixed(1) + ' KB';
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Focus password input on load
+        document.getElementById('password-input').focus();
+    </script>
+</body>
+</html>

@@ -10,6 +10,10 @@
     {
       "source": "/talktojack",
       "destination": "/talktojack/index.html"
+    },
+    {
+      "source": "/talktojack/admin",
+      "destination": "/talktojack/admin.html"
     }
   ]
 }
