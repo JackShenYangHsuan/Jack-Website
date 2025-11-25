@@ -8,7 +8,6 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
@@ -43,94 +42,11 @@
             line-height: 1.5;
         }
 
-        /* Lock Screen */
-        .lock-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--beige);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .lock-screen.hidden {
-            display: none;
-        }
-
-        .lock-box {
-            background: var(--gray-800);
-            border: 1px solid var(--gray-700);
-            padding: 48px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-        }
-
-        .lock-box h2 {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 18px;
-            margin-bottom: 24px;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .lock-box input {
-            width: 100%;
-            padding: 16px;
-            font-size: 16px;
-            border: 1px solid var(--gray-700);
-            background: var(--gray-900);
-            color: var(--white);
-            font-family: 'Inter', sans-serif;
-            margin-bottom: 16px;
-        }
-
-        .lock-box input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        .lock-box button {
-            width: 100%;
-            padding: 16px;
-            font-size: 14px;
-            font-weight: 600;
-            background: var(--accent);
-            color: var(--white);
-            border: none;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            transition: background 0.2s;
-        }
-
-        .lock-box button:hover {
-            background: #2563eb;
-        }
-
-        .lock-error {
-            color: #ef4444;
-            font-size: 13px;
-            margin-top: 12px;
-        }
-
-        .lock-error.hidden {
-            display: none;
-        }
-
         /* Dashboard */
         .dashboard {
-            display: none;
             padding: 32px;
             max-width: 1200px;
             margin: 0 auto;
-        }
-
-        .dashboard.active {
-            display: block;
         }
 
         header {
@@ -361,16 +277,6 @@
     </style>
 </head>
 <body>
-    <!-- Lock Screen -->
-    <div class="lock-screen" id="lock-screen">
-        <div class="lock-box">
-            <h2>Admin Access</h2>
-            <input type="password" id="password-input" placeholder="Enter password" onkeypress="if(event.key === 'Enter') authenticate()">
-            <button onclick="authenticate()">Unlock</button>
-            <div class="lock-error hidden" id="lock-error">Invalid password</div>
-        </div>
-    </div>
-
     <!-- Dashboard -->
     <div class="dashboard" id="dashboard">
         <header>
@@ -419,9 +325,6 @@
     </div>
 
     <script>
-        // Configuration
-        const ADMIN_PASSWORD = 'talktojack2024'; // Change this or use env var
-
         let db = null;
         let currentlyPlaying = null;
 
@@ -448,24 +351,6 @@
             } catch (error) {
                 console.error('Firebase init error:', error);
                 return false;
-            }
-        }
-
-        // Authentication
-        function authenticate() {
-            const input = document.getElementById('password-input');
-            const error = document.getElementById('lock-error');
-            const password = input.value;
-
-            if (password === ADMIN_PASSWORD) {
-                document.getElementById('lock-screen').classList.add('hidden');
-                document.getElementById('dashboard').classList.add('active');
-                initFirebase();
-                loadRecordings();
-            } else {
-                error.classList.remove('hidden');
-                input.value = '';
-                input.focus();
             }
         }
 
@@ -619,8 +504,9 @@
             return div.innerHTML;
         }
 
-        // Focus password input on load
-        document.getElementById('password-input').focus();
+        // Initialize on page load
+        initFirebase();
+        loadRecordings();
     </script>
 </body>
 </html>
