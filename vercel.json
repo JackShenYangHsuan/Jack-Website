@@ -6,6 +6,10 @@
     {
       "source": "/visionquest/(.*)",
       "destination": "/visionquest/index.html"
+    },
+    {
+      "source": "/talktojack",
+      "destination": "/talktojack/index.html"
     }
   ]
 }

@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation Intake System</title>
+    <script src="https://unpkg.com/@daily-co/daily-js"></script>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+        :root {
+            --black: #000000;
+            --gray-900: #171717;
+            --gray-800: #262626;
+            --gray-700: #404040;
+            --gray-600: #525252;
+            --gray-400: #737373;
+            --gray-200: #e5e5e5;
+            --gray-100: #f5f5f5;
+            --white: #ffffff;
+            --beige: #e8e5dc;
+            --border: var(--gray-800);
+            --background: var(--beige);
+            --foreground: var(--black);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--background);
+            background-image: url('Landing%20Background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--foreground);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            -webkit-font-smoothing: antialiased;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container.in-conversation {
+            padding: 0;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        h1 {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 120px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            letter-spacing: -0.04em;
+            color: var(--white);
+            line-height: 1;
+            font-style: italic;
+            text-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: var(--white);
+            font-weight: 400;
+            margin-top: 16px;
+            font-family: 'Inter', sans-serif;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .card {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            margin-bottom: 0;
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            border-color: transparent;
+        }
+
+        .intro-section {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+            width: 100%;
+        }
+
+        .intro-section .card {
+            padding: 0;
+            border: none;
+            background: transparent;
+        }
+
+        .meet-jack {
+            display: none;
+        }
+
+        .intro-text {
+            display: none;
+        }
+
+        .placeholder-image {
+            display: none;
+        }
+
+        .start-button {
+            font-family: 'Inter', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 16px;
+            letter-spacing: 0;
+            text-transform: none;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .start-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .start-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .email-input {
+            width: 100%;
+            max-width: 700px;
+            padding: 20px 24px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--black);
+            font-family: 'Inter', sans-serif;
+            margin: 0 auto;
+            transition: all 0.2s;
+            box-shadow: none;
+        }
+
+        .email-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .email-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .availability-note {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            margin-top: 12px;
+            margin-bottom: 0;
+            text-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .email-label {
+            display: none;
+        }
+
+        .conversation-container {
+            display: none;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        .conversation-container.active {
+            display: block;
+        }
+
+        .conversation-container.active ~ header {
+            display: none;
+        }
+
+        .conversation-container .card {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-header {
+            background: linear-gradient(180deg, var(--gray-700) 0%, var(--gray-800) 100%);
+            border-bottom: 4px solid var(--gray-600);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .video-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .video-title::before {
+            content: '■';
+            color: #ff3366;
+            font-size: 24px;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .window-btn {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--gray-600);
+            background: var(--gray-900);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .window-btn:hover {
+            background: var(--gray-700);
+            border-color: var(--gray-400);
+        }
+
+        #call-frame {
+            width: 100%;
+            flex: 1;
+            border-radius: 0;
+            overflow: hidden;
+            background: var(--gray-1000);
+            border: none;
+        }
+
+        .info-box {
+            background: var(--gray-900);
+            border-top: 2px solid var(--gray-700);
+            border-radius: 0;
+            padding: 24px;
+            transition: border-color 0.2s ease;
+        }
+
+        .info-box h3 {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--white);
+            margin-bottom: 16px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .info-box p {
+            color: var(--gray-200);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .info-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .status {
+            font-family: 'JetBrains Mono', monospace;
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 0;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+
+        .status.success {
+            background: var(--gray-800);
+            color: var(--white);
+            border: 1px solid var(--gray-700);
+        }
+
+        .status.warning {
+            background: var(--gray-800);
+            color: var(--gray-400);
+            border: 1px solid var(--gray-700);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--gray-400);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: var(--gray-900);
+            border: 1px solid var(--gray-700);
+            color: var(--gray-200);
+            padding: 16px;
+            border-radius: 0;
+            margin-top: 16px;
+            font-size: 13px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        footer a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .back-button {
+            font-family: 'JetBrains Mono', monospace;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--gray-200);
+            padding: 12px 24px;
+            border-radius: 0;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: all 0.15s ease;
+            font-weight: 500;
+            font-size: 13px;
+            letter-spacing: -0.01em;
+        }
+
+        .back-button:hover {
+            background: var(--gray-900);
+            border-color: var(--gray-700);
+            color: var(--white);
+        }
+
+        a {
+            color: var(--white);
+            text-decoration: underline;
+            transition: color 0.15s ease;
+        }
+
+        a:hover {
+            color: var(--gray-400);
+        }
+
+        input[type="email"] {
+            transition: all 0.15s ease;
+        }
+
+        input[type="email"]:focus {
+            outline: none;
+            border-color: var(--gray-600) !important;
+        }
+
+        h2 {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--white);
+            letter-spacing: -0.02em;
+            font-size: 18px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>automate anything by talking to me</h1>
+            <p class="subtitle">Chat with me and I'll help you automate your workflows. Tell me the 3 things that take up most of your time. I'll follow up via email afterwards.</p>
+        </header>
+
+        <!-- Landing Section -->
+        <div id="landing-section" class="intro-section">
+            <div class="card">
+                <!-- Placeholder for photo -->
+                <div class="placeholder-image">
+                    <span>Your photo will appear here</span>
+                </div>
+
+                <h2 class="meet-jack">Meet Jack</h2>
+
+                <p class="intro-text">
+                    Chat with me and I'll help you automate your workflows.
+                </p>
+
+                <p class="intro-text">
+                    Tell me the 3 things that take up most of your time. I'll follow up via email afterwards.
+                </p>
+
+                <div class="email-label">Your email:</div>
+                <input
+                    type="email"
+                    id="user-email"
+                    class="email-input"
+                    placeholder="your@email.com"
+                    required
+                />
+
+                <p class="availability-note">
+                    If you cannot start a conversation, it means there are more than 3 people talking to me right now. Please wait.
+                </p>
+
+                <button class="start-button" id="start-button" onclick="startConversation()">
+                    Start →
+                </button>
+
+                <div id="error-message" class="error hidden"></div>
+            </div>
+        </div>
+
+        <!-- Conversation Section -->
+        <div id="conversation-section" class="conversation-container">
+            <div class="card">
+                <div class="video-header">
+                    <div class="video-title">FACE-TO-FACE VIDEO</div>
+                    <div class="window-controls">
+                        <div class="window-btn"></div>
+                        <div class="window-btn"></div>
+                        <div class="window-btn" onclick="resetView()"></div>
+                    </div>
+                </div>
+
+                <div id="call-frame"></div>
+
+                <div class="info-box" id="conversation-info">
+                    <button class="back-button" onclick="resetView()">End Session</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Powered by <a href="https://tavus.io" target="_blank">Tavus</a>
+    </footer>
+
+    <script>
+        const API_BASE = '';
+        let dailyCall = null;
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let currentConversationId = null;
+        let currentUserEmail = null;
+        let conversationTimeout = null;
+        let db = null;
+        let storage = null;
+        const MAX_CONVERSATION_TIME = 4 * 60 * 1000; // 4 minutes in milliseconds
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB6tFk2Mu7o5kC-Rmtug6K7FewV8EWzs2U",
+            authDomain: "replica-recordings.firebaseapp.com",
+            projectId: "replica-recordings",
+            storageBucket: "replica-recordings.firebasestorage.app",
+            messagingSenderId: "333324634480",
+            appId: "1:333324634480:web:6712f972600979a81927b5",
+            measurementId: "G-26LJR5CKWT"
+        };
+
+        // Initialize Firebase
+        function initFirebase() {
+            try {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                db = firebase.firestore();
+                storage = firebase.storage();
+                console.log('✅ Firebase initialized');
+                return true;
+            } catch (error) {
+                console.error('❌ Firebase init error:', error);
+                return false;
+            }
+        }
+
+        // Start recording audio from Daily call
+        async function startRecording() {
+            try {
+                // Get audio stream from Daily
+                const participants = dailyCall.participants();
+                const localParticipant = participants.local;
+
+                if (!localParticipant || !localParticipant.tracks.audio) {
+                    console.warn('⚠️ No audio track available yet');
+                    return;
+                }
+
+                // Create media recorder
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream, {
+                    mimeType: 'audio/webm;codecs=opus'
+                });
+
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        audioChunks.push(event.data);
+                    }
+                };
+
+                mediaRecorder.onstop = async () => {
+                    console.log('🎙️ Recording stopped, uploading...');
+                    await uploadRecording();
+                };
+
+                mediaRecorder.start(1000); // Collect data every second
+                console.log('🎙️ Recording started');
+            } catch (error) {
+                console.error('❌ Recording error:', error);
+            }
+        }
+
+        // Upload recording to Firebase Storage
+        async function uploadRecording() {
+            if (audioChunks.length === 0) {
+                console.log('No audio data to upload');
+                return;
+            }
+
+            try {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const timestamp = new Date().toISOString();
+                const filename = `conversation-${currentConversationId || Date.now()}.webm`;
+                const storageRef = storage.ref(`recordings/${filename}`);
+
+                console.log(`📤 Uploading ${(audioBlob.size / 1024 / 1024).toFixed(2)}MB...`);
+
+                const uploadTask = storageRef.put(audioBlob);
+
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log(`Upload progress: ${progress.toFixed(0)}%`);
+                    },
+                    (error) => {
+                        console.error('❌ Upload error:', error);
+                    },
+                    async () => {
+                        const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                        console.log('✅ Upload complete!');
+
+                        // Store metadata in Firestore
+                        await db.collection('replicaIntakeRecordings').add({
+                            conversationId: currentConversationId,
+                            userEmail: currentUserEmail,
+                            recordingUrl: downloadURL,
+                            filename: filename,
+                            size: audioBlob.size,
+                            duration: null, // Could calculate this if needed
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            timestamp: timestamp
+                        });
+
+                        console.log('✅ Metadata saved to Firestore');
+                        alert(`Recording saved successfully. ${(audioBlob.size / 1024 / 1024).toFixed(2)}MB uploaded to storage.`);
+                    }
+                );
+            } catch (error) {
+                console.error('❌ Upload failed:', error);
+                alert('Failed to upload recording. Check console for details.');
+            }
+        }
+
+        // Stop recording
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            }
+        }
+
+        // End conversation via API
+        async function endConversation(conversationId) {
+            if (!conversationId) return;
+
+            try {
+                await fetch(`${API_BASE}/api/talktojack/end-conversation/${conversationId}`, {
+                    method: 'DELETE'
+                });
+                console.log('Conversation ended:', conversationId);
+            } catch (error) {
+                console.error('Error ending conversation:', error);
+            }
+        }
+
+        // Auto-end conversation after timeout
+        function autoEndConversation() {
+            console.log('⏰ 4-minute limit reached. Ending conversation...');
+
+            // Stop recording
+            stopRecording();
+
+            // End conversation via API
+            if (currentConversationId) {
+                endConversation(currentConversationId);
+            }
+
+            // Leave Daily call
+            if (dailyCall) {
+                dailyCall.leave();
+                dailyCall.destroy();
+                dailyCall = null;
+            }
+
+            // Show message to user
+            alert('Session ended: 4-minute time limit reached. Thank you for your time!');
+
+            // Reset view
+            resetView();
+        }
+
+        // Start conversation timeout
+        function startConversationTimeout() {
+            // Clear any existing timeout
+            if (conversationTimeout) {
+                clearTimeout(conversationTimeout);
+            }
+
+            // Set 4-minute timeout
+            conversationTimeout = setTimeout(autoEndConversation, MAX_CONVERSATION_TIME);
+            console.log('⏱️ 4-minute timer started');
+        }
+
+        // Clear conversation timeout
+        function clearConversationTimeout() {
+            if (conversationTimeout) {
+                clearTimeout(conversationTimeout);
+                conversationTimeout = null;
+                console.log('⏱️ Timer cleared');
+            }
+        }
+
+        async function startConversation() {
+            const button = document.getElementById('start-button');
+            const errorDiv = document.getElementById('error-message');
+            const emailInput = document.getElementById('user-email');
+
+            // Validate email input
+            const userEmail = emailInput.value.trim();
+
+            if (!userEmail) {
+                errorDiv.textContent = 'Please enter your email address';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(userEmail)) {
+                errorDiv.textContent = 'Please enter a valid email address';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            // Store email for metadata
+            currentUserEmail = userEmail;
+
+            button.disabled = true;
+            button.innerHTML = 'Initializing<span class="loading"></span>';
+            errorDiv.classList.add('hidden');
+
+            try {
+                // Create conversation (API handles persona creation automatically)
+                const response = await fetch(`${API_BASE}/api/talktojack/conversation`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: `Intake - ${new Date().toLocaleString()}`,
+                        user_email: currentUserEmail
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to create conversation');
+                }
+
+                const data = await response.json();
+
+                // Save conversation ID for recording
+                currentConversationId = data.conversation_id;
+
+                // Show conversation section and hide header/footer for full screen
+                document.getElementById('landing-section').style.display = 'none';
+                document.getElementById('conversation-section').classList.add('active');
+                document.querySelector('header').style.display = 'none';
+                document.querySelector('footer').style.display = 'none';
+
+                // Initialize Firebase
+                initFirebase();
+
+                // Initialize Daily call
+                initializeDailyCall(data.conversation_url);
+
+            } catch (error) {
+                console.error('Error:', error);
+                errorDiv.textContent = `Error: ${error.message}`;
+                errorDiv.classList.remove('hidden');
+                button.disabled = false;
+                button.textContent = 'Start Conversation';
+            }
+        }
+
+        function initializeDailyCall(roomUrl) {
+            // Get the container element
+            const container = document.getElementById('call-frame');
+
+            // Create Daily call frame using the element directly
+            dailyCall = window.Daily.createFrame(container, {
+                showLeaveButton: true,
+                showFullscreenButton: true,
+                iframeStyle: {
+                    position: 'relative',
+                    width: '100%',
+                    height: '600px',
+                    border: 'none',
+                    borderRadius: '0'
+                },
+                theme: {
+                    colors: {
+                        accent: '#3B82F6',
+                        background: '#1A1F29',
+                        baseText: '#FFFFFF',
+                        border: '#4B5563'
+                    }
+                }
+            });
+
+            // Join the conversation
+            dailyCall.join({ url: roomUrl });
+
+            // Listen for joined event to start recording
+            dailyCall.on('joined-meeting', async () => {
+                console.log('✅ Joined meeting');
+
+                // Start 5-minute conversation timeout
+                startConversationTimeout();
+
+                // Wait a bit for audio tracks to be ready
+                setTimeout(() => {
+                    startRecording();
+                }, 2000);
+            });
+
+            // Listen for leave event to stop recording and end conversation
+            dailyCall.on('left-meeting', async () => {
+                console.log('User left the meeting');
+
+                // Clear the 5-minute timeout
+                clearConversationTimeout();
+
+                stopRecording();
+
+                // End conversation when user leaves
+                if (currentConversationId) {
+                    await endConversation(currentConversationId);
+                }
+            });
+        }
+
+        async function resetView() {
+            // Clear the 5-minute timeout
+            clearConversationTimeout();
+
+            // Stop recording if active
+            stopRecording();
+
+            // End conversation via API
+            if (currentConversationId) {
+                await endConversation(currentConversationId);
+            }
+
+            if (dailyCall) {
+                dailyCall.leave();
+                dailyCall.destroy();
+                dailyCall = null;
+            }
+
+            document.getElementById('conversation-section').classList.remove('active');
+            document.getElementById('landing-section').style.display = 'block';
+            document.querySelector('header').style.display = 'block';
+            document.querySelector('footer').style.display = 'block';
+            document.getElementById('start-button').disabled = false;
+            document.getElementById('start-button').textContent = 'Start Conversation';
+
+            // Clear email input
+            document.getElementById('user-email').value = '';
+            currentUserEmail = null;
+            currentConversationId = null;
+        }
+
+        // Test UI function (no API calls)
+        function testUI() {
+            console.log('🔧 Testing UI without API calls');
+
+            // Set dummy data
+            currentConversationId = 'test-conversation-123';
+            currentUserEmail = 'test@example.com';
+
+            // Show conversation section and hide header/footer
+            document.getElementById('landing-section').style.display = 'none';
+            document.getElementById('conversation-section').classList.add('active');
+            document.querySelector('header').style.display = 'none';
+            document.querySelector('footer').style.display = 'none';
+
+            // Add realistic conversation UI preview
+            const callFrame = document.getElementById('call-frame');
+            callFrame.innerHTML = `
+                <div style="
+                    display: flex;
+                    height: 100%;
+                    background: #1a1f29;
+                    position: relative;
+                ">
+                    <!-- Main AI Video (Large) -->
+                    <div style="
+                        flex: 1;
+                        background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        position: relative;
+                    ">
+                        <div style="
+                            text-align: center;
+                            color: var(--gray-400);
+                        ">
+                            <div style="font-family: 'JetBrains Mono', monospace; font-size: 24px; color: var(--white); margin-bottom: 16px;">AI JACK</div>
+                            <div style="font-family: 'Inter', sans-serif; font-size: 16px; margin-top: 16px; color: var(--gray-400);">
+                                "Tell me about your top 3 automation needs..."
+                            </div>
+
+                            <!-- Live indicator -->
+                            <div style="
+                                margin-top: 32px;
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 8px;
+                                padding: 8px 16px;
+                                background: rgba(239, 68, 68, 0.1);
+                                border: 1px solid #ef4444;
+                            ">
+                                <div style="
+                                    width: 8px;
+                                    height: 8px;
+                                    border-radius: 50%;
+                                    background: #ef4444;
+                                    animation: pulse 2s infinite;
+                                "></div>
+                                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #ef4444; text-transform: uppercase;">LIVE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Video (Small, Picture-in-Picture) -->
+                    <div style="
+                        position: absolute;
+                        bottom: 24px;
+                        right: 24px;
+                        width: 240px;
+                        height: 180px;
+                        background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+                        border: 3px solid var(--gray-700);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+                    ">
+                        <div style="text-align: center; color: var(--gray-500);">
+                            <div style="font-family: 'JetBrains Mono', monospace; font-size: 14px; text-transform: uppercase;">You</div>
+                        </div>
+                    </div>
+
+                    <!-- Test Mode Badge -->
+                    <div style="
+                        position: absolute;
+                        top: 24px;
+                        left: 24px;
+                        background: rgba(255, 255, 255, 0.1);
+                        backdrop-filter: blur(10px);
+                        border: 1px solid rgba(255, 255, 255, 0.2);
+                        padding: 8px 16px;
+                        font-family: 'JetBrains Mono', monospace;
+                        font-size: 12px;
+                        color: var(--white);
+                    ">
+                        TEST MODE - UI PREVIEW
+                    </div>
+                </div>
+
+                <style>
+                    @keyframes pulse {
+                        0%, 100% { opacity: 1; }
+                        50% { opacity: 0.5; }
+                    }
+                </style>
+            `;
+        }
+
+        // End conversation when page is closed/refreshed
+        window.addEventListener('beforeunload', (event) => {
+            if (currentConversationId) {
+                // Use sendBeacon for reliable delivery during page unload
+                const url = `${API_BASE}/api/talktojack/end-conversation/${currentConversationId}`;
+                navigator.sendBeacon(url);
+            }
+        });
+    </script>
+</body>
+</html>
