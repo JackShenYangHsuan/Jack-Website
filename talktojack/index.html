@@ -9,7 +9,6 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
@@ -520,13 +519,10 @@
     <script>
         const API_BASE = '';
         let dailyCall = null;
-        let mediaRecorder = null;
-        let audioChunks = [];
         let currentConversationId = null;
         let currentUserEmail = null;
         let conversationTimeout = null;
         let db = null;
-        let storage = null;
         const MAX_CONVERSATION_TIME = 4 * 60 * 1000; // 4 minutes in milliseconds
 
         // Firebase Configuration
@@ -547,7 +543,6 @@
                     firebase.initializeApp(firebaseConfig);
                 }
                 db = firebase.firestore();
-                storage = firebase.storage();
                 console.log('✅ Firebase initialized');
                 return true;
             } catch (error) {
@@ -556,182 +551,53 @@
             }
         }
 
-        // Audio context for mixing streams
-        let audioContext = null;
-        let mixedStreamDestination = null;
+        // Recording is now handled by Tavus (enable_recording: true in API)
+        // We just need to save the recording metadata when the conversation ends
 
-        // Start recording audio from Daily call (both user and bot)
+        // Placeholder functions for compatibility
         async function startRecording() {
-            try {
-                // Create audio context for mixing
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                mixedStreamDestination = audioContext.createMediaStreamDestination();
-
-                // Get user's microphone audio
-                const userStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                const userSource = audioContext.createMediaStreamSource(userStream);
-                userSource.connect(mixedStreamDestination);
-                console.log('🎤 User audio connected');
-
-                // Wait a bit for remote participant to join
-                await waitForRemoteAudio();
-
-                // Create media recorder with mixed stream
-                mediaRecorder = new MediaRecorder(mixedStreamDestination.stream, {
-                    mimeType: 'audio/webm;codecs=opus'
-                });
-
-                audioChunks = [];
-
-                mediaRecorder.ondataavailable = (event) => {
-                    if (event.data.size > 0) {
-                        audioChunks.push(event.data);
-                    }
-                };
-
-                mediaRecorder.onstop = async () => {
-                    console.log('🎙️ Recording stopped, uploading...');
-                    await uploadRecording();
-                };
-
-                mediaRecorder.start(1000); // Collect data every second
-                console.log('🎙️ Recording started (both user and bot audio)');
-            } catch (error) {
-                console.error('❌ Recording error:', error);
-            }
+            console.log('🎙️ Recording handled by Tavus server-side');
         }
 
-        // Wait for remote participant audio and connect it
-        async function waitForRemoteAudio() {
-            return new Promise((resolve) => {
-                const checkRemoteAudio = () => {
-                    const participants = dailyCall.participants();
-
-                    // Find remote participants (not local)
-                    for (const [id, participant] of Object.entries(participants)) {
-                        if (id === 'local') continue;
-
-                        const audioTrack = participant.tracks?.audio;
-                        if (audioTrack && audioTrack.track) {
-                            try {
-                                const remoteStream = new MediaStream([audioTrack.track]);
-                                const remoteSource = audioContext.createMediaStreamSource(remoteStream);
-                                remoteSource.connect(mixedStreamDestination);
-                                console.log('🤖 Bot audio connected');
-                                resolve();
-                                return;
-                            } catch (e) {
-                                console.warn('Could not connect remote audio:', e);
-                            }
-                        }
-                    }
-
-                    // Keep checking every 500ms
-                    setTimeout(checkRemoteAudio, 500);
-                };
-
-                // Also listen for track-started events
-                dailyCall.on('track-started', (event) => {
-                    if (event.participant && !event.participant.local && event.track.kind === 'audio') {
-                        try {
-                            const remoteStream = new MediaStream([event.track]);
-                            const remoteSource = audioContext.createMediaStreamSource(remoteStream);
-                            remoteSource.connect(mixedStreamDestination);
-                            console.log('🤖 Bot audio connected via track-started event');
-                            resolve();
-                        } catch (e) {
-                            console.warn('Could not connect remote audio from event:', e);
-                        }
-                    }
-                });
-
-                checkRemoteAudio();
-
-                // Timeout after 10 seconds and proceed anyway
-                setTimeout(() => {
-                    console.warn('⚠️ Remote audio not detected after 10s, proceeding with user audio only');
-                    resolve();
-                }, 10000);
-            });
-        }
-
-        // Upload recording to Firebase Storage
-        async function uploadRecording() {
-            if (audioChunks.length === 0) {
-                console.log('No audio data to upload');
-                return;
-            }
-
-            try {
-                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                const timestamp = new Date().toISOString();
-                const filename = `conversation-${currentConversationId || Date.now()}.webm`;
-                const storageRef = storage.ref(`recordings/${filename}`);
-
-                console.log(`📤 Uploading ${(audioBlob.size / 1024 / 1024).toFixed(2)}MB...`);
-
-                const uploadTask = storageRef.put(audioBlob);
-
-                uploadTask.on('state_changed',
-                    (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        console.log(`Upload progress: ${progress.toFixed(0)}%`);
-                    },
-                    (error) => {
-                        console.error('❌ Upload error:', error);
-                    },
-                    async () => {
-                        const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-                        console.log('✅ Upload complete!');
-
-                        // Store metadata in Firestore
-                        await db.collection('replicaIntakeRecordings').add({
-                            conversationId: currentConversationId,
-                            userEmail: currentUserEmail,
-                            recordingUrl: downloadURL,
-                            filename: filename,
-                            size: audioBlob.size,
-                            duration: null, // Could calculate this if needed
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                            timestamp: timestamp
-                        });
-
-                        console.log('✅ Metadata saved to Firestore');
-                        alert(`Recording saved successfully. ${(audioBlob.size / 1024 / 1024).toFixed(2)}MB uploaded to storage.`);
-                    }
-                );
-            } catch (error) {
-                console.error('❌ Upload failed:', error);
-                alert('Failed to upload recording. Check console for details.');
-            }
-        }
-
-        // Stop recording
+        // Stop recording - now a no-op since Tavus handles recording
         function stopRecording() {
-            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                mediaRecorder.stop();
-                // Stop all tracks in the mixed stream
-                if (mixedStreamDestination) {
-                    mixedStreamDestination.stream.getTracks().forEach(track => track.stop());
-                }
-            }
-            // Close audio context
-            if (audioContext && audioContext.state !== 'closed') {
-                audioContext.close();
-                audioContext = null;
-                mixedStreamDestination = null;
-            }
+            console.log('Recording handled by Tavus');
         }
 
-        // End conversation via API
+        // End conversation via API and save recording to Firebase
         async function endConversation(conversationId) {
             if (!conversationId) return;
 
             try {
-                await fetch(`${API_BASE}/api/talktojack/end-conversation/${conversationId}`, {
-                    method: 'DELETE'
+                // Use POST method to get response with recording URL
+                const response = await fetch(`${API_BASE}/api/talktojack/end-conversation/${conversationId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 });
+
+                const data = await response.json();
                 console.log('Conversation ended:', conversationId);
+                console.log('Response data:', data);
+
+                // Save recording metadata to Firestore
+                if (db && data.conversationDetails) {
+                    try {
+                        await db.collection('replicaIntakeRecordings').add({
+                            conversationId: conversationId,
+                            userEmail: currentUserEmail || 'Unknown',
+                            recordingUrl: data.recordingUrl || null,
+                            tavusData: data.conversationDetails,
+                            status: data.recordingUrl ? 'available' : 'processing',
+                            source: 'tavus',
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                        console.log('✅ Recording metadata saved to Firestore');
+                    } catch (e) {
+                        console.error('Could not save to Firestore:', e);
+                    }
+                }
             } catch (error) {
                 console.error('Error ending conversation:', error);
             }

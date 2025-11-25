@@ -17,6 +17,11 @@ async function tavusRequest(endpoint, method = 'GET', body = null) {
 
     const response = await fetch(`${TAVUS_API_BASE}${endpoint}`, options);
 
+    // For GET requests that return 404, return null instead of throwing
+    if (method === 'GET' && response.status === 404) {
+        return null;
+    }
+
     if (!response.ok) {
         const errorText = await response.text();
         console.error(`Tavus API error: ${response.status} - ${errorText}`);
@@ -48,10 +53,38 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'Conversation ID required' });
         }
 
-        await tavusRequest(`/conversations/${conversationId}`, 'DELETE');
-        console.log('Ended conversation:', conversationId);
+        // First, try to get conversation details including recording URL
+        let conversationDetails = null;
+        let recordingUrl = null;
 
-        return res.json({ success: true });
+        try {
+            conversationDetails = await tavusRequest(`/conversations/${conversationId}`, 'GET');
+            console.log('Conversation details:', JSON.stringify(conversationDetails, null, 2));
+
+            // Extract recording URL from conversation details
+            recordingUrl = conversationDetails?.recording_url
+                || conversationDetails?.video_url
+                || conversationDetails?.recording?.url
+                || null;
+        } catch (e) {
+            console.warn('Could not fetch conversation details:', e.message);
+        }
+
+        // End the conversation
+        try {
+            await tavusRequest(`/conversations/${conversationId}`, 'DELETE');
+            console.log('Ended conversation:', conversationId);
+        } catch (e) {
+            // Conversation might already be ended
+            console.warn('Could not end conversation (may already be ended):', e.message);
+        }
+
+        // Return success with recording URL if available
+        return res.json({
+            success: true,
+            recordingUrl: recordingUrl,
+            conversationDetails: conversationDetails
+        });
     } catch (error) {
         console.error('Error ending conversation:', error);
         return res.status(500).json({ error: error.message });

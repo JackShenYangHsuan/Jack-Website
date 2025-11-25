@@ -94,7 +94,7 @@ export default async function handler(req, res) {
             properties: {
                 max_call_duration: 300, // 5 minutes max
                 participant_left_timeout: 30,
-                enable_recording: false,
+                enable_recording: true,  // Record both user and bot audio
                 apply_greenscreen: false
             },
             custom_greeting: `Hi! I'm Jack. Thanks for taking the time to chat with me today. I'm here to learn about your work and see if there are any tasks I can help automate for you. What's your role?`
