@@ -556,21 +556,28 @@
             }
         }
 
-        // Start recording audio from Daily call
+        // Audio context for mixing streams
+        let audioContext = null;
+        let mixedStreamDestination = null;
+
+        // Start recording audio from Daily call (both user and bot)
         async function startRecording() {
             try {
-                // Get audio stream from Daily
-                const participants = dailyCall.participants();
-                const localParticipant = participants.local;
+                // Create audio context for mixing
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                mixedStreamDestination = audioContext.createMediaStreamDestination();
 
-                if (!localParticipant || !localParticipant.tracks.audio) {
-                    console.warn('⚠️ No audio track available yet');
-                    return;
-                }
+                // Get user's microphone audio
+                const userStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const userSource = audioContext.createMediaStreamSource(userStream);
+                userSource.connect(mixedStreamDestination);
+                console.log('🎤 User audio connected');
 
-                // Create media recorder
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream, {
+                // Wait a bit for remote participant to join
+                await waitForRemoteAudio();
+
+                // Create media recorder with mixed stream
+                mediaRecorder = new MediaRecorder(mixedStreamDestination.stream, {
                     mimeType: 'audio/webm;codecs=opus'
                 });
 
@@ -588,10 +595,64 @@
                 };
 
                 mediaRecorder.start(1000); // Collect data every second
-                console.log('🎙️ Recording started');
+                console.log('🎙️ Recording started (both user and bot audio)');
             } catch (error) {
                 console.error('❌ Recording error:', error);
             }
+        }
+
+        // Wait for remote participant audio and connect it
+        async function waitForRemoteAudio() {
+            return new Promise((resolve) => {
+                const checkRemoteAudio = () => {
+                    const participants = dailyCall.participants();
+
+                    // Find remote participants (not local)
+                    for (const [id, participant] of Object.entries(participants)) {
+                        if (id === 'local') continue;
+
+                        const audioTrack = participant.tracks?.audio;
+                        if (audioTrack && audioTrack.track) {
+                            try {
+                                const remoteStream = new MediaStream([audioTrack.track]);
+                                const remoteSource = audioContext.createMediaStreamSource(remoteStream);
+                                remoteSource.connect(mixedStreamDestination);
+                                console.log('🤖 Bot audio connected');
+                                resolve();
+                                return;
+                            } catch (e) {
+                                console.warn('Could not connect remote audio:', e);
+                            }
+                        }
+                    }
+
+                    // Keep checking every 500ms
+                    setTimeout(checkRemoteAudio, 500);
+                };
+
+                // Also listen for track-started events
+                dailyCall.on('track-started', (event) => {
+                    if (event.participant && !event.participant.local && event.track.kind === 'audio') {
+                        try {
+                            const remoteStream = new MediaStream([event.track]);
+                            const remoteSource = audioContext.createMediaStreamSource(remoteStream);
+                            remoteSource.connect(mixedStreamDestination);
+                            console.log('🤖 Bot audio connected via track-started event');
+                            resolve();
+                        } catch (e) {
+                            console.warn('Could not connect remote audio from event:', e);
+                        }
+                    }
+                });
+
+                checkRemoteAudio();
+
+                // Timeout after 10 seconds and proceed anyway
+                setTimeout(() => {
+                    console.warn('⚠️ Remote audio not detected after 10s, proceeding with user audio only');
+                    resolve();
+                }, 10000);
+            });
         }
 
         // Upload recording to Firebase Storage
@@ -649,7 +710,16 @@
         function stopRecording() {
             if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                 mediaRecorder.stop();
-                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                // Stop all tracks in the mixed stream
+                if (mixedStreamDestination) {
+                    mixedStreamDestination.stream.getTracks().forEach(track => track.stop());
+                }
+            }
+            // Close audio context
+            if (audioContext && audioContext.state !== 'closed') {
+                audioContext.close();
+                audioContext = null;
+                mixedStreamDestination = null;
             }
         }
 
