@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gmail auto-label assistant - Tinkering with AI</title>
+    <title>Infinitely Scale 1-1 Customer Calls - Jack Shen</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -61,16 +61,12 @@
             color: #222222;
         }
 
-        ul {
-            margin-bottom: 24px;
-            padding-left: 24px;
-        }
-
-        li {
-            font-size: 15px;
-            line-height: 1.7;
-            margin-bottom: 12px;
-            color: #222222;
+        .subtitle {
+            font-size: 18px;
+            font-style: italic;
+            color: #666666;
+            margin-bottom: 32px;
+            line-height: 1.5;
         }
 
         .video-container {
@@ -110,57 +106,29 @@
             transform: translateY(-1px);
         }
 
-        @media (max-width: 768px) {
-            body {
-                padding: 40px 16px 60px;
-            }
-
-            h1 {
-                font-size: 28px;
-            }
-
-            h2 {
-                font-size: 20px;
-            }
-
-            p, li {
-                font-size: 14px;
-            }
+        @media (max-width: 600px) {
+            h1 { font-size: 28px; }
+            h2 { font-size: 20px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <a class="back-link" href="/tinkering">← Back</a>
+        <a href="/tinkering" class="back-link">← Back</a>
 
-        <h1>Gmail auto-label assistant</h1>
+        <h1>Infinitely Scale 1-1 Customer Calls</h1>
 
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/XeuC3eYid_U" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
+        <a href="https://jackshen.co/talktojack" target="_blank" class="try-button">Try it now →</a>
 
-        <h2>Problem</h2>
-        <ul>
-            <li>Email assistants like Fyxer and Perplexity are helpful but overkill for low email volume</li>
-            <li>Only need the auto-labelling feature, not the full suite</li>
-            <li>Don't want to pay $20/month for a sixth AI subscription</li>
-        </ul>
+        <p>Not sure where to start with AI agents? Start an instant zoom call with a digital version of me! It'll gather your requirements and help you automate.</p>
 
-        <h2>Solution</h2>
-        <ul>
-            <li>Built a Gmail auto-labelling system with customizable rules</li>
-            <li>Works for both received and sent emails</li>
-            <li>Highly configurable labelling logic without the subscription cost</li>
-        </ul>
+        <p>Tons of people have been asking how I use AI agents to automate mundane tasks. Everyone's situation is different. I'd love to help everyone, but I can't do 10 calls every day.</p>
 
-        <h2>Challenge</h2>
-        <ul>
-            <li>Initially ran all emails through the same rule set</li>
-            <li>GPT couldn't determine who sent the last email in long threads</li>
-            <li>Often confused "to respond" vs "awaiting reply" states</li>
-            <li>Fixed by adding a function layer that first identifies sent vs received</li>
-            <li>Then applies appropriate rules, making GPT more accurate</li>
-        </ul>
+        <p>So I hacked up a replica of myself you can actually talk to. Like a zoom call. It talks like me. Asks follow-up questions. Figures out what you actually need.</p>
+
+        <p>Built with <a href="https://www.tavus.io/" target="_blank">Tavus</a>. I've seen AI clones before, but never ones this natural in real-time. The latency is insanely good.</p>
+
+        <p>If you're drowning in the same call patterns and wish you could scale your 1-1 time with customers, this might be it :)</p>
     </div>
 </body>
 </html>
