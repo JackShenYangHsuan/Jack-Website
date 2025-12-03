@@ -4,7 +4,7 @@
  */
 
 import axios from 'axios';
-import { getAuthToken, getApiKey } from './localStorage';
+import { getAuthToken, getApiKey, deleteAuthToken } from './localStorage';
 
 // Create axios instance
 const api = axios.create({
@@ -42,7 +42,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Unauthorized - redirect to login
+      // Unauthorized - clear stale token and redirect to login
+      deleteAuthToken();
       window.location.href = '/';
     }
     return Promise.reject(error);

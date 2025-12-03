@@ -223,7 +223,7 @@ const evaluateRule = async (apiKey, email, ruleDescription, userEmail) => {
 
     // Call OpenAI API
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini', // Using gpt-4o-mini for cost efficiency
+      model: 'gpt-4.1-mini', // Using gpt-4.1-mini
       messages: [
         {
           role: 'system',
@@ -405,7 +405,7 @@ const evaluateSentEmail = async (apiKey, email, userEmail) => {
 
     // Call OpenAI API
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4.1-mini',
       messages: [
         {
           role: 'system',

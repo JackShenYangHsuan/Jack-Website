@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SpeakCoach - Practice clear, confident communication with AI-powered feedback">
+    <meta name="theme-color" content="#4F46E5">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="SpeakCoach">
+    <meta property="og:description" content="Practice clear, confident communication with AI-powered feedback">
+    <meta property="og:type" content="website">
+
+    <title>SpeakCoach - Practice Clear Communication</title>
+
+    <!-- Favicon placeholder -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎤</text></svg>">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+    <div id="app">
+        <!-- ========================================
+             SCREEN 1: Landing
+             ======================================== -->
+        <div id="screen-landing" class="screen active">
+            <div class="landing-content">
+                <div class="mic-icon" aria-hidden="true">
+                    <span>🎤</span>
+                </div>
+
+                <h1 class="landing-title">SpeakCoach</h1>
+
+                <p class="landing-tagline">
+                    Practice clear, confident communication
+                </p>
+
+                <p class="landing-description text-secondary">
+                    Get a topic, speak for 60 seconds, and receive instant AI-powered feedback on clarity, structure, and delivery.
+                </p>
+
+                <button id="btn-start-practice" class="btn btn-primary btn-lg">
+                    Start Practice
+                </button>
+            </div>
+        </div>
+
+        <!-- ========================================
+             SCREEN 2: Topic
+             ======================================== -->
+        <div id="screen-topic" class="screen">
+            <div class="topic-content">
+                <span id="topic-category" class="badge badge-primary">Opinion</span>
+
+                <p id="topic-text" class="topic-text mt-lg">
+                    Loading topic...
+                </p>
+
+                <button id="btn-different-topic" class="btn btn-ghost mt-lg">
+                    Different Topic
+                </button>
+
+                <div class="toggle-wrapper mt-xl">
+                    <input type="checkbox" id="toggle-hints" />
+                    <span class="toggle"></span>
+                    <span class="toggle-label">Enable live hints</span>
+                </div>
+
+                <button id="btn-start-speaking" class="btn btn-primary btn-lg mt-xl">
+                    Start Speaking
+                </button>
+            </div>
+        </div>
+
+        <!-- ========================================
+             SCREEN 3: Recording
+             ======================================== -->
+        <div id="screen-recording" class="screen">
+            <div class="recording-content">
+                <div class="timer-container" id="timer-container">
+                    <div class="timer-circle">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="timer-circle-bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="timer-circle-progress" id="timer-progress" cx="50" cy="50" r="45"
+                                stroke-dasharray="283"
+                                stroke-dashoffset="0">
+                            </circle>
+                        </svg>
+                    </div>
+                    <span class="timer-display" id="timer-display">1:00</span>
+                </div>
+
+                <div class="mic-icon recording mt-lg" id="mic-indicator">
+                    <span>🎤</span>
+                </div>
+
+                <p class="text-secondary mt-md" id="recording-status">Recording...</p>
+
+                <button id="btn-stop-recording" class="btn btn-danger mt-xl">
+                    Stop Recording
+                </button>
+            </div>
+
+            <!-- Hint Toast (positioned fixed) -->
+            <div id="hint-toast" class="hint-toast">
+                <span class="hint-toast-icon">💡</span>
+                <span id="hint-text">Hint text here</span>
+            </div>
+        </div>
+
+        <!-- ========================================
+             SCREEN 4: Feedback
+             ======================================== -->
+        <div id="screen-feedback" class="screen">
+            <div class="feedback-content">
+                <h2 class="text-center mb-lg">Your Feedback</h2>
+
+                <!-- Main Point -->
+                <div class="feedback-section">
+                    <div class="feedback-section-header">
+                        <span>📌</span>
+                        <span>Main Point</span>
+                    </div>
+                    <div class="feedback-section-content" id="feedback-main-point">
+                        Loading...
+                    </div>
+                </div>
+
+                <!-- Structure -->
+                <div class="feedback-section" id="feedback-structure-section">
+                    <div class="feedback-section-header">
+                        <span>🏗️</span>
+                        <span>Structure</span>
+                    </div>
+                    <div class="feedback-section-content">
+                        <div class="structure-list" id="feedback-structure">
+                            <!-- Structure items will be added here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fillers -->
+                <div class="feedback-section" id="feedback-fillers-section">
+                    <div class="feedback-section-header">
+                        <span>🔇</span>
+                        <span>Filler Words</span>
+                        <span class="filler-count" id="filler-count">0</span>
+                    </div>
+                    <div class="feedback-section-content">
+                        <div class="filler-words" id="feedback-fillers">
+                            <!-- Filler words will be added here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Long Sentences -->
+                <div class="feedback-section" id="feedback-long-section">
+                    <div class="feedback-section-header">
+                        <span>📏</span>
+                        <span>Long Sentences</span>
+                        <span class="filler-count" id="long-sentence-count">0</span>
+                    </div>
+                    <div class="feedback-section-content" id="feedback-long-sentences">
+                        <!-- Long sentences will be listed here -->
+                    </div>
+                </div>
+
+                <!-- Suggested Rewrite -->
+                <div class="feedback-section success">
+                    <div class="feedback-section-header">
+                        <span>✨</span>
+                        <span>Suggested 20-Second Version</span>
+                    </div>
+                    <div class="feedback-section-content">
+                        <div class="rewrite-box" id="feedback-rewrite">
+                            Loading...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button id="btn-try-again" class="btn btn-secondary">
+                        Try Again
+                    </button>
+                    <button id="btn-new-topic" class="btn btn-primary">
+                        New Topic
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================
+             Loading Overlay
+             ======================================== -->
+        <div id="loading-overlay" class="loading-overlay" style="display: none;">
+            <div class="spinner"></div>
+            <p class="loading-text" id="loading-text">Analyzing your speech...</p>
+        </div>
+
+        <!-- ========================================
+             Error Screen
+             ======================================== -->
+        <div id="screen-error" class="screen">
+            <div class="error-message">
+                <span class="error-icon">😕</span>
+                <h3 class="error-title" id="error-title">Something went wrong</h3>
+                <p class="error-description" id="error-description">
+                    We couldn't access your microphone. Please check your browser permissions and try again.
+                </p>
+                <button id="btn-error-retry" class="btn btn-primary mt-lg">
+                    Try Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/topics.js"></script>
+    <script src="js/recorder.js"></script>
+    <script src="js/liveHints.js"></script>
+    <script src="js/analyzer.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { signInWithGoogle, logOut, onAuthStateChange, type User } from '../services/firebase';
 import { useGoalStore } from '../store/goalStore';
 import { WhoopSettings } from './WhoopSettings';
-import { ScreenTimeSettings } from './ScreenTimeSettings';
 
 // Toggle Switch Component
 const ToggleSwitch: React.FC<{
@@ -437,7 +436,6 @@ export const Auth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <WhoopSettings />
-                <ScreenTimeSettings />
               </div>
             </div>
           </div>

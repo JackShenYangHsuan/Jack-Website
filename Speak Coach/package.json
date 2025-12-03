@@ -1,0 +1,35 @@
+{
+  "name": "speak-coach",
+  "version": "1.0.0",
+  "description": "Practice clear, confident communication with AI-powered feedback",
+  "main": "index.js",
+  "scripts": {
+    "dev": "live-server --port=3000 --open=/index.html",
+    "server": "node server.js",
+    "start": "node server.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "build": "echo 'No build step needed - vanilla JS'"
+  },
+  "keywords": [
+    "speech",
+    "practice",
+    "communication",
+    "ai",
+    "feedback"
+  ],
+  "author": "Jack Shen",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "live-server": "^1.2.2"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "form-data": "^4.0.5",
+    "formidable": "^3.5.4",
+    "multer": "^2.0.2"
+  }
+}

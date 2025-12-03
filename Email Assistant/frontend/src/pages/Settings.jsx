@@ -302,7 +302,7 @@ function Settings({ onLogout }) {
               <h3 className="text-lg font-semibold text-gray-900">Automatic Email Processing</h3>
               <p className="mt-1 text-sm text-gray-600">
                 Automatically process new emails as they arrive and apply labels based on your rules.
-                The system checks for new emails every 2 minutes.
+                The system checks for new emails every 10 seconds.
               </p>
               {autoProcessActive && (
                 <div className="mt-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
