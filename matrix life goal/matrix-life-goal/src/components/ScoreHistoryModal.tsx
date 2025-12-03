@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import type { ScoreHistoryEntry, Goal, WhoopMetricType, WhoopGoalMetrics, Reminder } from '../types/goal';
+import type { ScoreHistoryEntry, WhoopMetricType, WhoopGoalMetrics } from '../types/goal';
 import type { WhoopHistoricalEntry } from '../services/whoop';
 import { useGoalStore } from '../store/goalStore';
 
@@ -62,7 +62,7 @@ const formatTimeAgo = (timestamp: string | null | undefined): string => {
 };
 
 // Calculate streak from check-in history (consecutive days from today)
-const calculateStreak = (
+const _calculateStreak = (
   history: { date: string; completed: boolean }[],
   inverse: boolean = false
 ): number => {
@@ -104,7 +104,7 @@ const calculateStreak = (
 };
 
 // Generate calendar data for the last N weeks
-const generateCalendarData = (
+const _generateCalendarData = (
   history: { date: string; completed: boolean }[],
   inverse: boolean = false,
   weeks: number = 6
@@ -164,7 +164,7 @@ type TabType = 'overview' | 'score' | 'canvas' | 'reminder' | 'settings';
 export const ScoreHistoryModal: React.FC<ScoreHistoryModalProps> = ({
   goalId,
   whoopConnected,
-  whoopLastSync,
+  whoopLastSync: _whoopLastSync,
   globalWhoopMetrics,
   whoopHistory,
   onClose,
@@ -582,7 +582,7 @@ export const ScoreHistoryModal: React.FC<ScoreHistoryModalProps> = ({
     };
   }, [chartData, currentScore]);
 
-  const lineColor = getScoreColor(stats.current);
+  const _lineColor = getScoreColor(stats.current);
 
   return (
     <div

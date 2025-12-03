@@ -359,7 +359,7 @@ export const getHistoricalMetrics = async (accessToken: string, days: number = 3
       recoveryData.records.forEach((r: any) => {
         const date = r.created_at?.split('T')[0] || r.start?.split('T')[0];
         if (date) {
-          const existing = metricsMap.get(date) || { date };
+          const existing: WhoopHistoricalEntry = metricsMap.get(date) || { date };
           existing.recovery = r.score?.recovery_score ?? r.recovery_score ?? 0;
           metricsMap.set(date, existing);
         }
@@ -371,7 +371,7 @@ export const getHistoricalMetrics = async (accessToken: string, days: number = 3
       sleepData.records.forEach((s: any) => {
         const date = s.created_at?.split('T')[0] || s.start?.split('T')[0];
         if (date) {
-          const existing = metricsMap.get(date) || { date };
+          const existing: WhoopHistoricalEntry = metricsMap.get(date) || { date };
           existing.sleep = s.score?.sleep_performance_percentage ?? s.score?.sleep_efficiency_percentage ?? 0;
           metricsMap.set(date, existing);
         }
@@ -383,7 +383,7 @@ export const getHistoricalMetrics = async (accessToken: string, days: number = 3
       cycleData.records.forEach((c: any) => {
         const date = c.created_at?.split('T')[0] || c.start?.split('T')[0];
         if (date) {
-          const existing = metricsMap.get(date) || { date };
+          const existing: WhoopHistoricalEntry = metricsMap.get(date) || { date };
           const strainScore = c.score?.strain ?? 0;
           existing.strain = Math.round((strainScore / 21) * 100); // Normalize to 0-100
           metricsMap.set(date, existing);

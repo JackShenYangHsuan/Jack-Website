@@ -61,7 +61,7 @@ export const ScreenTimeSettings: React.FC = () => {
   };
 
   // Generate the Firebase project ID for the Shortcut URL
-  const firebaseProjectId = 'vision-matrix';
+  const _firebaseProjectId = 'vision-matrix';
   const userId = currentUser?.uid || '[USER_ID]';
 
   return (

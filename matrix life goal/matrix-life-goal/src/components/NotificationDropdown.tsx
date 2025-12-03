@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useGoalStore } from '../store/goalStore';
-import type { Reminder, GridCoordinates, CellPosition } from '../types/goal';
+import type { GridCoordinates, CellPosition } from '../types/goal';
 
 interface NotificationDropdownProps {
   onNavigateToGoal: (gridCoords: GridCoordinates, position: CellPosition) => void;

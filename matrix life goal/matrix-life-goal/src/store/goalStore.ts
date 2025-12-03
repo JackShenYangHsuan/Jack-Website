@@ -20,7 +20,7 @@ import type {
 } from '../types/goal';
 import { gridCoordsToKey, getAdjacentCoords } from '../types/goal';
 import { getActionableTasks } from '../services/openai';
-import { saveGoal, saveGrid, deleteGoal as deleteGoalFromFirebase, deleteGrid as deleteGridFromFirebase, loadUserGoals, loadUserGrids, saveWhoopTokens, loadWhoopTokens, deleteWhoopTokens, saveWhoopSyncStatus, saveScreenTimeLog, loadTodayScreenTime, subscribeToScreenTime, type User, type StoredWhoopTokens, type StoredScreenTimeLog } from '../services/firebase';
+import { saveGoal, saveGrid, deleteGoal as deleteGoalFromFirebase, deleteGrid as deleteGridFromFirebase, loadUserGoals, loadUserGrids, saveWhoopTokens, loadWhoopTokens, deleteWhoopTokens, saveWhoopSyncStatus, saveScreenTimeLog, loadTodayScreenTime, subscribeToScreenTime, type User, type StoredScreenTimeLog } from '../services/firebase';
 import * as whoopService from '../services/whoop';
 
 interface GoalStore extends AppState {
@@ -1264,7 +1264,7 @@ export const useGoalStore = create<GoalStore>((set, get) => ({
     const newGoals = new Map(state.goals);
     const updatedGoal: Goal = {
       ...goal,
-      whoopMetricType: metricType || null, // Use null instead of undefined for Firestore
+      whoopMetricType: metricType || undefined, // Use undefined when clearing metric
       autoSyncWhoop: metricType ? goal.autoSyncWhoop ?? true : false, // Enable auto-sync by default when setting metric
       updatedAt: new Date().toISOString(),
     };

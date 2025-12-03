@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useGoalStore } from '../store/goalStore';
 import { getSupportingGoals, getActionableTasks } from '../services/openai';
-import type { Goal, CellPosition, GridCoordinates, WhoopMetricType } from '../types/goal';
+import type { Goal, CellPosition, GridCoordinates } from '../types/goal';
 import { gridCoordsToKey } from '../types/goal';
 import { ScoreHistoryModal } from './ScoreHistoryModal';
 
@@ -22,7 +22,7 @@ export const Cell: React.FC<CellProps> = ({ goal, position, isCenter, gridCoords
 
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState('');
-  const [showTooltip, setShowTooltip] = useState(false);
+  const [showTooltip, _setShowTooltip] = useState(false);
   const [showSlider, setShowSlider] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
@@ -49,7 +49,7 @@ export const Cell: React.FC<CellProps> = ({ goal, position, isCenter, gridCoords
   const hasScoreHistory = isOuterGrid && !isCenterCell && goal && (goal.scoreHistory?.length || 0) > 0;
 
   // Handler to open history modal
-  const handleShowHistory = (e: React.MouseEvent) => {
+  const _handleShowHistory = (e: React.MouseEvent) => {
     e.stopPropagation();
     // Close slider/editing mode before opening modal
     setShowSlider(false);
@@ -526,8 +526,8 @@ export const Cell: React.FC<CellProps> = ({ goal, position, isCenter, gridCoords
 
   // Truncate text for display
   const displayText = goal?.text || '';
-  const isTruncated = displayText.length > 50;
-  const truncatedText = isTruncated ? displayText.slice(0, 50) + '...' : displayText;
+  const _isTruncated = displayText.length > 50;
+  const _truncatedText = _isTruncated ? displayText.slice(0, 50) + '...' : displayText;
 
   // Determine which borders to show (for collapsed border effect)
   const showRightBorder = !['top-right', 'right', 'bottom-right'].includes(position);
