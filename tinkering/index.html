@@ -26,29 +26,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Geist Font */
-        @font-face {
-            font-family: 'Geist';
-            src: url('https://assets.vercel.com/raw/upload/v1684956448/geist/Geist-Regular.woff2') format('woff2');
-            font-weight: 400;
-            font-style: normal;
-            font-display: swap;
-        }
-        @font-face {
-            font-family: 'Geist';
-            src: url('https://assets.vercel.com/raw/upload/v1684956448/geist/Geist-Medium.woff2') format('woff2');
-            font-weight: 500;
-            font-style: normal;
-            font-display: swap;
-        }
-        @font-face {
-            font-family: 'Geist';
-            src: url('https://assets.vercel.com/raw/upload/v1684956448/geist/Geist-SemiBold.woff2') format('woff2');
-            font-weight: 600;
-            font-style: normal;
-            font-display: swap;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -56,24 +33,22 @@
         }
 
         ::selection {
-            background-color: #0070f3;
-            color: #ffffff;
+            background-color: #F2C94C;
+            color: #000000;
         }
 
         ::-moz-selection {
-            background-color: #0070f3;
-            color: #ffffff;
+            background-color: #F2C94C;
+            color: #000000;
         }
 
         body {
-            font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-            background: #fafafa;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
             color: #000000;
-            line-height: 1.5;
+            line-height: 1.6;
             padding: 40px 20px;
             min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
@@ -104,28 +79,27 @@
         }
 
         .page-title {
-            font-size: 32px;
+            font-size: 38px;
             font-weight: 600;
             margin-bottom: 0;
-            line-height: 1.2;
-            letter-spacing: -0.02em;
+            line-height: 1.1;
         }
 
         .page-subtitle {
-            font-size: 15px;
-            color: #666666;
+            font-size: 16px;
+            color: #333333;
             margin-bottom: 24px;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         .quote-box {
-            background: #ffffff;
-            border: 1px solid #eaeaea;
+            background: #f3f4f6;
+            border-left: 3px solid #6b7280;
             padding: 12px 16px;
             margin-bottom: 32px;
-            border-radius: 8px;
+            border-radius: 0;
             font-style: italic;
-            color: #666666;
+            color: #6b7280;
             font-size: 14px;
             display: flex;
             align-items: center;
@@ -151,42 +125,41 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            border: 1px solid #eaeaea;
-            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
             padding: 12px 16px;
-            background: #ffffff;
+            background: #f9fafb;
         }
 
         .filter-label {
-            font-size: 11px;
-            font-weight: 500;
-            color: #666666;
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.5px;
         }
 
         .filter-buttons {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .filter-btn {
-            padding: 5px 10px;
-            border: 1px solid #eaeaea;
+            padding: 6px 12px;
+            border: 1px solid #e2e8f0;
             border-radius: 6px;
-            background: #fafafa;
-            color: #666666;
+            background: #ffffff;
+            color: #475569;
             font-size: 12px;
-            font-weight: 400;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 150ms ease;
+            transition: all 0.2s ease;
         }
 
         .filter-btn:hover {
-            background: #ffffff;
-            border-color: #999999;
-            color: #111111;
+            background: #f8fafc;
+            border-color: #cbd5e0;
         }
 
         .filter-btn.active {
@@ -246,22 +219,25 @@
             display: flex;
             flex-direction: row;
             gap: 20px;
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 20px;
             overflow: visible;
-            transition: all 150ms ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             text-decoration: none;
             color: #000000;
             background: #ffffff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-            border: 1px solid #eaeaea;
+            box-shadow: 
+                0 1px 2px rgba(0, 0, 0, 0.05),
+                0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.06);
             height: 100%;
         }
 
         .article-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-            border-color: #999999;
+            transform: translateY(-4px);
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.06),
+                0 12px 32px rgba(0, 0, 0, 0.08);
         }
 
 
@@ -410,13 +386,13 @@
             align-items: center;
             justify-content: center;
             padding: 6px 12px;
-            border: 1px solid #eaeaea;
+            border: 1px solid #e2e8f0;
             border-radius: 6px;
             font-size: 12px;
             font-weight: 500;
             background: #ffffff;
-            color: #111111;
-            transition: all 150ms ease;
+            color: #1a202c;
+            transition: all 0.15s ease;
             align-self: flex-start;
             margin-top: auto;
             text-decoration: none;
@@ -424,8 +400,8 @@
         }
 
         .card-action:hover {
-            background: #fafafa;
-            border-color: #999999;
+            background: #f8fafc;
+            border-color: #cbd5e0;
         }
 
         .typewriter-container {
@@ -563,7 +539,6 @@
                     <button class="filter-btn" data-filter="tech" data-value="railway">Railway</button>
                     <button class="filter-btn" data-filter="tech" data-value="gumloop">Gumloop</button>
                     <button class="filter-btn" data-filter="tech" data-value="reducto">Reducto</button>
-                    <button class="filter-btn" data-filter="tech" data-value="shortcut">Shortcut</button>
                 </div>
             </div>
             <div class="filter-group">
@@ -676,24 +651,6 @@
                         <a href="https://daystory.vercel.app/" target="_blank" class="card-action" style="background: #000000; color: #ffffff;">Try It Now</a>
                         <a href="javascript:void(0);" onclick="openDayStoryVideoModal()" class="card-action" style="background: #000000; color: #ffffff;">Watch Demo</a>
                         <a href="/tinkering/building-daystory" class="card-action">Learn More</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="article-card" data-difficulty="quick" data-tech="shortcut" data-hours="1">
-                <div class="card-hero">
-                    <img src="../DGX Spark Analysis Logo.png" alt="NVIDIA DGX Spark" class="card-icon">
-                </div>
-                <div class="card-content">
-                    <div class="card-tags">
-                        <span class="tag difficulty">1hr</span>
-                        <span class="tag">Shortcut</span>
-                    </div>
-                    <h2>NVIDIA DGX Spark Cost Analysis</h2>
-                    <p>Cost analysis comparing DGX Spark ownership vs GPU rental and API calls for AI video generation.</p>
-                    <div style="display: flex; gap: 12px;">
-                        <a href="https://www.tryshortcut.ai/share/292f69ba-6033-4959-97f1-cebf2450bd42" target="_blank" class="card-action" style="background: #000000; color: #ffffff;">See Model</a>
-                        <a href="/tinkering/nvidia-dgx-spark" class="card-action">Learn More</a>
                     </div>
                 </div>
             </div>
