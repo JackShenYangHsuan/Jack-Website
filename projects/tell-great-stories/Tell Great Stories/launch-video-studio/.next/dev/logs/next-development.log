@@ -1,0 +1,56 @@
+[23:45:40.897] Server  ERROR    ⨯ Error: Cannot find module 'next/dist/client/components/builtin/global-not-found'
+Require stack:
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/on-demand-entry-handler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/hot-reloader-turbopack.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-server.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/start-server.js
+[23:45:40.980] Server  ERROR   Error: Cannot find module 'next/dist/pages/_error'
+Require stack:
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/on-demand-entry-handler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/hot-reloader-turbopack.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-server.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/start-server.js
+[23:45:41.262] Server  ERROR    ⨯ Error: Cannot find module 'next/dist/pages/_error'
+Require stack:
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/on-demand-entry-handler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/hot-reloader-turbopack.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-server.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/start-server.js
+[23:45:41.290] Server  ERROR   Error: Cannot find module 'next/dist/pages/_error'
+Require stack:
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/on-demand-entry-handler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/hot-reloader-turbopack.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-server.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/start-server.js
+[23:45:41.382] Server  ERROR    ⨯ Error: Cannot find module 'next/dist/client/components/builtin/global-not-found'
+Require stack:
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/on-demand-entry-handler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/hot-reloader-turbopack.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-server.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/start-server.js
+[23:45:41.436] Server  ERROR   Error: Cannot find module 'next/dist/pages/_error'
+Require stack:
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/on-demand-entry-handler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/hot-reloader-turbopack.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-server.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/start-server.js
+[23:45:41.454] Server  ERROR    ⨯ Error: Cannot find module 'next/dist/pages/_error'
+Require stack:
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/on-demand-entry-handler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/hot-reloader-turbopack.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-server.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/start-server.js
+[23:45:41.477] Server  ERROR   Error: Cannot find module 'next/dist/pages/_error'
+Require stack:
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/on-demand-entry-handler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/dev/hot-reloader-turbopack.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/router-server.js
+- /Users/jackshen/Desktop/personal-website/Tell Great Stories/launch-video-studio/node_modules/next/dist/server/lib/start-server.js
