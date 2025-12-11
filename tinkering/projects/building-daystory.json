@@ -1,0 +1,20 @@
+{
+  "id": "building-daystory",
+  "title": "Create vlogs from your calendar event",
+  "cardDesc": "Transforms your day into movies - AI's creative interpretation of everyday moments",
+  "thumbnail": "/assets/images/Day Story Hero Image.png",
+  "category": "fun",
+  "video": "https://www.youtube.com/embed/0nsHfEeLvdU",
+  "tryLink": "https://daystory.vercel.app/",
+  "tags": ["5hrs with Codex"],
+  "sections": [
+    {
+      "title": "Motivation",
+      "content": "After creating my life as a Pixar story exercise, I was blown away by what Sora could do. I wanted to make it easy for anyone to turn their daily calendar events into videos—like having a creator and videographer by your side to capture your daily highlights."
+    },
+    {
+      "title": "Solution",
+      "content": "I built a simple, elegant product. Users connect their Google Calendar, choose which days they want to turn into a movie, and voila—they can share a day of their life with friends and loved ones.<br><br>The technical build was straightforward: Google Calendar feeds in the events, GPT writes a script, and Sora generates the video. For the UI, I wanted a warm, creative feeling, so I took inspiration from Airbnb. After 2-3 hours of vibe coding with Claude Code and hooking up the APIs, I had it running.<br><br>The only bottleneck Claude Code and I hit was setting up Firebase Storage to store and display the videos. Originally, Claude Code assumed the Sora API would return a URL we could display directly. Turns out we needed the extra storage layer."
+    }
+  ]
+}

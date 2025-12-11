@@ -1,0 +1,37 @@
+{
+  "id": "gmail-auto-label",
+  "title": "Gmail auto-label assistant",
+  "cardDesc": "AI-powered email labelling system that identifies sent vs received emails and applies custom labelling rules",
+  "thumbnail": "/assets/images/Gmail Assistant Hero Image.png",
+  "category": "personal",
+  "video": "https://www.youtube.com/embed/XeuC3eYid_U",
+  "tags": ["15hrs with Claude Code"],
+  "sections": [
+    {
+      "title": "Problem",
+      "items": [
+        "Email assistants like Fyxer and Perplexity are helpful but overkill for low email volume",
+        "Only need the auto-labelling feature, not the full suite",
+        "Don't want to pay $20/month for a sixth AI subscription"
+      ]
+    },
+    {
+      "title": "Solution",
+      "items": [
+        "Built a Gmail auto-labelling system with customizable rules",
+        "Works for both received and sent emails",
+        "Highly configurable labelling logic without the subscription cost"
+      ]
+    },
+    {
+      "title": "Challenge",
+      "items": [
+        "Initially ran all emails through the same rule set",
+        "GPT couldn't determine who sent the last email in long threads",
+        "Often confused \"to respond\" vs \"awaiting reply\" states",
+        "Fixed by adding a function layer that first identifies sent vs received",
+        "Then applies appropriate rules, making GPT more accurate"
+      ]
+    }
+  ]
+}

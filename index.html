@@ -2,871 +2,2029 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Jack Shen</title>
     <meta name="description" content="Jack Shen - Builder pivoting from strategy consulting to applied AI startups">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="apple-touch-icon" href="favicon.svg">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Jack Shen">
     <meta property="og:description" content="Builder pivoting from strategy consulting to applied AI startups">
     <meta property="og:image" content="https://jackshen.me/favicon.svg">
-    
+
     <!-- Twitter -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Jack Shen">
     <meta name="twitter:description" content="Builder pivoting from strategy consulting to applied AI startups">
     <meta name="twitter:image" content="https://jackshen.me/favicon.svg">
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <script>
-        !function(key) {
-            if (window.reb2b) return;
-            window.reb2b = { loaded: true };
-            var s = document.createElement("script");
-            s.async = true;
-            s.src = "https://ddwl4m2hdecbv.cloudfront.net/b/" + key + "/" + key + ".js.gz";
-            document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.getElementsByTagName("script")[0]);
-        }("QOQRJHDXXP62");
-    </script>
+
     <style>
-        * {
+        /* Font Face - NeueMontreal with fallbacks */
+        @font-face {
+            font-family: 'NeueMontreal';
+            src: local('PP Neue Montreal'), local('Neue Montreal'), local('NeueMontreal');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'NeueMontreal';
+            src: local('PP Neue Montreal Medium'), local('Neue Montreal Medium');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'NeueMontreal';
+            src: local('PP Neue Montreal Bold'), local('Neue Montreal Bold');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        /* CSS Reset */
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        /* CSS Variables - Light Theme (default) */
+        :root {
+            --bg-primary: #f5f5f3;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-nested: #f5f5f3;
+            --bg-project-card: #e8e8e6;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-muted: #8a8a8a;
+            --border-color: #e5e5e5;
+            --accent: #F2C94C;
+            --transition: 0.2s ease;
+        }
+
+        /* Selection */
         ::selection {
-            background-color: #F2C94C;
+            background-color: var(--accent);
             color: #000000;
         }
 
-        ::-moz-selection {
-            background-color: #F2C94C;
-            color: #000000;
-        }
-
+        /* Body */
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-            background-color: #ffffff;
-            color: #000000;
-            line-height: 1.6;
-            padding: 0;
-            margin: 0;
+            font-family: 'NeueMontreal', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Portfolio section - fixed position */
-        .portfolio-section {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            overflow: hidden;
-            padding: 40px 20px;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            gap: 60px;
-            min-height: 70vh;
-        }
-
-        .profile-image {
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .profile-image img {
-            width: 280px;
-            height: 280px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-                .pixar-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            position: static;
-            transform: none;
-            background: #ffffff;
-            color: #000000;
-            border: 1px solid #000000;
-            padding: 12px 24px;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: 30px;
-            cursor: pointer;
-            white-space: nowrap;
-            box-shadow: none;
-            text-shadow: none;
-        }
-
-                .pixar-button:hover {
-            background: #000000;
-            color: #ffffff;
-        }
-
-        .content {
-            flex: 1;
-        }
-
-        .content p {
-            font-size: 20px;
-            line-height: 1.8;
-            color: #000000;
-        }
-
-        .underline {
-            border-bottom: 3px solid #CCCCCC;
-            padding-bottom: 2px;
-            cursor: ne-resize;
-            transition: color 0.2s ease;
-        }
-
-        .underline:hover {
-            color: #DDDDDD;
-        }
-
-        .modal-overlay {
+        /* Header */
+        .header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            padding: 20px;
-        }
-
-        .modal-overlay.active {
+            height: 56px;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 100;
         }
 
-        .modal-content {
-            position: relative;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 255, 255, 0.85) 0%,
-                rgba(255, 255, 255, 0.75) 100%
-            );
-            backdrop-filter: blur(40px) saturate(200%) brightness(120%);
-            -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(120%);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            border-radius: 24px;
-            padding: 40px;
-            max-width: 700px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow:
-                0 25px 80px rgba(0, 0, 0, 0.2),
-                0 10px 40px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.03);
-            animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .header-logo {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
         }
 
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9) translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 36px;
-            height: 36px;
-            border: none;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
+        .nav-arrows {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-arrow {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
-            color: #000000;
-            transition: all 0.2s;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            transition: all var(--transition);
         }
 
-        .modal-close:hover {
-            background: rgba(255, 255, 255, 0.8);
-            transform: scale(1.05);
+        .nav-arrow:hover {
+            background: var(--border-color);
         }
 
-        .modal-header {
+        .nav-arrow svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Main Content */
+        main {
+            display: flex;
+            gap: 16px;
+            padding: 72px 24px 24px;
+            min-height: 100vh;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        main::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Columns */
+        .column {
+            flex: 0 0 384px;
+            min-width: 384px;
+            height: calc(100vh - 96px);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* About column wider */
+        #column-0 {
+            flex: 0 0 624px;
+            min-width: 624px;
+        }
+
+        /* Writings column wider */
+        #column-2 {
+            flex: 0 0 408px;
+            min-width: 408px;
+        }
+
+        .column-inner {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .column-inner::-webkit-scrollbar {
+            display: none;
+        }
+
+        .column-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #d97657;
+            margin-bottom: 20px;
+        }
+
+        /* Section Divider */
+        .section-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 24px 0;
+        }
+
+        /* Profile Section */
+        .profile-header {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .profile-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .profile-intro {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .profile-bio {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-top: 16px;
+        }
+
+        .profile-bio strong {
+            font-weight: 600;
+        }
+
+        /* Video Preview with Overlay Button */
+        .video-preview {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            background: #000;
+        }
+
+        .video-preview-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-preview-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
             display: flex;
             align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
-            padding-right: 40px;
-            flex-wrap: wrap;
+            justify-content: center;
+            transition: background var(--transition);
         }
 
-        .modal-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #000000;
-            margin: 0;
+        .video-preview:hover .video-preview-overlay {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .video-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px 12px 16px;
+            background: transparent;
+            border: 3px solid #ffffff;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .video-preview:hover .video-btn {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .video-btn-icon {
+            width: 28px;
+            height: 28px;
+            background: transparent;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-btn-icon svg {
+            width: 10px;
+            height: 10px;
+            margin-left: 2px;
+            fill: #ffffff;
+            stroke: #ffffff;
+            stroke-width: 2px;
+            stroke-linejoin: round;
+        }
+
+        .video-btn-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        /* Career Timeline */
+        .career-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .career-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .career-item-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .career-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .career-info {
             flex: 1;
             min-width: 0;
         }
 
-        .modal-body {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #000000;
+        .career-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
         }
 
-        .modal-body ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        .career-dates {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
         }
 
-        .modal-body li {
+        .career-details {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .career-detail-item {
+            margin-bottom: 16px;
+        }
+
+        .career-detail-item:last-child {
             margin-bottom: 0;
-            padding: 20px 0;
-            padding-left: 0;
-            position: relative;
-            border-bottom: 1px solid #CCCCCC;
         }
 
-        .modal-body li:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
+        .career-detail-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
         }
 
-        .modal-body li:first-child {
-            padding-top: 0;
+        .career-detail-value {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.5;
         }
 
-        .modal-body li::before {
+        .career-detail-value a {
+            color: var(--text-primary);
+            text-decoration: underline;
+        }
+
+        .career-detail-value a:hover {
+            color: var(--text-secondary);
+        }
+
+        /* Social Buttons */
+        .social-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .social-btn {
+            height: 40px;
+            padding: 0 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+        }
+
+        .social-btn:hover {
+            background: var(--border-color);
+        }
+
+        /* Side Projects - Parent Column */
+        .column-parent {
+            flex: 0 0 1000px;
+            min-width: 1000px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .column-parent > .column-inner {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 24px;
+            overflow: hidden;
+        }
+
+        .column-parent .column-title {
+            flex-shrink: 0;
+            padding: 0;
+            margin-bottom: 16px;
+        }
+
+        .nested-columns {
+            display: flex;
+            gap: 16px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .nested-column {
+            flex: 1;
+            height: 100%;
+            background: var(--bg-nested);
+            border: none;
+            border-radius: 8px;
+            overflow-y: auto;
+            padding: 16px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .nested-column::-webkit-scrollbar {
             display: none;
         }
 
-        .modal-body strong {
+        .nested-column-title {
+            font-size: 14px;
             font-weight: 600;
-            color: #666666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        /* Hide mobile prefix on desktop */
+        .mobile-prefix {
+            display: none;
+        }
+
+        /* Project Cards - Content on top style */
+        .project-card {
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-project-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            margin-bottom: 16px;
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+
+        .project-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .project-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-card-content {
+            padding: 14px 16px;
+            order: -1;
+            background: #ffffff;
+        }
+
+        .project-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .project-card-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .project-card-media {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            background: #b5b0a6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            overflow: hidden;
+        }
+
+        .project-card-media img {
+            max-width: 95%;
+            max-height: 95%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+
+        /* Project Expanded Panel */
+        .project-expanded-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 40px;
+        }
+
+        .project-expanded-overlay.active {
+            display: flex;
+        }
+
+        .project-expanded-panel {
+            background: #ffffff;
+            border-radius: 16px;
+            width: 60%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .project-expanded-content {
+            padding: 32px 24px 48px;
+        }
+
+        .project-expanded-title {
+            font-size: 28px;
+            font-weight: 400;
+            color: #000000;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .project-expanded-desc {
+            font-size: 15px;
+            color: #4b5563;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .project-expanded-meta {
+            margin-bottom: 32px;
+        }
+
+        .project-meta-row {
+            display: flex;
+            align-items: baseline;
+            padding: 12px 0;
+            border-bottom: 1px dotted #d1d5db;
+        }
+
+        .project-meta-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            font-size: 14px;
-        }
-
-        .modal-logo {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
+            width: 120px;
             flex-shrink: 0;
         }
 
-        .modal-year {
-            background: #000000;
-            color: #ffffff;
-            padding: 6px 12px;
-            border-radius: 12px;
+        .project-meta-value {
             font-size: 14px;
+            color: #111827;
+            flex: 1;
+            text-align: right;
+        }
+
+        .project-meta-value a {
+            color: #111827;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+        }
+
+        .project-expanded-section {
+            margin-bottom: 24px;
+        }
+
+        .project-expanded-section-title {
+            font-size: 18px;
             font-weight: 500;
-            white-space: nowrap;
-            flex-shrink: 0;
+            color: #000000;
+            margin-bottom: 12px;
         }
 
-        .modal-body p {
+        .project-expanded-section ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .project-expanded-section li {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .project-expanded-section p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .project-expanded-video {
+            width: 60%;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            background: #f3f4f6;
+        }
+
+        .project-video-preview {
+            width: 60%;
+            margin-bottom: 24px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .writing-content-body {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #222222;
+        }
+
+        .writing-content-body p {
+            margin-bottom: 20px;
+        }
+
+        .writing-content-body strong {
+            font-weight: 600;
+        }
+
+        .writing-content-body ul,
+        .writing-content-body ol {
+            padding-left: 24px;
+            margin-bottom: 20px;
+        }
+
+        .writing-content-body li {
+            margin-bottom: 12px;
+        }
+
+        .writing-content-body h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 16px;
             color: #000000;
         }
 
-        @media (max-width: 768px) {
-            .modal-content {
-                padding: 30px 20px;
-                max-height: 90vh;
-                max-width: 95%;
-            }
-
-            .modal-header {
-                gap: 12px;
-                padding-right: 50px;
-            }
-
-            .modal-logo {
-                width: 50px;
-                height: 50px;
-            }
-
-            .modal-title {
-                font-size: 18px;
-                line-height: 1.4;
-            }
-
-            .modal-year {
-                font-size: 12px;
-                padding: 5px 10px;
-            }
-
-            .modal-close {
-                width: 32px;
-                height: 32px;
-                font-size: 20px;
-            }
-
-            .modal-body {
-                font-size: 15px;
-            }
-
-            .modal-body li {
-                padding: 16px 0;
-            }
+        .project-expanded-images {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 24px;
         }
 
-        @media (max-width: 480px) {
-            .modal-content {
-                padding: 25px 16px;
-            }
-
-            .modal-header {
-                gap: 10px;
-            }
-
-            .modal-logo {
-                width: 45px;
-                height: 45px;
-            }
-
-            .modal-title {
-                font-size: 16px;
-            }
-
-            .modal-year {
-                font-size: 11px;
-                padding: 4px 8px;
-            }
-
-            .modal-body {
-                font-size: 14px;
-            }
-
-            .modal-body li {
-                padding: 14px 0;
-            }
-
-            .modal-body strong {
-                font-size: 12px;
-            }
+        .project-expanded-images img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .scroll-arrow {
+        .project-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-top: 1px solid #e5e5e5;
+            background: #ffffff;
+            position: sticky;
+            bottom: 0;
+        }
+
+        .project-nav-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .project-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .project-nav-cta {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .project-nav-cta:hover {
+            background: #333;
+        }
+
+        .project-nav-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            background: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .project-nav-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .project-nav-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: #6b7280;
+        }
+
+        .project-nav-close {
+            height: 40px;
+            padding: 0 24px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            background: #ffffff;
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .project-nav-close:hover {
+            background: #f3f4f6;
+        }
+
+        /* Writing Items */
+        .writing-item {
+            display: block;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-color);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .writing-item:last-child {
+            border-bottom: none;
+        }
+
+        .writing-item:hover .writing-item-title {
+            color: var(--accent);
+        }
+
+        .writing-item-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            transition: color var(--transition);
+        }
+
+        .writing-item-date {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Video Modal */
+        .video-modal-overlay {
             position: fixed;
-            bottom: 40px;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .video-modal-overlay.active {
+            display: flex;
+        }
+
+        .video-modal-close {
+            position: absolute;
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
             width: 48px;
             height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: transparent;
-            border: 2px solid #000000;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            z-index: 10;
+            color: #ffffff;
+            transition: all var(--transition);
         }
 
-        .scroll-arrow:hover {
-            transform: translateX(-50%) translateY(4px);
-            background: #000000;
+        .video-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
-        .scroll-arrow:hover svg {
-            stroke: #ffffff;
-        }
-
-        .scroll-arrow svg {
+        .video-modal-close svg {
             width: 24px;
             height: 24px;
-            stroke: #000000;
-            stroke-width: 2;
-            fill: none;
-            transition: stroke 0.3s ease;
         }
 
-        footer {
-            max-width: 1000px;
-            margin: 60px auto 80px;
-            padding: 0 20px 0 20px;
+        .video-modal-content {
+            width: 100%;
+            max-width: 1200px;
+            aspect-ratio: 16 / 9;
+            margin-top: 80px;
         }
 
-        .footer-links {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-left {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-
-        .footer-links a, .footer-links .location {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            color: #000000;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-            transition: opacity 0.2s;
-        }
-
-        .footer-links a:hover {
-            opacity: 0.6;
-        }
-
-        .footer-links a span, .footer-links .location span {
-            font-size: 18px;
-        }
-
-        @media (max-width: 768px) {
-            .scroll-arrow {
-                width: 44px;
-                height: 44px;
-                bottom: 30px;
-            }
-
-            .scroll-arrow svg {
-                width: 20px;
-                height: 20px;
-            }
-
-            .portfolio-section {
-                padding: 20px 15px;
-                position: static;
-                height: auto;
-                min-height: auto;
-                overflow: visible;
-            }
-
-            .container {
-                flex-direction: column;
-                gap: 40px;
-                text-align: left;
-                min-height: auto;
-            }
-
-            .profile-image img {
-                width: 220px;
-                height: 220px;
-            }
-
-            .pixar-button {
-                font-size: 13px;
-                padding: 12px 20px;
-                white-space: normal;
-                text-align: center;
-                max-width: 220px;
-            }
-
-            .content p {
-                font-size: 18px;
-                line-height: 1.7;
-            }
-
-            footer {
-                margin: 40px auto 20px;
-            }
-
-            .footer-links {
-                flex-direction: column;
-                gap: 20px;
-                align-items: flex-start;
-            }
-
-            .footer-left {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
-            }
-
-            .footer-links a, .footer-links .location {
-                font-size: 13px;
-            }
-
-            .footer-links a span, .footer-links .location span {
-                font-size: 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .portfolio-section {
-                padding: 20px 15px;
-                position: static;
-                height: auto;
-                min-height: auto;
-                overflow: visible;
-            }
-
-            .profile-image img {
-                width: 180px;
-                height: 180px;
-            }
-
-            .content p {
-                font-size: 16px;
-            }
-
-            .pixar-button {
-                font-size: 12px;
-                padding: 10px 18px;
-                max-width: 200px;
-            }
-        }
-
-        header {
-            max-width: 1000px;
-            margin: 0 auto 40px;
-            padding: 0 20px;
-        }
-
-        .header-nav {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-
-        .header-nav a {
-            text-decoration: none;
-            color: #000000;
-            font-size: 14px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-        }
-
-        .header-nav a:hover {
-            opacity: 0.6;
-        }
-
-        .header-nav a.ai-experiments {
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: none;
+        .video-modal-content iframe,
+        .video-modal-content video {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
             border: none;
-            box-shadow: none;
+        }
+
+        /* Hide mobile nav on desktop (default) */
+        .mobile-nav {
+            display: none;
+        }
+
+        /* Mobile Breakpoints */
+        @media (max-width: 1024px) {
+            .column {
+                flex: 1;
+                min-width: 280px;
+            }
+
+            .column-parent {
+                flex: 2.5;
+                min-width: 500px;
+            }
         }
 
         @media (max-width: 768px) {
-            header {
-                margin-bottom: 20px;
+            /* Mobile: Horizontal scroll with snap, showing peek of next card */
+            main {
+                display: flex;
+                flex-direction: row;
+                gap: 12px;
+                padding: 16px 16px 72px 16px;
+                min-height: 100vh;
+                overflow-x: auto;
+                overflow-y: hidden;
+                scroll-snap-type: x mandatory;
+                scroll-padding-left: 16px;
+                -webkit-overflow-scrolling: touch;
+                background: var(--bg-primary);
             }
 
-            .header-nav {
-                gap: 20px;
+            .column,
+            .column-parent {
+                flex: 0 0 calc(100vw - 48px);
+                width: calc(100vw - 48px);
+                min-width: calc(100vw - 48px);
+                height: calc(100vh - 80px);
+                max-height: calc(100vh - 80px);
+                border-radius: 16px;
+                border: 1px solid var(--border-color);
+                scroll-snap-align: start;
+                scroll-snap-stop: always;
+                background: var(--bg-card);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             }
 
-            .header-nav a {
+            /* Override column-specific widths on mobile */
+            #column-0,
+            #column-2 {
+                flex: 0 0 calc(100vw - 48px);
+                width: calc(100vw - 48px);
+                min-width: calc(100vw - 48px);
+            }
+
+            .column-inner {
+                overflow-y: auto;
+                padding: 20px 16px;
+            }
+
+            /* Hide the parent column wrapper on mobile */
+            .column-parent {
+                display: contents;
+            }
+
+            .column-parent > .column-inner {
+                display: contents;
+            }
+
+            .column-parent .column-title {
+                display: none;
+            }
+
+            /* Make nested columns into swipeable cards */
+            .nested-columns {
+                display: contents;
+            }
+
+            .nested-column {
+                flex: 0 0 calc(100vw - 48px);
+                width: calc(100vw - 48px);
+                min-width: calc(100vw - 48px);
+                height: calc(100vh - 80px);
+                max-height: calc(100vh - 80px);
+                border-radius: 16px;
+                border: 1px solid var(--border-color);
+                scroll-snap-align: start;
+                scroll-snap-stop: always;
+                background: var(--bg-card);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                padding: 20px 16px;
+                overflow-y: auto;
+            }
+
+            /* Header mobile - hide it */
+            .header {
+                display: none;
+            }
+
+            /* Hide desktop nav arrows */
+            .nav-arrows {
+                display: none;
+            }
+
+            /* Mobile bottom navigation - Mackenzie style */
+            .mobile-nav {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: calc(56px + env(safe-area-inset-bottom, 0px));
+                background: transparent;
+                border-top: none;
+                align-items: center;
+                justify-content: space-between;
+                z-index: 100;
+                padding: 8px 16px env(safe-area-inset-bottom, 8px);
+            }
+
+            .mobile-nav-logo {
+                font-size: 14px;
+                font-weight: 500;
+                color: var(--text-primary);
+                text-decoration: none;
+            }
+
+            .mobile-nav-arrows {
+                display: flex;
+                gap: 8px;
+            }
+
+            .mobile-nav-btn {
+                width: 56px;
+                height: 36px;
+                border-radius: 6px;
+                background: var(--bg-card);
+                border: 1px solid var(--border-color);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .mobile-nav-btn:active {
+                background: var(--bg-primary);
+            }
+
+            .mobile-nav-btn:disabled {
+                opacity: 0.4;
+            }
+
+            .mobile-nav-btn svg {
+                width: 16px;
+                height: 16px;
+                color: var(--text-secondary);
+            }
+
+            /* Hide the dot indicator on mobile */
+            .mobile-nav-indicator {
+                display: none;
+            }
+
+            /* Profile adjustments - compact like reference */
+            .profile-header {
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .profile-image {
+                width: 80px;
+                height: 80px;
+                border-radius: 12px;
+                flex-shrink: 0;
+            }
+
+            .profile-intro {
+                text-align: left;
+                font-size: 18px;
+                line-height: 1.4;
+            }
+
+            .profile-bio {
+                text-align: left;
+            }
+
+            .social-buttons {
+                justify-content: flex-start;
+            }
+
+            /* Video preview mobile */
+            .video-preview {
+                margin: 16px 0;
+            }
+
+            /* Career items mobile */
+            .career-item {
+                padding: 14px;
+            }
+
+            .career-logo {
+                width: 24px;
+                height: 24px;
+            }
+
+            .career-title {
                 font-size: 13px;
+            }
+
+            .career-dates {
+                font-size: 11px;
+            }
+
+            .career-detail-label {
+                font-size: 9px;
+            }
+
+            .career-detail-value {
+                font-size: 12px;
+            }
+
+            /* Project cards mobile */
+            .project-card {
+                margin-bottom: 12px;
+            }
+
+            .project-card-content {
+                padding: 12px 14px;
+            }
+
+            .project-card-title {
+                font-size: 13px;
+            }
+
+            .project-card-desc {
+                font-size: 11px;
+            }
+
+            .project-card-media {
+                aspect-ratio: 16 / 10;
+            }
+
+            /* Writing items mobile */
+            .writing-item {
+                padding: 12px 0;
+            }
+
+            .writing-item-title {
+                font-size: 14px;
+            }
+
+            .writing-item-date {
+                font-size: 10px;
+            }
+
+            /* Column titles mobile */
+            .column-title {
+                font-size: 11px;
+                margin-bottom: 16px;
+            }
+
+            .nested-column-title {
+                font-size: 11px;
+            }
+
+            /* Show mobile prefix on mobile */
+            .mobile-prefix {
+                display: inline;
+            }
+
+            /* Modal mobile */
+            .project-expanded-overlay {
+                padding: 0;
+            }
+
+            .project-expanded-panel {
+                width: 100%;
+                max-width: 100%;
+                height: 100vh;
+                max-height: 100vh;
+                border-radius: 0;
+            }
+
+            .project-expanded-content {
+                padding: 24px 16px 100px;
+            }
+
+            .project-expanded-title {
+                font-size: 22px;
+            }
+
+            .project-expanded-video {
+                width: 100%;
+            }
+
+            .project-video-preview {
+                width: 100%;
+            }
+
+            .project-nav {
+                padding: 12px 16px;
+            }
+
+            /* Video modal mobile */
+            .video-modal-content {
+                padding: 16px;
             }
         }
 
+        /* Hide mobile nav when modal is open */
+        body.modal-open .mobile-nav {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
-    <!-- Portfolio Section - Fixed -->
-    <div class="portfolio-section">
-        <header>
-            <nav class="header-nav">
-                <a href="/writings">Writings</a>
-                <a href="/tinkering" class="ai-experiments">AI Experiments</a>
-            </nav>
-        </header>
-        <div class="container">
-            <div class="profile-image">
-                <img src="assets/images/Profile.png" alt="Jack Shen">
-                <button class="pixar-button">Watch my life as a Pixar Movie</button>
-            </div>
-            <div class="content">
-                <p>I'm Jack, a builder pivoting from strategy consulting to applied AI startups. Built a <span class="underline" data-tooltip="Camera App">camera app</span> to 500K downloads in college. Spent four years at <span class="underline" data-tooltip="McKinsey">McKinsey</span> rebuilding performance engines and org structures for Fortune 500 financial turnarounds. Recently worked with YC founders on <span class="underline" data-tooltip="Agentic Sales Platforms">agentic sales platforms</span>. Now at Berkeley B-school, exploring career options and <span class="underline" data-tooltip="Tinkering with AI">tinkering with AI</span>. Strive for craft and taste. Read my thoughts <span class="underline" data-tooltip="Blog">here</span>.</p>
+    <!-- Header -->
+    <header class="header">
+        <a href="/" class="header-logo">Jack Shen</a>
+        <div class="header-right">
+            <div class="nav-arrows">
+                <button class="nav-arrow" id="navLeft" aria-label="Scroll left">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <button class="nav-arrow" id="navRight" aria-label="Scroll right">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
             </div>
         </div>
+    </header>
 
-        <footer>
-            <div class="footer-links">
-                <div class="footer-left">
-                    <a href="https://www.linkedin.com/in/jackshen1997/" target="_blank">
-                        <span>💼</span>LINKEDIN
-                    </a>
-                    <a href="mailto:jack_shen@berkeley.edu">
-                        <span>✉️</span>EMAIL
-                    </a>
+    <!-- Main Content -->
+    <main class="columns-container" id="columnsContainer">
+        <!-- Column 1: About -->
+        <section class="column" id="column-0">
+            <div class="column-inner">
+                <div class="column-title">About Me</div>
+
+                <!-- Profile Header -->
+                <div class="profile-header">
+                    <img src="assets/images/Profile.png" alt="Jack Shen" class="profile-image">
+                    <div class="profile-intro">Hey, I'm Jack, a builder pivoting from strategy consulting to applied AI startups. Manufactured in Taiwan, operating in SF.</div>
                 </div>
-                <div class="location">
-                    <span>📍</span>MANUFACTURED IN TW, OPERATING IN SF
+
+                <!-- Social Buttons -->
+                <div class="social-buttons">
+                    <a href="https://twitter.com/jackshen" target="_blank" class="social-btn">X</a>
+                    <a href="https://www.linkedin.com/in/jackshen1997/" target="_blank" class="social-btn">LinkedIn</a>
+                    <button class="social-btn" onclick="navigator.clipboard.writeText('jack_shen@berkeley.edu'); this.textContent='Copied!'; setTimeout(() => this.textContent='Email', 2000)">Email</button>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="video-preview" id="pixarBtn">
+                    <img src="https://img.youtube.com/vi/95AyVwMMEJg/maxresdefault.jpg" alt="Watch my Pixar movie" class="video-preview-thumbnail">
+                    <div class="video-preview-overlay">
+                        <div class="video-btn">
+                            <div class="video-btn-icon">
+                                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            </div>
+                            <span class="video-btn-text">My life as a Pixar Movie</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bio -->
+                <p class="profile-bio">Built a camera app to <strong>500K downloads</strong> in college. Spent four years at <strong>McKinsey</strong> rebuilding performance engines and org structures for Fortune 500 financial turnarounds. Recently worked with <strong>YC founders</strong> on agentic sales platforms. Now at <strong>Berkeley</strong> B-school, exploring career options and tinkering with AI.</p>
+
+                <div class="section-divider"></div>
+
+                <!-- Career Timeline -->
+                <div class="column-title" style="margin-top: 0;">Career Journey</div>
+                <div class="career-timeline">
+                    <!-- Berkeley MBA -->
+                    <div class="career-item">
+                        <div class="career-item-header">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Seal_of_University_of_California%2C_Berkeley.svg/200px-Seal_of_University_of_California%2C_Berkeley.svg.png" alt="Berkeley" class="career-logo">
+                            <div class="career-info">
+                                <div class="career-title">MBA - UC Berkeley Haas</div>
+                                <div class="career-dates">Aug 2024 - May 2026</div>
+                            </div>
+                        </div>
+                        <div class="career-details">
+                            <div class="career-detail-item">
+                                <div class="career-detail-value">Exploring career options & tinkering with AI 👉</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FuseAI -->
+                    <div class="career-item">
+                        <div class="career-item-header">
+                            <img src="assets/logos/FuseAI logo.jpeg" alt="FuseAI" class="career-logo">
+                            <div class="career-info">
+                                <div class="career-title">AI Product Manager - FuseAI (YC S24)</div>
+                                <div class="career-dates">Apr 2025 - Jul 2025</div>
+                            </div>
+                        </div>
+                        <div class="career-details">
+                            <div class="career-detail-item">
+                                <div class="career-detail-label">Problem</div>
+                                <div class="career-detail-value">Startup teams lack expertise and time to stitch together dozens of outreach tools</div>
+                            </div>
+                            <div class="career-detail-item">
+                                <div class="career-detail-label">Solution</div>
+                                <div class="career-detail-value">Unified platform for lead generation, data enrichment, outreach sequencing, and CRM</div>
+                            </div>
+                            <div class="career-detail-item">
+                                <div class="career-detail-label">Scope</div>
+                                <div class="career-detail-value">Created working prototype of demo call live-assistant to surface real-time talk tracks and prospect insights</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- McKinsey -->
+                    <div class="career-item">
+                        <div class="career-item-header">
+                            <img src="assets/logos/McKinsey logo.png" alt="McKinsey" class="career-logo">
+                            <div class="career-info">
+                                <div class="career-title">Senior Digital Transformation Associate - McKinsey</div>
+                                <div class="career-dates">Mar 2021 - Mar 2025</div>
+                            </div>
+                        </div>
+                        <div class="career-details">
+                            <div class="career-detail-item">
+                                <div class="career-detail-label">Industry</div>
+                                <div class="career-detail-value">Consumer electronics manufacturing, high-performance computing, pharmaceutical</div>
+                            </div>
+                            <div class="career-detail-item">
+                                <div class="career-detail-label">Engagement Model</div>
+                                <div class="career-detail-value">P&L-based engagements, actively shaping client operations and co-owning financial outcomes</div>
+                            </div>
+                            <div class="career-detail-item">
+                                <div class="career-detail-label">Geography</div>
+                                <div class="career-detail-value">Greater China, Germany, North America</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Frismo -->
+                    <div class="career-item">
+                        <div class="career-item-header">
+                            <img src="assets/logos/Frismo logo.png" alt="Frismo" class="career-logo">
+                            <div class="career-info">
+                                <div class="career-title">Co-founder / CEO - Frismo</div>
+                                <div class="career-dates">Jan 2016 - Dec 2016</div>
+                            </div>
+                        </div>
+                        <div class="career-details">
+                            <div class="career-detail-item">
+                                <div class="career-detail-label">Problem</div>
+                                <div class="career-detail-value">Solo travelers unable to capture quality portraits when asking strangers to take photos</div>
+                            </div>
+                            <div class="career-detail-item">
+                                <div class="career-detail-label">Solution</div>
+                                <div class="career-detail-value">Developed iOS app with ML-powered real-time composition guidance to coach photo-takers toward ideal framing</div>
+                            </div>
+                            <div class="career-detail-item">
+                                <div class="career-detail-label">Result</div>
+                                <div class="career-detail-value">Scaled to 500K downloads, #3 App Store ranking, <a href="https://agirls.aotter.net/post/52127" target="_blank">viral media attention</a></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tsinghua -->
+                    <div class="career-item">
+                        <div class="career-item-header">
+                            <img src="assets/logos/Tsing Hua Logo.png" alt="Tsinghua" class="career-logo">
+                            <div class="career-info">
+                                <div class="career-title">B.S. Computer Science - Tsing Hua University</div>
+                                <div class="career-dates">2015 - 2020</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Column 2: Side Projects (Parent) -->
+        <section class="column column-parent" id="column-1">
+            <div class="column-inner">
+                <div class="column-title">Tinkering with AI...</div>
+
+                <div class="nested-columns">
+                    <!-- Nested Column: Personal Problems -->
+                    <div class="nested-column">
+                        <div class="nested-column-title"><span class="mobile-prefix">Tinkering with AI... </span>... to solve personal problems</div>
+                        <div id="projects-personal"></div>
+                    </div>
+
+                    <!-- Nested Column: For Fun -->
+                    <div class="nested-column">
+                        <div class="nested-column-title"><span class="mobile-prefix">Tinkering with AI... </span>... just for fun</div>
+                        <div id="projects-fun"></div>
+                    </div>
                 </div>
             </div>
-        </footer>
-        
-        <a href="/tinkering" class="scroll-arrow" aria-label="View AI Experiments">
-            <svg viewBox="0 0 24 24">
-                <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-        </a>
+        </section>
+
+        <!-- Column 3: Writings -->
+        <section class="column" id="column-2">
+            <div class="column-inner">
+                <div class="column-title">Writings</div>
+
+                <a href="/writings/make-your-own-luck" class="writing-item">
+                    <div class="writing-item-title">You make your own luck</div>
+                    <div class="writing-item-date">December 2025</div>
+                </a>
+
+                <a href="/writings/chocolate-factory" class="writing-item">
+                    <div class="writing-item-title">A kid walking into a chocolate factory</div>
+                    <div class="writing-item-date">December 2025</div>
+                </a>
+
+                <a href="/writings/vibe-coding-hobby" class="writing-item">
+                    <div class="writing-item-title">Vibe coding as a hobby</div>
+                    <div class="writing-item-date">December 2025</div>
+                </a>
+
+                <a href="/writings/vibe-coding" class="writing-item">
+                    <div class="writing-item-title">5 things I learned after 100 hours of vibe coding</div>
+                    <div class="writing-item-date">December 2025</div>
+                </a>
+
+                <a href="/writings/how-i-work" class="writing-item">
+                    <div class="writing-item-title">How I work</div>
+                    <div class="writing-item-date">November 2025</div>
+                </a>
+
+                <a href="/writings/context-switching" class="writing-item">
+                    <div class="writing-item-title">The increasing importance of context switching</div>
+                    <div class="writing-item-date">November 2025</div>
+                </a>
+
+                <a href="/writings/goals" class="writing-item">
+                    <div class="writing-item-title">Goals in life</div>
+                    <div class="writing-item-date">May 2025</div>
+                </a>
+
+                <a href="/writings/leaving-mckinsey" class="writing-item">
+                    <div class="writing-item-title">Leaving McKinsey</div>
+                    <div class="writing-item-date">April 2025</div>
+                </a>
+
+                <a href="/writings/mental-models" class="writing-item">
+                    <div class="writing-item-title">Mental models</div>
+                    <div class="writing-item-date">January 2025</div>
+                </a>
+
+                <a href="/writings/english" class="writing-item">
+                    <div class="writing-item-title">Now is the time to master English</div>
+                    <div class="writing-item-date">October 2024</div>
+                </a>
+
+                <a href="/writings/fulfillment" class="writing-item">
+                    <div class="writing-item-title">How to find fulfillment</div>
+                    <div class="writing-item-date">September 2024</div>
+                </a>
+
+                <a href="/writings/writing" class="writing-item">
+                    <div class="writing-item-title">Why write when you can just think?</div>
+                    <div class="writing-item-date">May 2024</div>
+                </a>
+
+                <a href="/writings/fermi-paradox" class="writing-item">
+                    <div class="writing-item-title">Learning Kardashev Scale, Fermi Paradox, and ASI</div>
+                    <div class="writing-item-date">May 2024</div>
+                </a>
+
+                <a href="/writings/charlies-almanack" class="writing-item">
+                    <div class="writing-item-title">Notes from reading Charlie's Almanack</div>
+                    <div class="writing-item-date">February 2024</div>
+                </a>
+
+                <a href="/writings/llm-stack" class="writing-item">
+                    <div class="writing-item-title">What's under the hood of LLMs?</div>
+                    <div class="writing-item-date">January 2024</div>
+                </a>
+
+                <a href="/writings/marriage" class="writing-item">
+                    <div class="writing-item-title">How I decided to get married at 26</div>
+                    <div class="writing-item-date">December 2023</div>
+                </a>
+
+                <a href="/writings/wisdom-intelligence" class="writing-item">
+                    <div class="writing-item-title">Wisdom vs. Intelligence</div>
+                    <div class="writing-item-date">November 2023</div>
+                </a>
+
+                <a href="/writings/people-first" class="writing-item">
+                    <div class="writing-item-title">People comes first</div>
+                    <div class="writing-item-date">June 2022</div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav">
+        <a href="#" class="mobile-nav-logo" onclick="scrollToColumn(0); return false;">Jack Shen</a>
+        <div class="mobile-nav-arrows">
+            <button class="mobile-nav-btn" id="mobilePrev" aria-label="Previous column">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <button class="mobile-nav-btn" id="mobileNext" aria-label="Next column">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+        <!-- Dot indicator hidden on mobile by CSS -->
+        <div class="mobile-nav-indicator">
+            <div class="mobile-nav-dot active" data-column="0"></div>
+            <div class="mobile-nav-dot" data-column="1"></div>
+            <div class="mobile-nav-dot" data-column="2"></div>
+            <div class="mobile-nav-dot" data-column="3"></div>
+        </div>
+    </nav>
+
+    <!-- Project Expanded Modal -->
+    <div class="project-expanded-overlay" id="projectModal">
+        <div class="project-expanded-panel">
+            <div class="project-expanded-content" id="projectModalContent">
+                <!-- Content will be injected here -->
+            </div>
+            <div class="project-nav">
+                <div class="project-nav-left" id="projectNavLeft">
+                    <!-- CTA button will be injected here -->
+                </div>
+                <div class="project-nav-right">
+                    <button class="project-nav-btn" id="projectPrev">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <button class="project-nav-close" id="projectNavClose">Close</button>
+                    <button class="project-nav-btn" id="projectNext">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal-overlay" id="modal">
-        <div class="modal-content">
-            <button class="modal-close" id="modalClose">×</button>
-            <div class="modal-header" id="modalHeader">
-                <h2 class="modal-title" id="modalTitle">Title</h2>
+    <!-- Writing Expanded Modal -->
+    <div class="project-expanded-overlay" id="writingModal">
+        <div class="project-expanded-panel">
+            <div class="project-expanded-content" id="writingModalContent">
+                <!-- Content will be injected here -->
             </div>
-            <div class="modal-body" id="modalBody">
-                <p>Content goes here...</p>
+            <div class="project-nav">
+                <button class="project-nav-btn" id="writingPrev">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <button class="project-nav-close" id="writingNavClose">Close</button>
+                <button class="project-nav-btn" id="writingNext">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Video Modal -->
-    <div class="modal-overlay" id="videoModal">
-        <div class="modal-content" style="max-width: 90%; max-height: 90vh; padding: 0; background: #000000; overflow: hidden;">
-            <button class="modal-close" id="videoModalClose" style="z-index: 10;">×</button>
-            <video id="pixarVideo" controls style="width: 100%; height: 100%; display: block;">
-                <source src="assets/media/Jacks Story Pixar Style.mp4" type="video/mp4">
-                <track src="assets/media/subtitles.vtt" kind="subtitles" srclang="en" label="English" default>
-                Your browser does not support the video tag.
-            </video>
+    <div class="video-modal-overlay" id="videoModal">
+        <button class="video-modal-close" id="videoModalClose">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <div class="video-modal-content">
+            <iframe id="youtubePlayer" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
     <script>
-        const modal = document.getElementById('modal');
-        const modalHeader = document.getElementById('modalHeader');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalBody = document.getElementById('modalBody');
-        const modalClose = document.getElementById('modalClose');
-        const underlineElements = document.querySelectorAll('.underline[data-tooltip]');
+        // Navigation Arrows
+        const columnsContainer = document.getElementById('columnsContainer');
+        const navLeft = document.getElementById('navLeft');
+        const navRight = document.getElementById('navRight');
+        const scrollAmount = 420;
 
-        // Video modal elements
+        navLeft.addEventListener('click', () => {
+            columnsContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+
+        navRight.addEventListener('click', () => {
+            columnsContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+
+        // Video Modal
         const videoModal = document.getElementById('videoModal');
         const videoModalClose = document.getElementById('videoModalClose');
-        const pixarVideo = document.getElementById('pixarVideo');
-        const pixarButton = document.querySelector('.pixar-button');
+        const youtubePlayer = document.getElementById('youtubePlayer');
+        const pixarBtn = document.getElementById('pixarBtn');
+        const youtubeVideoId = '95AyVwMMEJg';
 
-        // Enable subtitles by default
-        pixarVideo.addEventListener('loadedmetadata', function() {
-            const tracks = pixarVideo.textTracks;
-            if (tracks.length > 0) {
-                tracks[0].mode = 'showing';
-            }
-        });
-
-        // Open video modal when Pixar button is clicked
-        pixarButton.addEventListener('click', function(e) {
-            e.stopPropagation();
+        pixarBtn.addEventListener('click', () => {
+            youtubePlayer.src = `https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&rel=0`;
             videoModal.classList.add('active');
             document.body.style.overflow = 'hidden';
-            pixarVideo.play();
-            // Ensure subtitles are showing
-            const tracks = pixarVideo.textTracks;
-            if (tracks.length > 0) {
-                tracks[0].mode = 'showing';
-            }
+            document.body.classList.add('modal-open');
         });
 
-        // Close video modal
-        videoModalClose.addEventListener('click', function() {
+        function closeVideoModal() {
             videoModal.classList.remove('active');
             document.body.style.overflow = '';
-            pixarVideo.pause();
-            pixarVideo.currentTime = 0;
-        });
+            document.body.classList.remove('modal-open');
+            youtubePlayer.src = '';
+        }
 
-        // Close video modal when clicking overlay
-        videoModal.addEventListener('click', function(e) {
+        function openVideoModal(videoUrl) {
+            // Convert embed URL to autoplay version
+            youtubePlayer.src = videoUrl + '?autoplay=1&rel=0';
+            videoModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            document.body.classList.add('modal-open');
+        }
+
+        videoModalClose.addEventListener('click', closeVideoModal);
+
+        videoModal.addEventListener('click', (e) => {
             if (e.target === videoModal) {
-                videoModal.classList.remove('active');
-                document.body.style.overflow = '';
-                pixarVideo.pause();
-                pixarVideo.currentTime = 0;
+                closeVideoModal();
             }
         });
 
-        // Modal content data
-        const modalData = {
-            'Camera App': {
-                title: 'Frismo - Co-founder / CEO',
-                logo: 'assets/logos/Frismo logo.png',
-                year: '2017',
-                content: `
-                    <ul>
-                        <li><strong>PROBLEM:</strong> Solo travelers unable to capture quality portraits when asking strangers to take photos</li>
-                        <li><strong>SOLUTION:</strong> Developed iOS app with ML-powered real-time composition guidance to coach photo-takers toward ideal framing</li>
-                        <li><strong>RESULT:</strong> Scaled to 500K downloads, #3 App Store ranking, <a href="https://agirls.aotter.net/post/52127" target="_blank" style="color: #000000; text-decoration: underline;">viral media attention</a></li>
-                    </ul>
-                `
-            },
-            'McKinsey': {
-                title: 'McKinsey & Company — Senior Digital Transformation Associate',
-                logo: 'assets/logos/McKinsey logo.png',
-                year: '2015-2021',
-                content: `
-                    <ul>
-                        <li><strong>INDUSTRY:</strong> Consumer electronics manufacturing, high-performance computing, pharmaceutical</li>
-                        <li><strong>ADVISING MODEL:</strong> P&L-based engagements, actively shaping client operations and co-owning financial outcomes</li>
-                        <li><strong>GEOGRAPHY:</strong> Greater China, Germany, North America</li>
-                    </ul>
-                `
-            },
-            'Agentic Sales Platforms': {
-                title: 'FuseAI — AI Product Manager | All-in-one Agentic Sales Platform',
-                titleLink: 'https://tryfuse.ai/',
-                logo: 'assets/logos/FuseAI logo.jpeg',
-                year: '2025',
-                content: `
-                    <ul>
-                        <li><strong>PROBLEM:</strong> Startup teams lack expertise and time to stitch together dozens of outreach tools</li>
-                        <li><strong>SOLUTION:</strong> Unified platform for lead generation, data enrichment, outreach sequencing, and CRM</li>
-                        <li><strong>SCOPE:</strong> Created working prototype of demo call live-assistant to surface real-time talk tracks and prospect insights; designed landing page; analyzed competitors; drove SEO optimization through content</li>
-                    </ul>
-                `
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && videoModal.classList.contains('active')) {
+                closeVideoModal();
             }
-        };
+        });
+        // Project Expanded Modal
+        // Projects data loaded from JSON files
+        let projectsData = [];
 
-        // Open modal
-        underlineElements.forEach(element => {
-            element.addEventListener('click', function(e) {
+        // Load projects from JSON files
+        async function loadProjectsData() {
+            try {
+                const manifestResponse = await fetch('/tinkering/projects/manifest.json');
+                const projectIds = await manifestResponse.json();
+
+                const projectPromises = projectIds.map(async (id) => {
+                    const response = await fetch(`/tinkering/projects/${id}.json`);
+                    return response.json();
+                });
+
+                projectsData = await Promise.all(projectPromises);
+                console.log('Projects loaded:', projectsData.length);
+
+                // Render project cards after loading
+                renderProjectCards();
+            } catch (error) {
+                console.error('Error loading projects:', error);
+            }
+        }
+
+        // Render project cards dynamically
+        function renderProjectCards() {
+            const personalContainer = document.getElementById('projects-personal');
+            const funContainer = document.getElementById('projects-fun');
+
+            if (!personalContainer || !funContainer) return;
+
+            projectsData.forEach((project, index) => {
+                const cardHtml = `
+                    <a href="#" class="project-card" data-project-index="${index}">
+                        <div class="project-card-media">
+                            <img src="${project.thumbnail}" alt="${project.title}">
+                        </div>
+                        <div class="project-card-content">
+                            <div class="project-card-title">${project.title}</div>
+                            <div class="project-card-desc">${project.cardDesc}</div>
+                        </div>
+                    </a>
+                `;
+
+                if (project.category === 'personal') {
+                    personalContainer.innerHTML += cardHtml;
+                } else {
+                    funContainer.innerHTML += cardHtml;
+                }
+            });
+
+            // Set up click handlers for dynamically created cards
+            setupProjectCardHandlers();
+        }
+
+        // Set up click handlers for project cards
+        function setupProjectCardHandlers() {
+            const cards = document.querySelectorAll('.project-card[data-project-index]');
+            cards.forEach(card => {
+                card.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const index = parseInt(card.getAttribute('data-project-index'));
+                    openProjectModal(index);
+                });
+            });
+        }
+
+        // Initialize projects on page load
+        loadProjectsData();
+
+        const projectModal = document.getElementById('projectModal');
+        const projectModalContent = document.getElementById('projectModalContent');
+        const projectNavClose = document.getElementById('projectNavClose');
+        const projectPrev = document.getElementById('projectPrev');
+        const projectNext = document.getElementById('projectNext');
+        let currentProjectIndex = 0;
+
+        function renderProjectContent(project) {
+            let html = '';
+
+            html += `<h1 class="project-expanded-title">${project.title}</h1>`;
+
+            if (project.subtitle) {
+                html += `<p class="project-expanded-desc" style="font-style: italic; color: #666;">${project.subtitle}</p>`;
+            }
+
+            if (project.tags) {
+                html += `<div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">`;
+                project.tags.forEach(tag => {
+                    html += `<span style="display: inline-block; padding: 4px 10px; background: #f3f4f6; color: #374151; border-radius: 4px; font-size: 12px; font-weight: 500;">${tag}</span>`;
+                });
+                html += `</div>`;
+            }
+
+            if (project.video) {
+                // Extract YouTube video ID from embed URL
+                const videoId = project.video.replace('https://www.youtube.com/embed/', '');
+                html += `
+                    <div class="video-preview project-video-preview" data-video-url="${project.video}">
+                        <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Watch demo" class="video-preview-thumbnail">
+                        <div class="video-preview-overlay">
+                            <div class="video-btn">
+                                <div class="video-btn-icon">
+                                    <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                </div>
+                                <span class="video-btn-text">Watch Demo</span>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+
+            if (project.tldr) {
+                html += `<div class="project-expanded-section" style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 24px;">`;
+                html += `<h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">TL;DR</h3>`;
+                html += `<ul style="padding-left: 20px; margin: 0;">`;
+                project.tldr.forEach(item => {
+                    html += `<li style="font-size: 16px; line-height: 1.7; color: #374151; margin-bottom: 10px;">${item}</li>`;
+                });
+                html += `</ul></div>`;
+            }
+
+            if (project.paragraphs) {
+                project.paragraphs.forEach(p => {
+                    html += `<p class="project-expanded-section" style="font-size: 16px; line-height: 1.7; color: #374151; margin-bottom: 16px;">${p}</p>`;
+                });
+            }
+
+            if (project.sections) {
+                project.sections.forEach(section => {
+                    html += `<div class="project-expanded-section">`;
+                    html += `<h2 class="project-expanded-section-title">${section.title}</h2>`;
+                    if (section.items) {
+                        html += `<ul>`;
+                        section.items.forEach(item => {
+                            html += `<li>${item}</li>`;
+                        });
+                        html += `</ul>`;
+                    }
+                    if (section.content) {
+                        html += `<p>${section.content}</p>`;
+                    }
+                    html += `</div>`;
+                });
+            }
+
+            return html;
+        }
+
+        function openProjectModal(index) {
+            currentProjectIndex = index;
+            const project = projectsData[index];
+            if (!project) return;
+
+            projectModalContent.innerHTML = renderProjectContent(project);
+            projectModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            document.body.classList.add('modal-open');
+
+            // Update CTA button in footer
+            const navLeft = document.getElementById('projectNavLeft');
+            if (project.tryLink) {
+                navLeft.innerHTML = `<a href="${project.tryLink}" target="_blank" class="project-nav-cta">Try it now →</a>`;
+            } else {
+                navLeft.innerHTML = '';
+            }
+
+            // Set up video preview click handlers
+            const videoPreview = projectModalContent.querySelector('.project-video-preview');
+            if (videoPreview) {
+                videoPreview.addEventListener('click', () => {
+                    const videoUrl = videoPreview.getAttribute('data-video-url');
+                    openVideoModal(videoUrl);
+                });
+            }
+
+            // Update nav button states
+            projectPrev.style.opacity = index === 0 ? '0.3' : '1';
+            projectPrev.style.pointerEvents = index === 0 ? 'none' : 'auto';
+            projectNext.style.opacity = index === projectsData.length - 1 ? '0.3' : '1';
+            projectNext.style.pointerEvents = index === projectsData.length - 1 ? 'none' : 'auto';
+        }
+
+        function closeProjectModal() {
+            projectModal.classList.remove('active');
+            document.body.style.overflow = '';
+            document.body.classList.remove('modal-open');
+            // Stop any playing videos
+            const iframes = projectModalContent.querySelectorAll('iframe');
+            iframes.forEach(iframe => {
+                iframe.src = iframe.src;
+            });
+        }
+
+        projectNavClose.addEventListener('click', closeProjectModal);
+
+        projectPrev.addEventListener('click', () => {
+            if (currentProjectIndex > 0) {
+                openProjectModal(currentProjectIndex - 1);
+            }
+        });
+
+        projectNext.addEventListener('click', () => {
+            if (currentProjectIndex < projectsData.length - 1) {
+                openProjectModal(currentProjectIndex + 1);
+            }
+        });
+
+        projectModal.addEventListener('click', (e) => {
+            if (e.target === projectModal) {
+                closeProjectModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (projectModal.classList.contains('active')) {
+                if (e.key === 'Escape') {
+                    closeProjectModal();
+                } else if (e.key === 'ArrowLeft' && currentProjectIndex > 0) {
+                    openProjectModal(currentProjectIndex - 1);
+                } else if (e.key === 'ArrowRight' && currentProjectIndex < projectsData.length - 1) {
+                    openProjectModal(currentProjectIndex + 1);
+                }
+            }
+        });
+
+        // Writing Expanded Modal
+        const writingsData = [
+            { id: 'make-your-own-luck', title: 'You Make Your Own Luck', date: 'December 2025', content: '<p>You make your own luck.</p><p>Luck doesn\'t drop out of the sky. You raise the odds by increasing the surface area where something good can hit you. And that only happens when you do things most people don\'t do.</p><p>When I started vibe coding and posting my work, my life changed. People I never thought I\'d meet suddenly showed up. None of that would have happened if I waited for the "right moment" or a perfect plan.</p><p>Action creates information. Information shows you the next step. Sitting still gives you nothing. So even when you don\'t know what to do, do something. Anything. That\'s how luck finds you.</p>' },
+            { id: 'chocolate-factory', title: 'A Kid Walking Into a Chocolate Factory', date: 'December 2025', content: '<p>Growing up in Taiwan, SF felt like a place full of imagination and possibilities. On my commute, I listened to All-In, Invest Like the Best, Uncapped, and No Priors. On Twitter, investors and founders kept saying "SF is back." It felt like a magical chocolate factory on the other side of the Pacific -- bright, loud, impossible.</p><p>When I finally landed, the airport was covered with AI banners. It felt like someone opened the factory doors and said, "Go ahead." So I ran in.</p><p>I spent my time awake trying and gobbling up every flavor of the chocolate. Demo nights where people shipped wild ideas in a week, founder coffee chats, even the sting of getting rejected by a 20-year-old dropout for a full-time role. Everything was colorful. Everything was sugar.</p><p>But after a while, the sweetness turned heavy. One night, leaving an event full of cracked founders with millions of ARR, the emptiness hit. People asked what I was building, and all I had was, "I used to be at McKinsey."</p><p>And then it clicked: I\'d been talking about being "AI obsessed" but never actually building. So I downloaded Claude Code. That small act broke the spell.</p><p>I started following my intellectual curiosity again. Solving my own problems. Making instead of chasing. You don\'t network your way through the factory. You understand the machine. You make your own chocolate. And people naturally wander over.</p><p>I came here like a kid walking into a chocolate factory -- wide-eyed, overwhelmed, trying every piece. Now I\'m learning how the machines work, and life feels better when I\'m building.</p>' },
+            { id: 'vibe-coding-hobby', title: 'Vibe Coding as a Hobby', date: 'December 2025', content: '<p>I realized something funny recently: vibe coding has become a hobby for me.</p><p>I don\'t do it to start a business or make money. I do it because it\'s fun. It is a form of self-expression. The same way some people pick up a guitar or go for a run, I open my terminal and start building small things that make me delightful.</p><p>Tennis is my way of flexing my body and dealing with pressure. Vibe coding is my way of flexing my creative muscle. No stakes. No goals. Just curiosity and play.</p><p>And that makes it even more enjoyable.</p>' },
+            { id: 'vibe-coding', title: '5 Things I Learned After 100 Hours of Vibe Coding', date: 'December 2025', content: '<p><strong>1. Be Braver Into Unknown.</strong> If you know the "end state," you can ask AI to fill in the messy "middle".</p><p><strong>2. Plan > Execute.</strong> Always start with a PRD and list the tasks. Debugging later costs way more time than a few minutes of thinking up front.</p><p><strong>3. AI is Expansionary.</strong> The more I can create, the more I want to create.</p><p><strong>4. Taste & Judgment Matters More Than Ever.</strong> Execution isn\'t the bottleneck anymore, but you still need to know what "great" looks like to guide the AI.</p><p><strong>5. First-Principle Problem Solving Still Wins.</strong> Break things into fundamental building blocks so you can unblock the AI when it gets stuck.</p>' },
+            { id: 'how-i-work', title: 'How I Work', date: 'November 2025', content: '<p><strong>Bias towards actions.</strong> I understand the system first, then move fast with a high bar. Even if I\'m unsure what to do, I will just do anything because action produces information.</p><p><strong>Sequences of sprints.</strong> I go extremely hard (100hrs/wk at McKinsey), then rest on vacations.</p><p><strong>Let the best ideas win.</strong> Allergic to politics and sloppy thinking.</p><p><strong>Prefer shipping over perfect planning.</strong> I would rather ship a smaller, real version and iterate than wait for an "optimal" strategy on slides.</p><p><strong>Ruthlessly truth seeking.</strong> Strong opinions, loosely held. I am fine changing my mind when the data or reality contradicts my view.</p>' },
+            { id: 'context-switching', title: 'The increasing importance of context switching', date: 'November 2025', content: '<p>I realized something weird: I\'m working like a McKinsey partner now.</p><p>Not the strategy part. The context switching part. Partners spend their days jumping between back-to-back meetings with different clients. They hold multiple contexts, switch constantly, never finish one thing before starting another. That was a senior skill.</p><p>Now I\'m doing it because AI creates these gaps. I start a build, wait sixty seconds, flip to another project. The tools force you to orchestrate multiple things at once.</p><p>You\'re commanding agents instead of executing yourself. That\'s what makes you senior—you coordinate instead of build. Junior people are getting shoved into this pattern whether they\'re ready or not.</p><p>Context switching is the new critical skill. AI made it mandatory for everyone.</p>' },
+            { id: 'goals', title: 'Goals in life', date: 'May 2025', content: '<ol><li>Become a father</li><li>Find and keep the woman for me</li><li>Chase my best self</li><li>Take more risks</li><li>Create a product or service that impacts millions</li><li>Stay close to mom and family</li><li>Look back and enjoy the view</li><li>Just keep living</li></ol>' },
+            { id: 'leaving-mckinsey', title: 'Leaving McKinsey', date: 'April 2025', content: '<p>Hi friends,</p><p>Today marks the end of my four-year McKinsey journey, and I\'m deeply grateful for the memories, the lessons, and most of all—the people.</p><p>From pulling all-nighters reconciling L5 numbers to fine-tuning Excel formulas for a leaner model; from belting out \'90s songs in a smoky Stuttgart KTV, to sipping Hendricks out of bowls because glasses just wouldn\'t do—these are the moments where work and life blurred into something beautiful and unforgettable.</p><p>Through it all, I\'ve come to understand what leadership truly means—lifting up those around me to feel bolder and more capable of doing great things. I\'ve learned to be resilient—pushing through self-doubt and remembering that when I feel drowned, I\'m likely only a third of the way to my full potential.</p><p>Thank you for helping me become a more confident and humble person.</p><p>Looking ahead, my wife and I are moving to the U.S. this summer, where I\'ll be starting my MBA and pivoting my career toward a product-building role in the tech space.</p><p>Thank you for everything!</p><p>Jack</p>' },
+            { id: 'mental-models', title: 'Mental models', date: 'January 2025', content: '<p>Human psychology tortures reality to fit your mental models. With only one or two models, you force every problem into them. You need models from multiple disciplines because wisdom doesn\'t concentrate in one field.</p><p><strong>Amara\'s Law:</strong> You overestimate technology\'s short-term effect and underestimate its long-term impact.</p><p><strong>Two-track analysis:</strong> Examine rational factors governing interests plus subconscious influences operating automatically.</p><p><strong>Inversion:</strong> Turn problems into reverse. Find where you would die and avoid it.</p><p><strong>Critical mass:</strong> The traction point where products become self-sustaining through network effects and scale economies.</p><p><strong>Cancer surgery formula:</strong> Find anything sound in a mess that can survive independently. Cut everything else away. Repeat.</p>' },
+            { id: 'english', title: 'Now is the time to master English', date: 'October 2024', content: '<p>AI collapsed the barrier between human thought and machine execution. The new competitive advantage is language precision.</p><p>For decades, we instructed machines through code or software interfaces—both requiring technical expertise. AI removed these constraints. We now instruct machines with natural language, just like we communicate with people.</p><p>This changes everything. Those who articulate thoughts structurally and precisely connect their biological brains with unlimited machine capacity. They have machines execute and expand their ideas at scale.</p><p>Your imagination no longer faces practical limits. You can create software, images, videos in seconds by expressing creativity clearly through language.</p><p>Now is the time to master English communication. It makes you a better leader and mobilizer. More critically, it makes you the commander of an infinite army of intelligent machines.</p>' },
+            { id: 'fulfillment', title: 'How to find fulfillment', date: 'September 2024', content: '<p>People need internal motivation. It arises under four conditions: autonomy, mastery, purpose, and joy.</p><p><strong>Autonomy:</strong> You decide what to do and how to do it. The best people don\'t need management—give them a clear goal and they find their own path forward.</p><p><strong>Mastery:</strong> You want the opportunity to do great work. Deep conversations with intellectual people catalyze meaningful progress.</p><p><strong>Purpose:</strong> In 1962, a janitor at NASA answered President Kennedy\'s question about his job: "I\'m helping put a man on the moon." Everyone craves being part of something bigger than themselves.</p><p><strong>Joy:</strong> You love doing it. You enter flow state—intoxicating and recharging. You make significant progress, pushing yourself almost to the limit without stretching so hard you burn out.</p>' },
+            { id: 'writing', title: 'Why write when you can just think?', date: 'May 2024', content: '<p>Writing exposes what thinking hides.</p><p>In your head, ideas feel coherent. On paper, logical flaws emerge. Writing forces structured formulation and reveals gaps your mind skips over.</p><p>You can write down more than you can think, which broadens your bandwidth for handling ideas. Once you distill ideas into a well-thought essay, it becomes a building block for future thinking and daily conversations.</p><p>The benefit compounds. The person who formulates and communicates the best argument mobilizes resources toward a vision. Words change the world one sentence at a time.</p><p>How to write: Form key questions you intend to answer. Questions create your outline. Write sentences around it for your first draft. Then edit. Rewrite sentences to test if they sound and flow better. Wait days between passes. Fresh eyes reveal what you wrote versus what you thought.</p>' },
+            { id: 'fermi-paradox', title: 'Learning Kardashev Scale, Fermi Paradox, and ASI', date: 'May 2024', content: '<p>Where is everybody? The universe should be teeming with intelligent life. High probability suggests extraterrestrial civilizations exist. Yet we see no evidence. No contact. No signals. This is the Fermi Paradox.</p><p><strong>Explanation 1:</strong> The Great Filter theory suggests a wall exists somewhere between pre-life and Type III intelligence. Nearly all attempts at life hit this barrier and can\'t pass through.</p><p><strong>Explanation 2:</strong> They exist but we haven\'t heard from them. Perhaps they visited before we existed, we live remotely, physical colonization is primitive thinking, they\'re observing us, or they\'re here but we\'re too primitive to perceive them.</p><p>The Kardashev Scale classifies civilizations: Type I harnesses planetary energy. Type II harnesses their host star. Type III harnesses their entire galaxy.</p><p>ASI opens the possibility of immortality for our species. It will also make such dramatic impact that it likely knocks humanity off the balance beam—toward transcendence or extinction.</p>' },
+            { id: 'charlies-almanack', title: 'Notes from reading Charlie\'s Almanack', date: 'February 2024', content: '<ul><li>Charlie counts <strong>preparation</strong>, <strong>patience, discipline</strong>, and <strong>objectivity</strong> among his most fundamental guiding principles.</li><li>Instead of making a superficial assessment, Charlie <strong>conducts a comprehensive analysis of both the internal workings and the larger ecosystem</strong>.</li><li>Charlie focuses first on what to avoid—<strong>on what <em>not</em> to do</strong>—before considering affirmative steps.</li><li><strong>Quickly eliminate the big universe of what not to do</strong>; follow up with a fluent, multidisciplinary attack on what remains; then act decisively when the right circumstances appear.</li><li>He practices <strong>"extreme patience combined with extreme decisiveness."</strong></li><li><strong>"Invert, always invert."</strong> Seek good judgment by collecting instances of bad judgment, then pondering ways to avoid such outcomes.</li></ul>' },
+            { id: 'llm-stack', title: 'What\'s under the hood of LLMs?', date: 'January 2024', content: '<p>The LLM stack has 4 layers:</p><p><strong>1. Data layer</strong> - RAG allows LLMs to make predictions based on a corpus of input data. Includes ELT & featurization, vector storage, and search & retrieval.</p><p><strong>2. Model layer</strong> - Two paths: large foundation models dominate, or fine-tuned models for each use case. Components: core model, serving & computing, model routing, and fine-tuning.</p><p><strong>3. Deployment layer</strong> - Security & governance, observability & evaluation, product analytics, and orchestration & LLMOps.</p><p><strong>4. Interface layer</strong> - 3rd party API interoperability and user interfaces beyond chat.</p>' },
+            { id: 'marriage', title: 'How I decided to get married at 26', date: 'December 2023', content: '<p>People worry about getting married too young. They\'re measuring the wrong thing.</p><p>I got engaged at 26—not because I\'d reached some magic age, but because I\'d built a framework for the decision and my partner met every criterion.</p><p>The framework: Marriage is 50% finding the right person and 50% committing to hard work.</p><p>The right person has three qualities: Complementary personalities that balance your weaknesses. Common values that align on what matters. Willingness to commit to each other\'s goals.</p><p>The hard work requires two capabilities: Team problem-solving through clear communication. Resilience to stay committed through hardship.</p><p>The real question isn\'t "Am I too young?" It\'s "Have I found the right person, and am I ready to do the work?"</p><p>I answered yes to both. The privilege of finding her early just means more years to build something extraordinary together.</p>' },
+            { id: 'wisdom-intelligence', title: 'Wisdom vs. Intelligence', date: 'November 2023', content: '<p>Wisdom is knowing what to do in most situations. Intelligence is knowing what to do in a few, spectacularly.</p><p>"Wise" people achieve high average outcomes across contexts. "Smart" people perform brilliantly in narrow domains.</p><p>Wisdom is harder to pin down than intelligence because it encompasses a grab-bag of qualities: self-discipline, experience, empathy. It\'s not one skill but consistent good judgment across situations.</p><p>The wise person knows what to do on average. The smart person knows what to do in specific cases, sometimes brilliantly. Both are valuable. They\'re not the same thing.</p>' },
+            { id: 'people-first', title: 'People comes first', date: 'June 2022', content: '<p>I recently turned down a team with strong learning potential. The reason was simple: the leaders were uninspiring.</p><p>I had no direct experience with them, so I connected the dots from multiple sources. Nobody had anything positive to say about their integrity, inspiration, or leadership. The pattern was clear enough. I passed.</p><p>Early in my career, I learned that uninspiring people ruin everything—no matter how interesting the work. You can be passionate about the industry and excited about the problems, but the wrong people make you miserable, unfulfilled, and stuck.</p><p>Exceptional leaders create the opposite effect. They bring joy, belonging, and inspiration. They help you reach your potential instead of blocking it.</p><p>But on people, don\'t compromise. That\'s the decision that shapes all the others.</p>' }
+        ];
+
+        const writingModal = document.getElementById('writingModal');
+        const writingModalContent = document.getElementById('writingModalContent');
+        const writingNavClose = document.getElementById('writingNavClose');
+        const writingPrev = document.getElementById('writingPrev');
+        const writingNext = document.getElementById('writingNext');
+        const writingItems = document.querySelectorAll('.writing-item');
+        let currentWritingIndex = 0;
+
+        function renderWritingContent(writing) {
+            let html = '';
+            html += '<h1 class="project-expanded-title">' + writing.title + '</h1>';
+            html += '<div style="font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 32px;">' + writing.date + '</div>';
+            html += '<div class="writing-content-body">' + writing.content + '</div>';
+            return html;
+        }
+
+        function openWritingModal(index) {
+            currentWritingIndex = index;
+            const writing = writingsData[index];
+            if (!writing) return;
+            writingModalContent.innerHTML = renderWritingContent(writing);
+            writingModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            document.body.classList.add('modal-open');
+            writingPrev.style.opacity = index === 0 ? '0.3' : '1';
+            writingPrev.style.pointerEvents = index === 0 ? 'none' : 'auto';
+            writingNext.style.opacity = index === writingsData.length - 1 ? '0.3' : '1';
+            writingNext.style.pointerEvents = index === writingsData.length - 1 ? 'none' : 'auto';
+        }
+
+        function closeWritingModal() {
+            writingModal.classList.remove('active');
+            document.body.style.overflow = '';
+            document.body.classList.remove('modal-open');
+        }
+
+        writingItems.forEach((item, index) => {
+            item.addEventListener('click', (e) => {
                 e.preventDefault();
-                const key = this.getAttribute('data-tooltip');
-
-                // Navigate to tinkering page
-                if (key === 'Tinkering with AI') {
-                    window.location.href = '/tinkering';
-                    return;
-                }
-                // Navigate to blog page
-                if (key === 'Blog') {
-                    window.location.href = '/writings';
-                    return;
-                }
-
-                const data = modalData[key];
-
-                if (data) {
-                    // Clear header
-                    modalHeader.innerHTML = '';
-
-                    // Remove existing year badge if any
-                    const existingYear = document.querySelector('.modal-year');
-                    if (existingYear) {
-                        existingYear.remove();
-                    }
-
-                    // Add logo if exists
-                    if (data.logo) {
-                        const logoImg = document.createElement('img');
-                        logoImg.src = data.logo;
-                        logoImg.alt = 'Logo';
-                        logoImg.className = 'modal-logo';
-                        modalHeader.appendChild(logoImg);
-                    }
-
-                    // Add title
-                    const titleElement = document.createElement('h2');
-                    titleElement.className = 'modal-title';
-
-                    // Make title clickable if titleLink exists
-                    if (data.titleLink) {
-                        const titleLink = document.createElement('a');
-                        titleLink.href = data.titleLink;
-                        titleLink.target = '_blank';
-                        titleLink.textContent = data.title;
-                        titleLink.style.color = '#000000';
-                        titleLink.style.textDecoration = 'none';
-                        titleLink.style.transition = 'opacity 0.2s';
-                        titleLink.onmouseover = function() { this.style.opacity = '0.6'; };
-                        titleLink.onmouseout = function() { this.style.opacity = '1'; };
-                        titleElement.appendChild(titleLink);
-                    } else {
-                        titleElement.textContent = data.title;
-                    }
-
-                    modalHeader.appendChild(titleElement);
-
-                    // Add year badge if exists
-                    if (data.year) {
-                        const yearBadge = document.createElement('div');
-                        yearBadge.className = 'modal-year';
-                        yearBadge.textContent = data.year;
-                        modalHeader.appendChild(yearBadge);
-                    }
-
-                    modalBody.innerHTML = data.content;
-                    modal.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                }
+                openWritingModal(index);
             });
         });
 
-        // Close modal
-        modalClose.addEventListener('click', function() {
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
-        });
+        writingNavClose.addEventListener('click', closeWritingModal);
+        writingPrev.addEventListener('click', function() { if (currentWritingIndex > 0) openWritingModal(currentWritingIndex - 1); });
+        writingNext.addEventListener('click', function() { if (currentWritingIndex < writingsData.length - 1) openWritingModal(currentWritingIndex + 1); });
+        writingModal.addEventListener('click', function(e) { if (e.target === writingModal) closeWritingModal(); });
 
-        // Close modal when clicking overlay
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        });
-
-        // Close modal with Escape key
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                if (modal.classList.contains('active')) {
-                    modal.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-                if (videoModal.classList.contains('active')) {
-                    videoModal.classList.remove('active');
-                    document.body.style.overflow = '';
-                    pixarVideo.pause();
-                    pixarVideo.currentTime = 0;
-                }
+            if (writingModal.classList.contains('active')) {
+                if (e.key === 'Escape') closeWritingModal();
+                else if (e.key === 'ArrowLeft' && currentWritingIndex > 0) openWritingModal(currentWritingIndex - 1);
+                else if (e.key === 'ArrowRight' && currentWritingIndex < writingsData.length - 1) openWritingModal(currentWritingIndex + 1);
             }
         });
 
+        // Mobile Navigation
+        const mobileNav = document.getElementById('mobileNav');
+        const mobilePrev = document.getElementById('mobilePrev');
+        const mobileNext = document.getElementById('mobileNext');
+        const mobileNavDots = document.querySelectorAll('.mobile-nav-dot');
+        const mainElement = document.querySelector('main');
+        let currentMobileColumn = 0;
+
+        // Get swipeable columns - on mobile this includes nested columns
+        function getMobileColumns() {
+            const isMobile = window.innerWidth <= 768;
+            if (isMobile) {
+                // On mobile: About, Solving Personal Problems, For Fun, Writings
+                return [
+                    document.getElementById('column-0'),
+                    document.querySelector('.nested-column:first-child'),
+                    document.querySelector('.nested-column:last-child'),
+                    document.getElementById('column-2')
+                ].filter(Boolean);
+            } else {
+                // On desktop: original 3 columns
+                return Array.from(document.querySelectorAll('main > section[id^="column-"]'));
+            }
+        }
+
+        function updateMobileNav() {
+            const columns = getMobileColumns();
+            mobileNavDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentMobileColumn);
+            });
+
+            // Update button states
+            mobilePrev.style.opacity = currentMobileColumn === 0 ? '0.3' : '1';
+            mobilePrev.disabled = currentMobileColumn === 0;
+            mobileNext.style.opacity = currentMobileColumn === columns.length - 1 ? '0.3' : '1';
+            mobileNext.disabled = currentMobileColumn === columns.length - 1;
+        }
+
+        function scrollToColumn(index) {
+            const columns = getMobileColumns();
+            if (index < 0 || index >= columns.length) return;
+            currentMobileColumn = index;
+            columns[index].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+            updateMobileNav();
+        }
+
+        mobilePrev.addEventListener('click', () => {
+            if (currentMobileColumn > 0) {
+                scrollToColumn(currentMobileColumn - 1);
+            }
+        });
+
+        mobileNext.addEventListener('click', () => {
+            const columns = getMobileColumns();
+            if (currentMobileColumn < columns.length - 1) {
+                scrollToColumn(currentMobileColumn + 1);
+            }
+        });
+
+        // Update nav on scroll (swipe detection)
+        let scrollTimeout;
+        mainElement.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const columns = getMobileColumns();
+                const scrollLeft = mainElement.scrollLeft;
+                // Column width is calc(100vw - 48px) + 12px gap
+                const columnWidth = window.innerWidth - 48 + 12;
+                const newIndex = Math.round(scrollLeft / columnWidth);
+                if (newIndex !== currentMobileColumn && newIndex >= 0 && newIndex < columns.length) {
+                    currentMobileColumn = newIndex;
+                    updateMobileNav();
+                }
+            }, 50);
+        });
+
+        // Allow clicking dots to navigate
+        mobileNavDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => scrollToColumn(index));
+        });
+
+        // Initialize mobile nav state
+        updateMobileNav();
     </script>
 
     <!-- Vercel Analytics -->

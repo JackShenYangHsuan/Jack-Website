@@ -1,0 +1,30 @@
+{
+  "id": "claude-code-music",
+  "title": "Music that plays with Claude Code",
+  "cardDesc": "Mac app that monitors Claude Code's CPU usage - music plays during execution, silence signals completion",
+  "thumbnail": "/assets/images/Claude Code Music Player Hero Image.png",
+  "category": "personal",
+  "video": "https://www.youtube.com/embed/b6_m9SNVrDw",
+  "tryLink": "https://jackshen.co/tinkering/claude-code-music/landing",
+  "tags": ["6hrs with Claude Code"],
+  "sections": [
+    {
+      "title": "Problem",
+      "items": [
+        "You want music while Claude Code runs but silence when execution finishes",
+        "Constantly checking if the session completed kills your flow",
+        "Manual play/pause means you're always half-monitoring instead of fully relaxing"
+      ]
+    },
+    {
+      "title": "Solution",
+      "items": [
+        "Built a Mac app that monitors Claude Code's CPU usage (10% threshold)",
+        "Music plays automatically when code is executing",
+        "Music stops when execution completes",
+        "The silence signals you to jump back and provide next steps",
+        "Press play once per session, then forget about it"
+      ]
+    }
+  ]
+}

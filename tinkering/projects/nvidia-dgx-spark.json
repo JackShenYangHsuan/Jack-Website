@@ -1,0 +1,34 @@
+{
+  "id": "nvidia-dgx-spark",
+  "title": "NVIDIA DGX Spark ROI analysis",
+  "cardDesc": "Cost analysis comparing DGX Spark ownership vs GPU rental and API calls for AI video generation",
+  "thumbnail": "/assets/images/DGX ROI Calc Hero Image.png",
+  "category": "fun",
+  "tryLink": "https://www.tryshortcut.ai/share/292f69ba-6033-4959-97f1-cebf2450bd42",
+  "tags": ["1hr with Shortcut.ai"],
+  "paragraphs": [
+    "NVIDIA DGX Spark might be the best Christmas gift to get for your creator friend. Let me explain.",
+    "I built a simple model (with Fundamental Research Labs's Shortcut.ai -- incredible product btw) for frontier-video generation and found that it breaks even if you make more than 58 min (~92% of utilization) of AI video per week compared to renting a GPU or using API calls. Plus all content run and stored locally."
+  ],
+  "sections": [
+    {
+      "title": "Key Numbers",
+      "items": [
+        "Break-even vs API: ~3 min video/week",
+        "Break-even vs GPU rental: ~58 min video/week",
+        "DGX Spark capacity: ~63 min video/week"
+      ]
+    },
+    {
+      "title": "Assumptions",
+      "items": [
+        "GPU performance for vid gen (token/sec): H100 200, DGX Spark 30",
+        "Workload: high-quality videos with 24 fps, 200 tokens per frame",
+        "H100 rate: $3.5 per hour",
+        "API call: $4 per 10 sec video (ref. OpenAI Sora)",
+        "DGX Spark useful life: 1 year",
+        "DGX Spark electricity cost: $0.03 per hour"
+      ]
+    }
+  ]
+}

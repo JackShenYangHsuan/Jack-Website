@@ -1,0 +1,33 @@
+{
+  "id": "command-center",
+  "title": "What if McKinsey consultants work AI-natively",
+  "cardDesc": "Multi-agent orchestration system that automates analysis while keeping consultants focused on client counseling",
+  "thumbnail": "/assets/images/Command Center Hero.png",
+  "category": "fun",
+  "video": "https://www.youtube.com/embed/BGmVL73kLDM",
+  "tags": ["30hrs with Claude Code & Codex"],
+  "tldr": [
+    "The goal is to reimagine how McKinsey consultants could work \"AI-natively,\" shifting time from data crunching to client counseling by automating analytical tasks through an AI-driven \"Command Center.\"",
+    "The Command Center web app mirrors McKinsey's project structure: (1) Project Context (objectives, constraints), (2) Main Deck (final insights), (3) Agents (AI team members handling research, modeling, synthesis), and (4) Logistics (tools like Uber Eats ordering).",
+    "Each AI Agent acts like an analyst or associate, following four phases—set objective/workplan, clarify with manager, execute using tools (e.g., Exa for search, GPT for modeling, Reducto for document parsing), and synthesize insights into the main deck.",
+    "The workflow allows multiple agents to run in parallel, generating insights that feed an automatically built executive summary, test hypotheses, and simulate how consulting teams coordinate across research, synthesis, and validation loops.",
+    "The vision is a proof of concept for a future \"AI-native consulting operating model,\" where knowledge workers use customizable APIs, toolkits, and prompt templates to automate research, modeling, and insight generation—freeing humans to focus on relationship-driven work."
+  ],
+  "paragraphs": [
+    "Four years at McKinsey taught me consulting is two jobs: analysis and client counseling."
+  ],
+  "sections": [
+    {
+      "title": "Analysis",
+      "content": "Research, data crunching, synthesis. This consumes most consultant hours. AI automates this if the workflow matches how we think: divide-and-conquer across multiple workstreams, test hypotheses constantly, then consolidate. Control the start (direction) and end (polish & sense-check). Automate the middle."
+    },
+    {
+      "title": "Counseling",
+      "content": "This is where client value lives. Guiding decisions, managing relationships, being in the room when it matters. Right now we don't have enough time for this. AI changes that."
+    },
+    {
+      "title": "The Shift",
+      "content": "AI shifts the balance. Less time on slides, more time with clients. The work goes from analysis-heavy to counsel-heavy. Command Center is my vision to make this shift real."
+    }
+  ]
+}

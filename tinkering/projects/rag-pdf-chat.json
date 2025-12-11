@@ -1,0 +1,22 @@
+{
+  "id": "rag-pdf-chat",
+  "title": "Chat with your PDF",
+  "cardDesc": "Document Q&A with semantic chunking, vector embeddings, and citation-backed retrieval",
+  "thumbnail": "/assets/images/PDF Chat Hero Image.png",
+  "category": "fun",
+  "tryLink": "https://ragpdf-umber.vercel.app/",
+  "tags": ["3hrs with Claude Code"],
+  "sections": [
+    {
+      "title": "Motivation",
+      "content": "RAG has been around for a while and comes up constantly in conversations. I understood the high-level concept but never dove into the technical implementation details."
+    },
+    {
+      "title": "Implementation",
+      "content": "The basic pipeline works like this: We transform PDF data into \"embeddings\"—mathematical representations that capture semantic meaning—then store them in Pinecone. When users ask questions, we search the embeddings to find where the answers might be, then feed those results to GPT for a response."
+    }
+  ],
+  "paragraphs": [
+    "This is an extremely simple RAG implementation. Going forward, I'd like to explore agentic RAG and other techniques—their applications, strengths, and limitations."
+  ]
+}

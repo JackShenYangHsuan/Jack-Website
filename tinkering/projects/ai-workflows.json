@@ -1,0 +1,75 @@
+{
+  "id": "ai-workflows",
+  "title": "Delegate tasks to AI interns (agents)",
+  "cardDesc": "A personal OS with infinite specialized agents controlled through Slack",
+  "thumbnail": "/assets/images/Delegate Tasks to AI Interns Hero Image.png",
+  "category": "personal",
+  "tags": [""],
+  "sections": [
+    {
+      "title": "Agents Are Like Interns",
+      "content": "Give them tools, context, and instructions. They figure out the rest. I use them to automate tasks I know how to do but don't want to spend time on."
+    },
+    {
+      "title": "One-off workflows: Perplexity Comet",
+      "content": "Example use cases:",
+      "items": [
+        "<strong>Finding discount codes at checkout</strong> (life saver): it searches through the web and applies every code it could find and gives you the best deal",
+        "<strong>Research background of Luma event attendees</strong>: Log in to Luma events page, have Comet click through each attendee and search for their background. With this, I could now go into the event with some basic understanding of the group."
+      ]
+    },
+    {
+      "title": "Key benefits",
+      "items": [
+        "Zero setup—spin it up instantly",
+        "Works with login-required tools—log in once, then let it execute",
+        "No configuration needed for one-time tasks"
+      ]
+    },
+    {
+      "title": "Recurring workflows: Gumloop with Slack",
+      "content": "I built a personal operating system with Slack as the control center. Each channel houses specialized agents with MCP connections to GSuite, Exa (for web search), and Apollo (for contacts). I have 2 channels in my personal Slack (still expanding):"
+    },
+    {
+      "title": "#job-openings (1 agent)",
+      "items": [
+        "Consolidates job postings from 4 Berkeley Slack channels (past 48hrs)",
+        "Searches LinkedIn for Summer 2026 MBA internships in PM/operations/GTM",
+        "Delivers: Company + Role + Description + Contact/Link",
+        "Eliminates daily manual searching and reading through messy slack channels"
+      ]
+    },
+    {
+      "title": "#network (3 agents managing professional network)",
+      "content": "<strong>Add network</strong> (Tools: Apollo, Exa, Gmail, Google Sheet)",
+      "items": [
+        "Input: LinkedIn URL + context about how we met and other info",
+        "Agent researches: work experience, education, posts, press coverage",
+        "Finds email via Apollo",
+        "Drafts personalized follow-up email",
+        "Adds complete profile to my Google Sheet database"
+      ]
+    },
+    {
+      "title": "Update network (Tools: Google Sheet)",
+      "items": [
+        "Input: Contact name + new information to log",
+        "Agent finds person in database, clarifies if needed",
+        "Appends new data without replacing existing info"
+      ]
+    },
+    {
+      "title": "Find network (Tools: Google Sheet, Gmail, Calendar, Exa)",
+      "items": [
+        "Input: Keywords (e.g., \"people from Google\", \"met 2 months ago\")",
+        "Agent searches database for matches",
+        "Researches recent updates: job changes, LinkedIn posts, company news",
+        "Checks Gmail/Calendar for last interaction",
+        "Delivers: Connections + relevance + research + last contact date"
+      ]
+    }
+  ],
+  "paragraphs": [
+    "<strong>What's magical:</strong> a single interface to command infinite agents without juggling multiple tools."
+  ]
+}

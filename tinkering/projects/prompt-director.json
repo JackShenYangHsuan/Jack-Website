@@ -1,0 +1,26 @@
+{
+  "id": "prompt-director",
+  "title": "Construct your prompt with annotation and voice",
+  "cardDesc": "Draw and speak your ideas - we'll turn them into structured LLM prompts with spatial context understanding",
+  "thumbnail": "/assets/images/Prompt Director Hero Image.png",
+  "category": "personal",
+  "tryLink": "/tinkering/prompt-director",
+  "tags": ["1hr with Droid"],
+  "sections": [
+    {
+      "title": "Motivation",
+      "content": "I often struggle with describing front-end UI details while vibe coding. I could use Figma, but switching tools kills momentum. Words work better, except when you're describing pixel-perfect layouts."
+    },
+    {
+      "title": "Inspiration",
+      "content": "At McKinsey, partners solved this by annotating slides on Zoom while talking through their vision. Real-time markup plus verbal context. I built a tool that brings that workflow to AI prompting."
+    },
+    {
+      "title": "Implementation",
+      "content": "The tech is simple: record audio, capture annotations, then feed both to GPT for detailed prompt generation. I added one twist: stitching before-and-after annotation images together gives the model extra context about what changed."
+    }
+  ],
+  "paragraphs": [
+    "It's now part of my vibe coding workflow. Whenever I need to describe complicated or precise UI, I spin it up."
+  ]
+}

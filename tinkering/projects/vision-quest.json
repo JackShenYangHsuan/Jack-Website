@@ -1,0 +1,22 @@
+{
+  "id": "vision-quest",
+  "title": "Structure my life like Shohei Ohtani",
+  "cardDesc": "Turn your goals into a Shohei Ohtani-style matrix. Break down dreams into systems, visualize progress, iterate weekly",
+  "thumbnail": "/assets/images/Vision Quest Hero Image.png",
+  "category": "personal",
+  "subtitle": "",
+  "video": "https://www.youtube.com/embed/SKd2vLienC0",
+  "tryLink": "https://jackshen.co/visionquest",
+  "tags": ["30hrs with Claude Code & Codex"],
+  "paragraphs": [
+    "The hardest part of leaving a well-lit path isn't the uncertainty. It's the loss of vision—and the quest to find it again. Four months ago, I left McKinsey and moved to SF with my wife. Complete reset: career, family, goals. SF is intoxicating. New tech everywhere. Events every night. 20-year-olds building wild things. The opportunities felt endless.",
+    "But endless opportunity without direction just feels like chaos. I wanted to chart my own path but I kept freezing at the starting line.",
+    "Then I came across the matrix Shohei Ohtani drew in high school. He'd taken his goal and decomposed it into sub-goals and specific actions. Sleep. Nutrition. Mental approach. Relationships. Practice technique. Every piece connected to the larger goal.",
+    "The breadth and depth floored me. Here was a teenager treating his dream like a system to build, not a wish to hope for.",
+    "I started using this fractal matrix approach. Broke down my goals. Made them visible. Revisited them weekly.",
+    "What I learned: the framework itself isn't the magic. The magic is in writing it down, visualizing it, and iterating on it.",
+    "Writing forces specificity. Visualization makes it real. When you see all the pieces laid out, you spot what's missing. You notice what you're avoiding. You understand how different goals connect or conflict.",
+    "If you're in transition or feeling stuck, I built \"Vision Quest\" to help you create your matrix and track progress. It's become the foundation of my operating system.",
+    "Next up: AI agents that can execute actions in the matrix. Me and a swarm of agents working together toward the goal."
+  ]
+}

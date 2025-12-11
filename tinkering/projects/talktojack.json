@@ -1,0 +1,16 @@
+{
+  "id": "talktojack",
+  "title": "Infinitely scale 1-1 customer calls",
+  "cardDesc": "AI video replica that can have real-time conversations with customers. Scale myself infinitely",
+  "thumbnail": "/assets/images/Scale 1-1 Customer Calls Hero Image.png",
+  "category": "personal",
+  "tryLink": "https://jackshen.co/talktojack",
+  "tags": ["5hrs with Claude Code"],
+  "paragraphs": [
+    "Not sure where to start with AI agents? Start an instant zoom call with a digital version of me! It'll gather your requirements and help you automate.",
+    "Tons of people have been asking how I use AI agents to automate mundane tasks. Everyone's situation is different. I'd love to help everyone, but I can't do 10 calls every day.",
+    "So I hacked up a replica of myself you can actually talk to. Like a zoom call. It talks like me. Asks follow-up questions. Figures out what you actually need.",
+    "Built with Tavus. I've seen AI clones before, but never ones this natural in real-time. The latency is insanely good.",
+    "If you're drowning in the same call patterns and wish you could scale your 1-1 time with customers, this might be it :)"
+  ]
+}

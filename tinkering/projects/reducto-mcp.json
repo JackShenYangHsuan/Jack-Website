@@ -1,0 +1,19 @@
+{
+  "id": "reducto-mcp",
+  "title": "Build a Reducto MCP server",
+  "cardDesc": "Connect AI agents to document processing APIs using Model Context Protocol - deployed serverless on Vercel",
+  "thumbnail": "/assets/images/Reducto MCP Server Hero Image.png",
+  "category": "personal",
+  "tryLink": "https://reducto-mcp-server.vercel.app/",
+  "tags": ["1hr with Claude Code"],
+  "sections": [
+    {
+      "title": "Motivation",
+      "content": "I needed a reliable OCR and document parsing tool for my personal OS. GPT sometimes misses details, especially with handwriting. I learned that Reducto is best in class for this. Rather than calling Reducto's API directly from each workflow, I wanted a standardized MCP interface that any AI agent could use. I also wanted to integrate it with my Gumloop agents so I could call it directly from Slack."
+    },
+    {
+      "title": "Implementation",
+      "content": "You can turn any API into an MCP. The way I think about MCPs is they're basically API calls with a reasoning brain. Instead of structured requests, you interact with MCPs in natural language and they decide how to interface with other services.<br><br>This Reducto MCP takes my request in natural language (like \"parse this document\") and converts it into Reducto API calls. It handles authentication and error handling, then returns the result.<br><br>To run this in my Gumloop agent, I had to deploy the MCP server on Vercel so Gumloop could call it. The server is live here: <a href=\"https://reducto-mcp-server.vercel.app/\" target=\"_blank\">https://reducto-mcp-server.vercel.app/</a>"
+    }
+  ]
+}
