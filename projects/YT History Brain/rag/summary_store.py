@@ -1,10 +1,13 @@
 """ChromaDB vector store for video summaries."""
+import logging
 import chromadb
 from chromadb.config import Settings
 from typing import Optional
 
 import config
 from .embeddings import get_embeddings
+
+logger = logging.getLogger(__name__)
 
 
 class SummaryStore:
@@ -148,12 +151,14 @@ class SummaryStore:
         )
         return len(results["ids"]) > 0
 
-    def delete_video(self, video_id: str) -> None:
-        """Delete a video summary from the index."""
+    def delete_video(self, video_id: str) -> bool:
+        """Delete a video summary from the index. Returns True if successful."""
         try:
             self.collection.delete(ids=[video_id])
-        except Exception:
-            pass  # Video might not exist
+            return True
+        except Exception as e:
+            logger.warning(f"Failed to delete video {video_id} from index: {e}")
+            return False
 
     def clear_all(self) -> None:
         """Clear all summaries from the collection."""

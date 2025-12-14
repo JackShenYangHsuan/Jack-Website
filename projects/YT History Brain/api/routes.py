@@ -311,10 +311,7 @@ async def delete_video(video_id: str):
     save_processed_videos(data)
 
     # Also remove from summary index if exists
-    try:
-        summary_store.delete_video(video_id)
-    except Exception:
-        pass  # Ignore if not in index
+    summary_store.delete_video(video_id)  # Logs warning if video not found
 
     # Remove from connections graph
     connections_path = config.DATA_DIR / "connections.json"
@@ -352,7 +349,7 @@ async def delete_video(video_id: str):
             with open(connections_path, "w", encoding="utf-8") as f:
                 json.dump(conn_data, f, ensure_ascii=False, indent=2)
         except Exception as e:
-            print(f"Error removing video from connections: {e}")
+            logger.error(f"Error removing video from connections: {e}")
 
     return {"message": "Video deleted", "video_id": video_id}
 

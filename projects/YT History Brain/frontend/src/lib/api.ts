@@ -1,4 +1,5 @@
-const API_BASE = "http://localhost:8000/api";
+// API base URL - can be configured via environment variable
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000/api";
 
 export interface Video {
   video_id: string;

@@ -1,6 +1,7 @@
 import { useRef, useMemo, useEffect, useCallback, useState } from "react";
 import ForceGraph2D from "react-force-graph-2d";
 import type { GraphNode, GraphEdge } from "@/lib/api";
+import { getCategoryHexColorFromArray } from "@/lib/constants";
 
 // ============================================================================
 // TYPES
@@ -49,35 +50,8 @@ const THUMBNAIL_WIDTH = 140;
 const THUMBNAIL_HEIGHT = 79;
 const NODE_BORDER_WIDTH = 3;
 
-const CATEGORY_COLORS: Record<string, string> = {
-  Technology: "#3b82f6",
-  Programming: "#a855f7",
-  "AI/ML": "#06b6d4",
-  Business: "#f59e0b",
-  Finance: "#22c55e",
-  Productivity: "#f97316",
-  "Self-Improvement": "#ec4899",
-  "Health/Fitness": "#ef4444",
-  Entertainment: "#8b5cf6",
-  Education: "#6366f1",
-  News: "#64748b",
-  Science: "#14b8a6",
-  Design: "#f43f5e",
-  Marketing: "#84cc16",
-  Career: "#0ea5e9",
-  Lifestyle: "#d946ef",
-  Gaming: "#10b981",
-  Music: "#eab308",
-  Travel: "#06b6d4",
-  Food: "#f97316",
-  Sports: "#22c55e",
-  Other: "#6b7280",
-};
-
-function getCategoryColor(categories: string[]): string {
-  if (categories.length === 0) return CATEGORY_COLORS.Other;
-  return CATEGORY_COLORS[categories[0]] || CATEGORY_COLORS.Other;
-}
+// Use centralized category colors (hex format for canvas)
+const getCategoryColor = getCategoryHexColorFromArray;
 
 function getYouTubeThumbnail(videoId: string): string {
   return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
