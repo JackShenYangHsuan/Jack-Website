@@ -1,102 +1,168 @@
 # YT History Brain
 
-RAG-powered search over your YouTube watch history. Ask questions about videos you've watched and get answers with source attribution.
+RAG-powered search over your YouTube watch history. Import videos, get AI-generated summaries, discover connections between content, and ask questions about what you've watched.
 
 ## Quick Start
 
-### 1. Install Dependencies
+### 1. Install Backend Dependencies
 
 ```bash
 cd "YT History Brain"
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-playwright install chromium
 ```
 
-### 2. Configure Environment
+### 2. Install Frontend Dependencies
+
+```bash
+cd frontend
+npm install
+```
+
+### 3. Configure Environment
 
 ```bash
 cp .env.example .env
 # Edit .env with your OpenRouter API key
 ```
 
-### 3. Export Your YouTube History
+Required environment variables:
+- `OPENROUTER_API_KEY`: For AI summaries via Gemini
 
-Go to [Google Takeout](https://takeout.google.com):
-1. Click "Deselect all"
-2. Select "YouTube and YouTube Music"
-3. Click "All YouTube data included" → select only "history"
-4. Export and download the zip
-5. Extract `watch-history.json` from the zip
+Optional:
+- `EMBEDDING_PROVIDER`: "local" (default) or "openrouter"
+- `TAKEOUT_HTML_PATH`: Path to Google Takeout watch-history.html
 
-### 4. Run the Server
+### 4. Run the Application
 
+Terminal 1 - Backend:
 ```bash
 python main.py
 ```
 
-Open http://localhost:8000
+Terminal 2 - Frontend:
+```bash
+cd frontend
+npm run dev
+```
 
-### 5. Upload & Index
-
-1. Click "Upload History" and select your `watch-history.json`
-2. Click "Sync & Index" to fetch transcripts and build the search index
-3. Start asking questions!
+Open http://localhost:5173
 
 ## Features
 
-- **Semantic Search**: Find relevant content across all your watched videos
-- **Source Attribution**: Every answer links back to the source videos
+- **AI Video Summaries**: Gemini API analyzes videos and generates summaries, categories, takeaways, and fun facts
+- **Semantic Search**: Find relevant content across all your watched videos with AI synthesis
+- **Knowledge Graph**: Visualize connections between videos based on content similarity
+- **Connection Discovery**: See how your watched content relates to each other
+- **Category Filtering**: Filter by auto-detected categories (Technology, Business, AI/ML, etc.)
 - **Local Embeddings**: Uses sentence-transformers (no API costs for embeddings)
-- **Transcript Caching**: Transcripts are cached locally to avoid re-fetching
 - **Dark Mode UI**: Palantir-inspired interface
 
 ## Architecture
 
 ```
-watch-history.json → Parser → Transcript Fetcher → ChromaDB → RAG Query → LLM
+Video Import → Gemini Summarization → ChromaDB Indexing → Semantic Search & Graph
 ```
 
-- **Parser**: Extracts video IDs from Google Takeout export
-- **Transcript Fetcher**: Uses youtube-transcript-api (no API key needed)
-- **ChromaDB**: Local vector database for semantic search
-- **Embeddings**: Local sentence-transformers (all-MiniLM-L6-v2)
-- **LLM**: OpenRouter for flexible model choice
+### Components
+
+- **Backend (FastAPI)**
+  - Video processing with Gemini API
+  - ChromaDB for vector storage
+  - Connection discovery and graph generation
+  - RESTful API endpoints
+
+- **Frontend (React + TypeScript)**
+  - Video table with filtering and search
+  - Knowledge graph visualization (react-force-graph-2d)
+  - Real-time processing status
+  - Category and channel statistics
+
+### Data Flow
+
+1. **Import**: Upload watch history or import individual YouTube URLs
+2. **Summarize**: Gemini API analyzes each video (title, content)
+3. **Index**: Summaries embedded and stored in ChromaDB
+4. **Connect**: Compute similarity between video embeddings
+5. **Query**: Semantic search with AI-synthesized answers
 
 ## API Endpoints
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/api/query` | POST | Query the knowledge base |
-| `/api/stats` | GET | Get indexing statistics |
-| `/api/upload-history` | POST | Upload watch-history.json |
-| `/api/sync` | POST | Fetch transcripts and index |
+| `/api/videos` | GET | List all processed videos |
+| `/api/videos/{id}` | DELETE | Delete a video |
+| `/api/videos/{id}/process` | POST | Process a single video |
+| `/api/import-videos` | POST | Import videos from URLs |
+| `/api/process-pending` | POST | Process all pending videos |
+| `/api/search` | POST | Semantic search with synthesis |
+| `/api/connections/graph` | GET | Get connection graph data |
+| `/api/connections/compute` | POST | Compute video connections |
+| `/api/connections/similar/{id}` | GET | Get similar videos |
+| `/api/category-stats` | GET | Category distribution |
+| `/api/channel-stats` | GET | Channel distribution |
+| `/api/insights` | GET/POST | Global insights from all videos |
 
 ## Configuration
 
-Edit `.env`:
+### Backend (.env)
 
 ```bash
 OPENROUTER_API_KEY=your_key_here
 EMBEDDING_PROVIDER=local  # or "openrouter"
 LLM_MODEL=anthropic/claude-3.5-sonnet
-SYNC_SCHEDULE=0 3 * * *  # Daily at 3am
+TAKEOUT_HTML_PATH=/path/to/watch-history.html  # Optional
 ```
 
-## Limitations
+### Frontend (frontend/.env)
 
-- YouTube Data API no longer provides watch history access
-- Some videos may not have transcripts available
-- Google Takeout automation is fragile (manual export recommended)
-- First-time embedding model download may be slow
+```bash
+VITE_API_BASE=http://localhost:8000/api  # Optional, defaults to localhost
+```
+
+## Data Storage
+
+All data is stored locally in the `data/` directory:
+
+- `processed_videos.json`: Video metadata and summaries
+- `connections.json`: Precomputed video connections graph
+- `chroma/`: ChromaDB vector database
+- `channel_cache.json`: Cached channel names
+- `global_insights.json`: Generated insights
+- `saved_insights.json`: User-saved insights
 
 ## Development
+
+### Backend
 
 ```bash
 # Run with auto-reload
 uvicorn main:app --reload --port 8000
 ```
+
+### Frontend
+
+```bash
+cd frontend
+npm run dev  # Development server with HMR
+npm run build  # Production build
+npm run lint  # Run ESLint
+```
+
+## Tech Stack
+
+- **Backend**: Python, FastAPI, ChromaDB, sentence-transformers
+- **Frontend**: React, TypeScript, Vite, Tailwind CSS, shadcn/ui
+- **AI**: Gemini API via OpenRouter
+- **Visualization**: react-force-graph-2d
+
+## Limitations
+
+- YouTube transcripts may not be available for all videos
+- Gemini API processes videos by title/URL (not full content analysis)
+- First-time embedding model download (~100MB)
+- Connection computation is O(n²) - may be slow for large libraries
 
 ## License
 
