@@ -2,6 +2,7 @@
 """Aggressively filter Takeout watch history for non-entertainment videos."""
 
 import json
+import os
 import re
 from datetime import datetime
 from pathlib import Path
@@ -10,8 +11,13 @@ from typing import Optional, List, Dict
 
 
 START_DATE = datetime(2025, 10, 1)
-ROOT_DIR = Path("/Users/jackshen/Desktop/personal-website/projects/YT History Brain")
-TAKEOUT_HTML = Path("/Users/jackshen/Downloads/Takeout/YouTube and YouTube Music/history/watch-history.html")
+# Use relative path from this file's location
+ROOT_DIR = Path(__file__).parent.resolve()
+# Takeout path can be overridden via environment variable
+TAKEOUT_HTML = Path(os.getenv(
+    "TAKEOUT_HTML_PATH",
+    str(Path.home() / "Downloads/Takeout/YouTube and YouTube Music/history/watch-history.html")
+))
 WATCH_HISTORY_PATH = ROOT_DIR / "watch_history.json"
 PROCESSED_PATH = ROOT_DIR / "data" / "processed_videos.json"
 SHORT_KEYWORDS = [

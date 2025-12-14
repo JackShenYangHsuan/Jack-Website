@@ -1,5 +1,6 @@
 """Connection discovery and similarity computation for videos."""
 import json
+import logging
 import numpy as np
 from datetime import datetime
 from typing import Optional
@@ -7,6 +8,10 @@ from pathlib import Path
 
 import config
 from .summary_store import SummaryStore
+
+logger = logging.getLogger(__name__)
+
+DEFAULT_CONNECTIONS = {"version": 1, "computed_at": None, "connections": {}, "graph": {"nodes": [], "edges": []}}
 
 
 class ConnectionDiscovery:
@@ -19,15 +24,25 @@ class ConnectionDiscovery:
 
     def _load_connections(self) -> dict:
         """Load precomputed connections from disk."""
-        if self.connections_path.exists():
+        if not self.connections_path.exists():
+            return DEFAULT_CONNECTIONS.copy()
+        try:
             with open(self.connections_path, "r", encoding="utf-8") as f:
                 return json.load(f)
-        return {"version": 1, "computed_at": None, "connections": {}, "graph": {"nodes": [], "edges": []}}
+        except json.JSONDecodeError as e:
+            logger.error(f"Corrupted connections.json: {e}. Returning default.")
+            return DEFAULT_CONNECTIONS.copy()
+        except OSError as e:
+            logger.error(f"Failed to read connections.json: {e}. Returning default.")
+            return DEFAULT_CONNECTIONS.copy()
 
     def _save_connections(self, data: dict) -> None:
         """Save connections to disk."""
-        with open(self.connections_path, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
+        try:
+            with open(self.connections_path, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+        except OSError as e:
+            logger.error(f"Failed to save connections.json: {e}")
 
     def get_all_embeddings(self) -> tuple[list[str], np.ndarray, list[dict]]:
         """
@@ -98,11 +113,15 @@ class ConnectionDiscovery:
         # Load processed videos to filter
         processed_videos_path = self.data_dir / "processed_videos.json"
         processed_ids = set()
+        processed_data = {"videos": []}
         if processed_videos_path.exists():
-            with open(processed_videos_path, "r", encoding="utf-8") as f:
-                processed_data = json.load(f)
-            # Only include videos with proper summaries (not title-only)
-            for v in processed_data.get("videos", []):
+            try:
+                with open(processed_videos_path, "r", encoding="utf-8") as f:
+                    processed_data = json.load(f)
+            except (json.JSONDecodeError, OSError) as e:
+                logger.error(f"Failed to load processed_videos.json: {e}")
+        # Only include videos with proper summaries (not title-only)
+        for v in processed_data.get("videos", []):
                 summary = v.get("summary", "")
                 # Skip videos without proper transcript-based summaries
                 if not summary:

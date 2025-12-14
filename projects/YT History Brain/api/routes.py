@@ -1,6 +1,7 @@
 """FastAPI routes for YT History Brain."""
 import asyncio
 import json
+import logging
 import re
 import httpx
 from pathlib import Path
@@ -10,6 +11,8 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 import config
+
+logger = logging.getLogger(__name__)
 from scraper.parser import parse_watch_history, get_unique_video_ids
 from transcripts.fetcher import TranscriptFetcher
 from rag.vectorstore import VectorStore
@@ -262,16 +265,26 @@ def extract_video_id(url: str) -> Optional[str]:
 
 def load_processed_videos() -> dict:
     """Load processed videos from JSON file."""
-    if PROCESSED_VIDEOS_PATH.exists():
+    if not PROCESSED_VIDEOS_PATH.exists():
+        return {"videos": []}
+    try:
         with open(PROCESSED_VIDEOS_PATH, "r", encoding="utf-8") as f:
             return json.load(f)
-    return {"videos": []}
+    except json.JSONDecodeError as e:
+        logger.error(f"Corrupted processed_videos.json: {e}")
+        return {"videos": []}
+    except OSError as e:
+        logger.error(f"Failed to read processed_videos.json: {e}")
+        return {"videos": []}
 
 
 def save_processed_videos(data: dict) -> None:
     """Save processed videos to JSON file."""
-    with open(PROCESSED_VIDEOS_PATH, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    try:
+        with open(PROCESSED_VIDEOS_PATH, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except OSError as e:
+        logger.error(f"Failed to save processed_videos.json: {e}")
 
 
 @router.get("/videos")
@@ -506,16 +519,26 @@ CHANNEL_CACHE_PATH = config.DATA_DIR / "channel_cache.json"
 
 def load_channel_cache() -> dict:
     """Load cached channel data."""
-    if CHANNEL_CACHE_PATH.exists():
+    if not CHANNEL_CACHE_PATH.exists():
+        return {}
+    try:
         with open(CHANNEL_CACHE_PATH, "r", encoding="utf-8") as f:
             return json.load(f)
-    return {}
+    except json.JSONDecodeError as e:
+        logger.error(f"Corrupted channel_cache.json: {e}")
+        return {}
+    except OSError as e:
+        logger.error(f"Failed to read channel_cache.json: {e}")
+        return {}
 
 
 def save_channel_cache(data: dict) -> None:
     """Save channel cache to file."""
-    with open(CHANNEL_CACHE_PATH, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    try:
+        with open(CHANNEL_CACHE_PATH, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except OSError as e:
+        logger.error(f"Failed to save channel_cache.json: {e}")
 
 
 async def fetch_channel_name(video_id: str) -> Optional[str]:
@@ -1008,30 +1031,50 @@ class GlobalInsightsResponse(BaseModel):
 
 def load_global_insights() -> dict:
     """Load saved global insights."""
-    if INSIGHTS_PATH.exists():
+    if not INSIGHTS_PATH.exists():
+        return {}
+    try:
         with open(INSIGHTS_PATH, "r", encoding="utf-8") as f:
             return json.load(f)
-    return {}
+    except json.JSONDecodeError as e:
+        logger.error(f"Corrupted global_insights.json: {e}")
+        return {}
+    except OSError as e:
+        logger.error(f"Failed to read global_insights.json: {e}")
+        return {}
 
 
 def save_global_insights(data: dict) -> None:
     """Save global insights to JSON file."""
-    with open(INSIGHTS_PATH, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    try:
+        with open(INSIGHTS_PATH, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except OSError as e:
+        logger.error(f"Failed to save global_insights.json: {e}")
 
 
 def load_saved_insights() -> dict:
     """Load saved (favorited) insights."""
-    if SAVED_INSIGHTS_PATH.exists():
+    if not SAVED_INSIGHTS_PATH.exists():
+        return {"insights": [], "fun_facts": []}
+    try:
         with open(SAVED_INSIGHTS_PATH, "r", encoding="utf-8") as f:
             return json.load(f)
-    return {"insights": [], "fun_facts": []}
+    except json.JSONDecodeError as e:
+        logger.error(f"Corrupted saved_insights.json: {e}")
+        return {"insights": [], "fun_facts": []}
+    except OSError as e:
+        logger.error(f"Failed to read saved_insights.json: {e}")
+        return {"insights": [], "fun_facts": []}
 
 
 def save_saved_insights(data: dict) -> None:
     """Save favorited insights to JSON file."""
-    with open(SAVED_INSIGHTS_PATH, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    try:
+        with open(SAVED_INSIGHTS_PATH, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except OSError as e:
+        logger.error(f"Failed to save saved_insights.json: {e}")
 
 
 @router.get("/insights")

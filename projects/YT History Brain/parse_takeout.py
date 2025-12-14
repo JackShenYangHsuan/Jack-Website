@@ -7,11 +7,17 @@ we'll keep YouTube Music videos as they're clearly music content.
 """
 
 import json
+import os
 import re
 from datetime import datetime
 from pathlib import Path
 from html import unescape
 from typing import Optional, List, Dict
+
+# Use relative path from this file's location
+ROOT_DIR = Path(__file__).parent.resolve()
+# Takeout path can be overridden via environment variable
+DEFAULT_TAKEOUT_PATH = Path.home() / "Downloads/Takeout/YouTube and YouTube Music/history/watch-history.html"
 
 
 def parse_timestamp(timestamp_str: str) -> Optional[datetime]:
@@ -81,9 +87,9 @@ def extract_videos_from_html(html_content: str) -> List[Dict]:
 
 
 def main():
-    # Paths
-    takeout_path = Path("/Users/jackshen/Downloads/Takeout/YouTube and YouTube Music/history/watch-history.html")
-    history_path = Path("/Users/jackshen/Desktop/personal-website/projects/YT History Brain/watch_history.json")
+    # Paths - use environment variable if set, otherwise use defaults
+    takeout_path = Path(os.getenv("TAKEOUT_HTML_PATH", str(DEFAULT_TAKEOUT_PATH)))
+    history_path = ROOT_DIR / "watch_history.json"
 
     # Load existing history
     with open(history_path, "r") as f:
