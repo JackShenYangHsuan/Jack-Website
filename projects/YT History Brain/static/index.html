@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YT History Brain</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>YT History Brain</h1>
+                <p class="subtitle">Search your YouTube memory</p>
+            </div>
+
+            <div class="stats-panel">
+                <h3>Statistics</h3>
+                <div class="stat-item">
+                    <span class="stat-label">Videos Indexed</span>
+                    <span class="stat-value" id="stat-videos">--</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Transcript Chunks</span>
+                    <span class="stat-value" id="stat-chunks">--</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Cached Transcripts</span>
+                    <span class="stat-value" id="stat-cached">--</span>
+                </div>
+            </div>
+
+            <div class="upload-panel">
+                <h3>Import Data</h3>
+                <p class="help-text">Upload your watch-history.json from Google Takeout</p>
+                <input type="file" id="file-input" accept=".json" hidden>
+                <button class="btn btn-secondary" id="upload-btn">
+                    Upload History
+                </button>
+                <button class="btn btn-primary" id="sync-btn">
+                    Sync & Index
+                </button>
+                <div class="sync-status" id="sync-status"></div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-area">
+            <div class="chat-messages" id="chat-messages">
+                <div class="welcome-message">
+                    <h2>Welcome to YT History Brain</h2>
+                    <p>Ask questions about videos you've watched on YouTube.</p>
+                    <div class="example-queries">
+                        <p><strong>Try asking:</strong></p>
+                        <button class="example-btn" data-query="What videos have I watched about machine learning?">
+                            What videos have I watched about machine learning?
+                        </button>
+                        <button class="example-btn" data-query="Summarize what I've learned about productivity">
+                            Summarize what I've learned about productivity
+                        </button>
+                        <button class="example-btn" data-query="What cooking tips have I picked up?">
+                            What cooking tips have I picked up?
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <form id="chat-form">
+                    <input
+                        type="text"
+                        id="chat-input"
+                        placeholder="Ask about your YouTube history..."
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="btn btn-primary" id="send-btn">
+                        Send
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
