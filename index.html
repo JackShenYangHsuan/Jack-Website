@@ -613,7 +613,6 @@
             background: #ffffff;
             border-radius: 16px;
             width: 60%;
-            max-width: 800px;
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
@@ -1724,8 +1723,22 @@
 
                 // Render project cards after loading
                 renderProjectCards();
+
+                // Check if URL matches a project and open modal
+                checkUrlForProject();
             } catch (error) {
                 console.error('Error loading projects:', error);
+            }
+        }
+
+        // Check URL and open project modal if path matches
+        function checkUrlForProject() {
+            const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
+            if (path && path !== '') {
+                const projectIndex = projectsData.findIndex(p => p.id === path);
+                if (projectIndex !== -1) {
+                    openProjectModal(projectIndex, false); // false = don't push state
+                }
             }
         }
 
@@ -1853,7 +1866,7 @@
             return html;
         }
 
-        function openProjectModal(index) {
+        function openProjectModal(index, pushState = true) {
             currentProjectIndex = index;
             const project = projectsData[index];
             if (!project) return;
@@ -1862,6 +1875,12 @@
             projectModal.classList.add('active');
             document.body.style.overflow = 'hidden';
             document.body.classList.add('modal-open');
+
+            // Update URL
+            if (pushState) {
+                history.pushState({ projectId: project.id, index: index }, project.title, '/' + project.id);
+            }
+            document.title = project.title + ' | Jack Shen';
 
             // Update CTA button in footer
             const navLeft = document.getElementById('projectNavLeft');
@@ -1887,7 +1906,7 @@
             projectNext.style.pointerEvents = index === projectsData.length - 1 ? 'none' : 'auto';
         }
 
-        function closeProjectModal() {
+        function closeProjectModal(goBack = true) {
             projectModal.classList.remove('active');
             document.body.style.overflow = '';
             document.body.classList.remove('modal-open');
@@ -1896,19 +1915,41 @@
             iframes.forEach(iframe => {
                 iframe.src = iframe.src;
             });
+
+            // Update URL back to root
+            if (goBack && window.location.pathname !== '/') {
+                history.pushState({}, 'Jack Shen', '/');
+            }
+            document.title = 'Jack Shen';
         }
 
         projectNavClose.addEventListener('click', closeProjectModal);
 
         projectPrev.addEventListener('click', () => {
             if (currentProjectIndex > 0) {
-                openProjectModal(currentProjectIndex - 1);
+                openProjectModal(currentProjectIndex - 1, false);
+                const project = projectsData[currentProjectIndex];
+                history.replaceState({ projectId: project.id, index: currentProjectIndex }, project.title, '/' + project.id);
             }
         });
 
         projectNext.addEventListener('click', () => {
             if (currentProjectIndex < projectsData.length - 1) {
-                openProjectModal(currentProjectIndex + 1);
+                openProjectModal(currentProjectIndex + 1, false);
+                const project = projectsData[currentProjectIndex];
+                history.replaceState({ projectId: project.id, index: currentProjectIndex }, project.title, '/' + project.id);
+            }
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.projectId) {
+                const projectIndex = projectsData.findIndex(p => p.id === event.state.projectId);
+                if (projectIndex !== -1) {
+                    openProjectModal(projectIndex, false);
+                }
+            } else {
+                closeProjectModal(false);
             }
         });
 
@@ -1923,9 +1964,13 @@
                 if (e.key === 'Escape') {
                     closeProjectModal();
                 } else if (e.key === 'ArrowLeft' && currentProjectIndex > 0) {
-                    openProjectModal(currentProjectIndex - 1);
+                    openProjectModal(currentProjectIndex - 1, false);
+                    const project = projectsData[currentProjectIndex];
+                    history.replaceState({ projectId: project.id, index: currentProjectIndex }, project.title, '/' + project.id);
                 } else if (e.key === 'ArrowRight' && currentProjectIndex < projectsData.length - 1) {
-                    openProjectModal(currentProjectIndex + 1);
+                    openProjectModal(currentProjectIndex + 1, false);
+                    const project = projectsData[currentProjectIndex];
+                    history.replaceState({ projectId: project.id, index: currentProjectIndex }, project.title, '/' + project.id);
                 }
             }
         });

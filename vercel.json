@@ -4,6 +4,46 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/gmail-auto-label",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/vision-quest",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/claude-code-music",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/command-center",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/building-daystory",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/nvidia-dgx-spark",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/rag-pdf-chat",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/reducto-mcp",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/prompt-director",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ai-workflows",
+      "destination": "/index.html"
+    },
+    {
       "source": "/visionquest/(.*)",
       "destination": "/visionquest/index.html"
     },
