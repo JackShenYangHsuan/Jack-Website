@@ -147,10 +147,8 @@
             display: flex;
             gap: 16px;
             padding: 72px 24px 24px;
-            min-height: 100vh;
-            overflow-x: auto;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
+            height: 100vh;
+            overflow: hidden;
         }
 
         main::-webkit-scrollbar {
@@ -159,8 +157,8 @@
 
         /* Columns */
         .column {
-            flex: 0 0 307px;
-            min-width: 307px;
+            flex: 1.5;
+            min-width: 0;
             height: calc(100vh - 96px);
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -170,10 +168,10 @@
             flex-direction: column;
         }
 
-        /* About column wider */
+        /* About column - ratio 2 */
         #column-0 {
-            flex: 0 0 499px;
-            min-width: 499px;
+            flex: 2;
+            min-width: 0;
         }
 
         #column-0 .column-title-fixed {
@@ -195,10 +193,10 @@
             display: none;
         }
 
-        /* Writings column wider */
+        /* Writings column - ratio 1.5 */
         #column-2 {
-            flex: 0 0 326px;
-            min-width: 326px;
+            flex: 1.5;
+            min-width: 0;
         }
 
         #column-2 .column-title {
@@ -459,10 +457,10 @@
             background: var(--border-color);
         }
 
-        /* Side Projects - Parent Column */
+        /* Side Projects - Parent Column - ratio 3.5 */
         .column-parent {
-            flex: 0 0 800px;
-            min-width: 800px;
+            flex: 3.5;
+            min-width: 0;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 8px;
@@ -937,16 +935,20 @@
             display: none;
         }
 
-        /* Mobile Breakpoints */
+        /* Tablet Breakpoints - maintain ratios */
         @media (max-width: 1024px) {
             .column {
-                flex: 1;
-                min-width: 280px;
+                flex: 1.5;
+                min-width: 0;
+            }
+
+            #column-0 {
+                flex: 2;
             }
 
             .column-parent {
-                flex: 2.5;
-                min-width: 500px;
+                flex: 3.5;
+                min-width: 0;
             }
         }
 
