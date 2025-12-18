@@ -2,19 +2,10 @@
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
-  "routes": [
-    { "src": "/visionquest/(.*)", "dest": "/visionquest/index.html" },
-    { "src": "/talktojack/admin", "dest": "/talktojack/admin.html" },
-    { "src": "/talktojack", "dest": "/talktojack/index.html" },
-    { "src": "/gmail-auto-label", "dest": "/index.html" },
-    { "src": "/vision-quest", "dest": "/index.html" },
-    { "src": "/claude-code-music", "dest": "/index.html" },
-    { "src": "/command-center", "dest": "/index.html" },
-    { "src": "/building-daystory", "dest": "/index.html" },
-    { "src": "/nvidia-dgx-spark", "dest": "/index.html" },
-    { "src": "/rag-pdf-chat", "dest": "/index.html" },
-    { "src": "/reducto-mcp", "dest": "/index.html" },
-    { "src": "/prompt-director", "dest": "/index.html" },
-    { "src": "/ai-workflows", "dest": "/index.html" }
+  "rewrites": [
+    { "source": "/visionquest/(.*)", "destination": "/visionquest/index.html" },
+    { "source": "/talktojack/admin", "destination": "/talktojack/admin.html" },
+    { "source": "/talktojack", "destination": "/talktojack/index.html" },
+    { "source": "/(gmail-auto-label|vision-quest|claude-code-music|command-center|building-daystory|nvidia-dgx-spark|rag-pdf-chat|reducto-mcp|prompt-director|ai-workflows)", "destination": "/index.html" }
   ]
 }
