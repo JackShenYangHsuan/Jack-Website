@@ -4,56 +4,20 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/gmail-auto-label",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/vision-quest",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/claude-code-music",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/command-center",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/building-daystory",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/nvidia-dgx-spark",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/rag-pdf-chat",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/reducto-mcp",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/prompt-director",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/ai-workflows",
-      "destination": "/index.html"
-    },
-    {
       "source": "/visionquest/(.*)",
       "destination": "/visionquest/index.html"
+    },
+    {
+      "source": "/talktojack/admin",
+      "destination": "/talktojack/admin.html"
     },
     {
       "source": "/talktojack",
       "destination": "/talktojack/index.html"
     },
     {
-      "source": "/talktojack/admin",
-      "destination": "/talktojack/admin.html"
+      "source": "/:project(gmail-auto-label|vision-quest|claude-code-music|command-center|building-daystory|nvidia-dgx-spark|rag-pdf-chat|reducto-mcp|prompt-director|ai-workflows)",
+      "destination": "/index.html"
     }
   ]
 }
