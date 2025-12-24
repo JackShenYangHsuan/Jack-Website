@@ -1,0 +1,33 @@
+{
+  "id": "video-studio",
+  "title": "Video studio for cinematic startup launch videos",
+  "cardDesc": "A one-person video studio for cinematic startup launch videos using DGX Spark and open-source AI models",
+  "thumbnail": "/assets/images/Video Studio Hero Image.png",
+  "category": "fun",
+  "tags": ["20hrs with Claude Code", "ComfyUI", "DGX Spark"],
+  "paragraphs": [
+    "I built a one-person video studio for cinematic startup launch videos"
+  ],
+  "sections": [
+    {
+      "title": "Why",
+      "content": "After talking with many founders, one thing keeps coming up. Storytelling. Writing launch posts. Making launch videos. Explaining what they are building with taste and speed. All of this still takes a lot of manual work. It does not scale well. At the same time, I was asking myself how to best use my DGX Spark. Video generation stood out. It is compute-heavy. And the open-source video models coming out of China right now are very good."
+    },
+    {
+      "title": "The experiment",
+      "content": "I wanted to test the limits of open-source models on my own hardware. I also did not want to be limited by my personal creativity. So I tried to recreate the \"Claude Code Keep Thinking\" video as a benchmark."
+    },
+    {
+      "title": "What I built",
+      "content": "A web app with an 8-step video pipeline. Style, storyboard, video generation, and audio layering. The app connects to my DGX Spark running ComfyUI. It uses cutting-edge open-source video and image models like Hunyuan and Z-Image."
+    },
+    {
+      "title": "The result",
+      "content": "I produced a 1:30 video with about 90% similarity in quality and style. It took under two hours using templated settings and fast configurations."
+    },
+    {
+      "title": "Key takeaway",
+      "content": "This feels like early software again. You used to need expensive engineers to build products. You used to need expensive gear and teams to produce high-end video. Now the cost and friction have dropped fast. The main constraint is no longer tools or compute. It is creativity."
+    }
+  ]
+}

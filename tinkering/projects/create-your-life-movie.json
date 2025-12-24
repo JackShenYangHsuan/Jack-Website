@@ -1,0 +1,21 @@
+{
+  "id": "create-your-life-movie",
+  "title": "Create your life movie, Pixar style",
+  "cardDesc": "Use AI video models to create a montage of your life story, Pixar-style.",
+  "thumbnail": "/assets/images/Life Movie Hero Image.png",
+  "category": "fun",
+  "tags": ["GPT-5", "Sora", "1hr"],
+  "sections": [
+    {
+      "title": "Motivation",
+      "content": "When I was creating my personal website, I thought about the fastest and most fun way to introduce myself. The fastest way would be a few bullet points on my career highlights. But most fun? Definitely not. Everyone loves Pixar movies, and I do too. So I wondered: What if I could use video models to create a montage of my life?"
+    },
+    {
+      "title": "Implementation",
+      "content": "I was playing with the latest release of the Sora app and was blown away by the remix capabilities. It became obvious that the technology was ready. I just needed to write my life movie's script and direct my own film. With ChatGPT's help, I created 10 scenes that portray the arc of my 28 years and fed them into Sora. Since Sora is limited to 15-second videos, I stitched them together with CapCut."
+    }
+  ],
+  "paragraphs": [
+    "The detail page includes example prompts for each scene—video prompts and narration prompts you can use as a starting point for your own life movie."
+  ]
+}

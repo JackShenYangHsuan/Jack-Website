@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video studio for cinematic startup launch videos - Tinkering with AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #222222;
+            line-height: 1.6;
+            padding: 50px 20px 80px;
+        }
+
+        a { color: inherit; }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #666666;
+            text-decoration: none;
+            font-size: 12px;
+            margin-bottom: 30px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #000000;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            color: #000000;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            color: #000000;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+            color: #222222;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 700px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-placeholder {
+            width: 100%;
+            max-width: 700px;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            margin-bottom: 32px;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 40px 16px 60px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="/">← Back</a>
+
+        <h1>Video studio for cinematic startup launch videos</h1>
+
+        <img src="/assets/images/Video Studio Hero Image.png" alt="Video Studio" class="hero-image">
+
+        <p>I built a one-person video studio for cinematic startup launch videos</p>
+
+        <h2>Why</h2>
+        <p>After talking with many founders, one thing keeps coming up. Storytelling.</p>
+        <p>Writing launch posts. Making launch videos. Explaining what they are building with taste and speed.</p>
+        <p>All of this still takes a lot of manual work. It does not scale well.</p>
+        <p>At the same time, I was asking myself how to best use my DGX Spark. Video generation stood out. It is compute-heavy. And the open-source video models coming out of China right now are very good.</p>
+
+        <h2>The experiment</h2>
+        <p>I wanted to test the limits of open-source models on my own hardware.</p>
+        <p>I also did not want to be limited by my personal creativity.</p>
+        <p>So I tried to recreate the "Claude Code Keep Thinking" video as a benchmark.</p>
+
+        <h2>What I built</h2>
+        <p>A web app with an 8-step video pipeline. Style, storyboard, video generation, and audio layering.</p>
+        <p>The app connects to my DGX Spark running ComfyUI.</p>
+        <p>It uses cutting-edge open-source video and image models like Hunyuan and Z-Image.</p>
+
+        <h2>The result</h2>
+        <p>I produced a 1:30 video with about 90% similarity in quality and style.</p>
+        <p>It took under two hours using templated settings and fast configurations.</p>
+
+        <h2>Key takeaway</h2>
+        <p>This feels like early software again.</p>
+        <p>You used to need expensive engineers to build products.</p>
+        <p>You used to need expensive gear and teams to produce high-end video.</p>
+        <p>Now the cost and friction have dropped fast.</p>
+        <p>The main constraint is no longer tools or compute. It is creativity.</p>
+    </div>
+</body>
+</html>
