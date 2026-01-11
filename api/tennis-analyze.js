@@ -2,7 +2,7 @@
  * Vercel API Route - Analyze tennis video frames using OpenRouter GPT-4o
  */
 
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const MODEL = 'openai/gpt-4o';
 
 const ANALYSIS_PROMPT = `Analyze this tennis video frame and respond with ONLY a JSON object (no markdown, no explanation):
