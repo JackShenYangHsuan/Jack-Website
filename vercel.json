@@ -2,6 +2,22 @@
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/tennis-clips/(.*)",
+      "headers": [
+        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
+        { "key": "Cross-Origin-Embedder-Policy", "value": "credentialless" }
+      ]
+    },
+    {
+      "source": "/projects/tennis-clips/(.*)",
+      "headers": [
+        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
+        { "key": "Cross-Origin-Embedder-Policy", "value": "credentialless" }
+      ]
+    }
+  ],
   "rewrites": [
     { "source": "/tennis-clips", "destination": "/projects/tennis-clips" },
     { "source": "/tennis-clips/:path*", "destination": "/projects/tennis-clips/:path*" },

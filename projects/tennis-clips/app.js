@@ -411,8 +411,14 @@ class TennisHighlightApp {
         const startTime = parseFloat(this.clipStart.value);
         const endTime = parseFloat(this.clipEnd.value);
 
+        // Validate times
+        if (isNaN(startTime) || isNaN(endTime) || startTime >= endTime) {
+            alert('Invalid clip times. Please check start and end times.');
+            return;
+        }
+
         this.downloadClipBtn.disabled = true;
-        this.downloadClipBtn.textContent = 'Loading...';
+        this.downloadClipBtn.textContent = 'Preparing...';
 
         try {
             const clipResult = await this.clipGenerator.extractClip(
@@ -426,15 +432,28 @@ class TennisHighlightApp {
 
             const filename = `tennis-highlight-${VideoAnalyzer.formatTime(startTime).replace(':', '-')}.mp4`;
 
-            // Try to share (for mobile) or download
-            await this.clipGenerator.shareClip(clipResult, filename);
+            // Update button to show sharing/downloading state
+            this.downloadClipBtn.textContent = clipResult.isFallback ? 'Saving video...' : 'Saving clip...';
 
-            this.downloadClipBtn.textContent = 'Download Clip';
-            this.downloadClipBtn.disabled = false;
+            // Try to share (for mobile) or download
+            const shared = await this.clipGenerator.shareClip(clipResult, filename);
+
+            // Show feedback based on result
+            if (shared) {
+                this.downloadClipBtn.textContent = 'Saved!';
+            } else {
+                this.downloadClipBtn.textContent = 'Downloaded!';
+            }
+
+            // Reset button after delay
+            setTimeout(() => {
+                this.downloadClipBtn.textContent = 'Download Clip';
+                this.downloadClipBtn.disabled = false;
+            }, 1500);
 
         } catch (error) {
             console.error('Clip download failed:', error);
-            alert(`Failed to create clip: ${error.message}`);
+            alert(`Failed to save clip: ${error.message}`);
             this.downloadClipBtn.textContent = 'Download Clip';
             this.downloadClipBtn.disabled = false;
         }

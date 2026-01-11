@@ -16,7 +16,11 @@ class ClipGenerator {
      */
     canUseFFmpeg() {
         // SharedArrayBuffer is required for FFmpeg.wasm
-        return typeof SharedArrayBuffer !== 'undefined' && !this.loadFailed;
+        // Also check that the FFmpeg globals are available
+        return typeof SharedArrayBuffer !== 'undefined' &&
+               typeof FFmpegWASM !== 'undefined' &&
+               typeof FFmpegUtil !== 'undefined' &&
+               !this.loadFailed;
     }
 
     /**
@@ -33,6 +37,13 @@ class ClipGenerator {
             return false;
         }
 
+        // Check if FFmpeg globals are available
+        if (typeof FFmpegWASM === 'undefined' || typeof FFmpegUtil === 'undefined') {
+            console.warn('FFmpeg libraries not loaded');
+            this.loadFailed = true;
+            return false;
+        }
+
         try {
             const { FFmpeg } = FFmpegWASM;
             const { fetchFile } = FFmpegUtil;
@@ -41,9 +52,11 @@ class ClipGenerator {
             this.fetchFile = fetchFile;
 
             // Load FFmpeg core with timeout for slow mobile connections
+            // Version must match @ffmpeg/ffmpeg version loaded in index.html
             const loadPromise = this.ffmpeg.load({
                 coreURL: 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js',
-                wasmURL: 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm'
+                wasmURL: 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm',
+                classWorkerURL: 'https://unpkg.com/@ffmpeg/ffmpeg@0.12.7/dist/umd/814.ffmpeg.js'
             });
 
             // 30 second timeout for loading
@@ -157,15 +170,25 @@ class ClipGenerator {
      * Accepts either a blob directly or an object { blob, isFallback }
      */
     downloadClip(clipResult, filename = 'tennis-highlight.mp4') {
-        const blob = clipResult.blob || clipResult;
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        try {
+            const blob = clipResult.blob || clipResult;
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+
+            // Clean up after a short delay to ensure download starts
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+        } catch (error) {
+            console.error('Download failed:', error);
+            throw new Error('Failed to download clip: ' + error.message);
+        }
     }
 
     /**
@@ -178,39 +201,55 @@ class ClipGenerator {
         const isFallback = clipResult.isFallback || false;
         const message = clipResult.message || '';
 
-        // Show warning if using fallback
-        if (isFallback && message) {
-            alert(message);
+        // Log fallback status for debugging
+        if (isFallback) {
+            console.log('Using fallback mode:', message);
         }
 
+        // Check if Web Share API with files is available
         if (!navigator.canShare) {
-            // Fallback to download
+            console.log('Web Share API not available, downloading instead');
             this.downloadClip(blob, filename);
             return false;
         }
 
-        const file = new File([blob], filename, { type: 'video/mp4' });
+        try {
+            // Convert to proper File object if needed
+            // Handle both File and Blob inputs
+            let file;
+            if (blob instanceof File) {
+                // Already a File, but may need to rename
+                file = new File([blob], filename, { type: blob.type || 'video/mp4' });
+            } else {
+                file = new File([blob], filename, { type: 'video/mp4' });
+            }
 
-        if (navigator.canShare({ files: [file] })) {
-            try {
-                await navigator.share({
-                    files: [file],
-                    title: 'Tennis Highlight',
-                    text: isFallback
-                        ? 'Tennis video (trim in Photos app)'
-                        : 'Check out this tennis highlight!'
-                });
-                return true;
-            } catch (error) {
-                if (error.name !== 'AbortError') {
-                    console.error('Share failed:', error);
-                    // Fallback to download
-                    this.downloadClip(blob, filename);
-                }
+            // Check if can share files
+            if (!navigator.canShare({ files: [file] })) {
+                console.log('Cannot share files on this device, downloading instead');
+                this.downloadClip(blob, filename);
                 return false;
             }
-        } else {
-            // Fallback to download
+
+            // Attempt share
+            await navigator.share({
+                files: [file],
+                title: 'Tennis Highlight',
+                text: isFallback
+                    ? 'Tennis video (you can trim it in Photos)'
+                    : 'Check out this tennis highlight!'
+            });
+            return true;
+
+        } catch (error) {
+            // User cancelled - not an error
+            if (error.name === 'AbortError') {
+                console.log('Share cancelled by user');
+                return false;
+            }
+
+            // Other errors - fall back to download
+            console.error('Share failed:', error);
             this.downloadClip(blob, filename);
             return false;
         }
