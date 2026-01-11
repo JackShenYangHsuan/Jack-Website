@@ -3,7 +3,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/tennis-clips", "destination": "/projects/tennis-clips/index.html" },
+    { "source": "/tennis-clips", "destination": "/projects/tennis-clips" },
     { "source": "/tennis-clips/:path*", "destination": "/projects/tennis-clips/:path*" },
     { "source": "/visionquest/:path*", "destination": "/visionquest/index.html" },
     { "source": "/talktojack/admin", "destination": "/talktojack/admin.html" },
