@@ -2,11 +2,8 @@
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
-  "redirects": [
-    { "source": "/tennis-clips", "destination": "/tennis-clips/", "permanent": true }
-  ],
   "rewrites": [
-    { "source": "/tennis-clips/", "destination": "/projects/tennis-clips/index.html" },
+    { "source": "/tennis-clips", "destination": "/projects/tennis-clips/index.html" },
     { "source": "/tennis-clips/:path*", "destination": "/projects/tennis-clips/:path*" },
     { "source": "/visionquest/:path*", "destination": "/visionquest/index.html" },
     { "source": "/talktojack/admin", "destination": "/talktojack/admin.html" },

@@ -158,8 +158,10 @@ async function handleAnalyzeRequest(req, res) {
 }
 
 function serveStaticFile(req, res) {
-    let filePath = req.url === '/' ? '/index.html' : req.url;
-    filePath = path.join(__dirname, filePath);
+    let urlPath = req.url === '/' ? '/index.html' : req.url;
+    // Strip /tennis-clips/ prefix for local development
+    urlPath = urlPath.replace(/^\/tennis-clips\//, '/');
+    const filePath = path.join(__dirname, urlPath);
 
     const ext = path.extname(filePath);
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
