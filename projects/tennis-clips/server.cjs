@@ -199,7 +199,7 @@ const server = http.createServer((req, res) => {
     }
 
     // API route
-    if (req.url === '/api/analyze' && req.method === 'POST') {
+    if (req.url === '/api/tennis-analyze' && req.method === 'POST') {
         handleAnalyzeRequest(req, res);
         return;
     }

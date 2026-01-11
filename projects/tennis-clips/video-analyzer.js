@@ -160,7 +160,7 @@ class VideoAnalyzer {
         const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
         try {
-            const response = await fetch('/api/analyze', {
+            const response = await fetch('/api/tennis-analyze', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
