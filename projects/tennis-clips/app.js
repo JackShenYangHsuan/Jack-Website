@@ -131,6 +131,15 @@ class TennisHighlightApp {
             return;
         }
 
+        // Warn about large files on mobile (memory constraints)
+        const sizeMB = file.size / (1024 * 1024);
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile && sizeMB > 100) {
+            if (!confirm(`This video is ${sizeMB.toFixed(0)}MB. Large videos may cause issues on mobile devices. Continue anyway?`)) {
+                return;
+            }
+        }
+
         this.videoFile = file;
 
         // Clean up previous video URL
@@ -376,8 +385,9 @@ class TennisHighlightApp {
         this.clipStart.value = highlight.startTime.toFixed(1);
         this.clipEnd.value = highlight.endTime.toFixed(1);
 
-        // Show modal
+        // Show modal and prevent body scroll on mobile
         this.clipModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
 
         // Auto-pause at end time
         this.clipPreview.ontimeupdate = () => {
@@ -389,6 +399,7 @@ class TennisHighlightApp {
 
     closeModal() {
         this.clipModal.classList.add('hidden');
+        document.body.style.overflow = '';
         this.clipPreview.pause();
         this.clipPreview.src = '';
         this.currentHighlight = null;
@@ -401,10 +412,10 @@ class TennisHighlightApp {
         const endTime = parseFloat(this.clipEnd.value);
 
         this.downloadClipBtn.disabled = true;
-        this.downloadClipBtn.textContent = 'Processing...';
+        this.downloadClipBtn.textContent = 'Loading...';
 
         try {
-            const clipBlob = await this.clipGenerator.extractClip(
+            const clipResult = await this.clipGenerator.extractClip(
                 this.videoFile,
                 startTime,
                 endTime,
@@ -416,7 +427,7 @@ class TennisHighlightApp {
             const filename = `tennis-highlight-${VideoAnalyzer.formatTime(startTime).replace(':', '-')}.mp4`;
 
             // Try to share (for mobile) or download
-            await this.clipGenerator.shareClip(clipBlob, filename);
+            await this.clipGenerator.shareClip(clipResult, filename);
 
             this.downloadClipBtn.textContent = 'Download Clip';
             this.downloadClipBtn.disabled = false;

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tennis Video Highlight</title>
-    <link rel="stylesheet" href="/tennis-clips/styles.css">
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
     <div class="container">
@@ -26,7 +26,7 @@
         <!-- Video Preview Section -->
         <section id="preview-section" class="section hidden">
             <div class="video-container">
-                <video id="video-player" controls></video>
+                <video id="video-player" controls playsinline webkit-playsinline></video>
             </div>
             <div class="video-info">
                 <span id="video-duration"></span>
@@ -99,7 +99,7 @@
                     <h3>Highlight Preview</h3>
                     <button class="modal-close" id="modal-close">&times;</button>
                 </div>
-                <video id="clip-preview" controls></video>
+                <video id="clip-preview" controls playsinline webkit-playsinline></video>
                 <div class="clip-controls">
                     <div class="time-adjust">
                         <label>Start: <input type="number" id="clip-start" step="0.5"></label>
@@ -117,8 +117,8 @@
     <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.7/dist/umd/ffmpeg.js"></script>
     <script src="https://unpkg.com/@ffmpeg/util@0.12.1/dist/umd/util.js"></script>
 
-    <script src="/tennis-clips/video-analyzer.js"></script>
-    <script src="/tennis-clips/clip-generator.js"></script>
-    <script src="/tennis-clips/app.js"></script>
+    <script src="/video-analyzer.js"></script>
+    <script src="/clip-generator.js"></script>
+    <script src="/app.js"></script>
 </body>
 </html>

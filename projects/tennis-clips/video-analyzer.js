@@ -21,52 +21,81 @@ class VideoAnalyzer {
             const duration = video.duration;
             const totalFrames = Math.floor(duration / this.frameInterval);
 
-            // Set canvas size to match video (scaled down for efficiency)
-            const maxWidth = 640;
+            // Scale down for efficiency - smaller on mobile to save memory
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const maxWidth = isMobile ? 480 : 640;
             const scale = Math.min(1, maxWidth / video.videoWidth);
-            this.canvas.width = video.videoWidth * scale;
-            this.canvas.height = video.videoHeight * scale;
+            this.canvas.width = Math.floor(video.videoWidth * scale);
+            this.canvas.height = Math.floor(video.videoHeight * scale);
 
             let currentFrame = 0;
+            let seekTimeout = null;
+            const SEEK_TIMEOUT_MS = 5000; // 5 second timeout per frame
 
             const captureFrame = () => {
                 if (currentFrame >= totalFrames) {
+                    clearTimeout(seekTimeout);
                     resolve(this.frames);
                     return;
                 }
 
                 const timestamp = currentFrame * this.frameInterval;
+
+                // Set timeout in case seek stalls (common on mobile)
+                clearTimeout(seekTimeout);
+                seekTimeout = setTimeout(() => {
+                    console.warn(`Seek timeout at frame ${currentFrame}, skipping...`);
+                    currentFrame++;
+                    captureFrame();
+                }, SEEK_TIMEOUT_MS);
+
                 video.currentTime = timestamp;
             };
 
-            video.onseeked = () => {
-                // Draw frame to canvas
-                this.ctx.drawImage(video, 0, 0, this.canvas.width, this.canvas.height);
+            const handleSeeked = () => {
+                clearTimeout(seekTimeout);
 
-                // Get base64 image (JPEG for smaller size)
-                const imageData = this.canvas.toDataURL('image/jpeg', 0.7);
+                // Small delay to ensure frame is actually rendered (mobile fix)
+                requestAnimationFrame(() => {
+                    try {
+                        // Draw frame to canvas
+                        this.ctx.drawImage(video, 0, 0, this.canvas.width, this.canvas.height);
 
-                this.frames.push({
-                    index: currentFrame,
-                    timestamp: currentFrame * this.frameInterval,
-                    imageData: imageData
+                        // Get base64 image (lower quality on mobile to save memory)
+                        const quality = isMobile ? 0.6 : 0.7;
+                        const imageData = this.canvas.toDataURL('image/jpeg', quality);
+
+                        this.frames.push({
+                            index: currentFrame,
+                            timestamp: currentFrame * this.frameInterval,
+                            imageData: imageData
+                        });
+
+                        currentFrame++;
+
+                        if (onProgress) {
+                            onProgress({
+                                current: currentFrame,
+                                total: totalFrames,
+                                phase: 'extracting'
+                            });
+                        }
+
+                        // Continue to next frame
+                        captureFrame();
+                    } catch (err) {
+                        console.error('Frame capture error:', err);
+                        currentFrame++;
+                        captureFrame();
+                    }
                 });
-
-                currentFrame++;
-
-                if (onProgress) {
-                    onProgress({
-                        current: currentFrame,
-                        total: totalFrames,
-                        phase: 'extracting'
-                    });
-                }
-
-                // Continue to next frame
-                captureFrame();
             };
 
-            video.onerror = reject;
+            video.onseeked = handleSeeked;
+            video.onerror = (e) => {
+                clearTimeout(seekTimeout);
+                reject(e);
+            };
 
             // Start extraction
             captureFrame();
@@ -120,35 +149,59 @@ class VideoAnalyzer {
     }
 
     /**
-     * Analyze a batch of frames via API
+     * Analyze a batch of frames via API with timeout and retry
      */
-    async analyzeBatch(frames) {
-        const response = await fetch('/api/tennis-analyze', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                frames: frames.map(f => ({
-                    index: f.index,
-                    timestamp: f.timestamp,
-                    imageData: f.imageData
-                }))
-            })
-        });
+    async analyzeBatch(frames, retryCount = 0) {
+        const MAX_RETRIES = 2;
+        const TIMEOUT_MS = 60000; // 60 second timeout for mobile
 
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || 'Analysis failed');
+        // Create abort controller for timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+        try {
+            const response = await fetch('/api/analyze', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    frames: frames.map(f => ({
+                        index: f.index,
+                        timestamp: f.timestamp,
+                        imageData: f.imageData
+                    }))
+                }),
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'Analysis failed');
+            }
+
+            const results = await response.json();
+
+            // Merge results with frame data
+            return frames.map((frame, i) => ({
+                ...frame,
+                ...results[i]
+            }));
+        } catch (error) {
+            clearTimeout(timeoutId);
+
+            // Retry on timeout or network error
+            if (retryCount < MAX_RETRIES && (error.name === 'AbortError' || error.message.includes('network'))) {
+                console.warn(`API request failed, retrying (${retryCount + 1}/${MAX_RETRIES})...`);
+                // Wait before retry (exponential backoff)
+                await new Promise(r => setTimeout(r, 1000 * (retryCount + 1)));
+                return this.analyzeBatch(frames, retryCount + 1);
+            }
+
+            throw error;
         }
-
-        const results = await response.json();
-
-        // Merge results with frame data
-        return frames.map((frame, i) => ({
-            ...frame,
-            ...results[i]
-        }));
     }
 
     /**
