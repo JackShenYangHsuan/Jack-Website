@@ -123,7 +123,7 @@ class VideoAnalyzer {
      * Analyze a batch of frames via API
      */
     async analyzeBatch(frames) {
-        const response = await fetch('/api/analyze', {
+        const response = await fetch('/api/tennis-analyze', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

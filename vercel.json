@@ -3,9 +3,20 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/visionquest/(.*)", "destination": "/visionquest/index.html" },
+    { "source": "/tennis-clips", "destination": "/projects/Tennis Video Highlight/index.html" },
+    { "source": "/tennis-clips/:path*", "destination": "/projects/Tennis Video Highlight/:path*" },
+    { "source": "/visionquest/:path*", "destination": "/visionquest/index.html" },
     { "source": "/talktojack/admin", "destination": "/talktojack/admin.html" },
     { "source": "/talktojack", "destination": "/talktojack/index.html" },
-    { "source": "/(gmail-auto-label|vision-quest|claude-code-music|command-center|building-daystory|nvidia-dgx-spark|rag-pdf-chat|reducto-mcp|prompt-director|ai-workflows)", "destination": "/index.html" }
+    { "source": "/gmail-auto-label", "destination": "/" },
+    { "source": "/vision-quest", "destination": "/" },
+    { "source": "/claude-code-music", "destination": "/" },
+    { "source": "/command-center", "destination": "/" },
+    { "source": "/building-daystory", "destination": "/" },
+    { "source": "/nvidia-dgx-spark", "destination": "/" },
+    { "source": "/rag-pdf-chat", "destination": "/" },
+    { "source": "/reducto-mcp", "destination": "/" },
+    { "source": "/prompt-director", "destination": "/" },
+    { "source": "/ai-workflows", "destination": "/" }
   ]
 }
