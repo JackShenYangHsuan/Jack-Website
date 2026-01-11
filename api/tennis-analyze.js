@@ -5,24 +5,26 @@
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const MODEL = 'openai/gpt-4o';
 
-const ANALYSIS_PROMPT = `Analyze this tennis video frame and respond with ONLY a JSON object (no markdown, no explanation):
+const ANALYSIS_PROMPT = `Analyze this tennis video frame to detect ACTIVE RALLY play.
+IGNORE balls lying on the ground (practice balls).
+Focus on: player stance, body position, whether they're actively hitting.
+
+Respond with ONLY JSON (no markdown):
 
 {
-  "isActivePlay": boolean,
-  "actionIntensity": number,
+  "activeRally": boolean,
+  "playerEngaged": boolean,
+  "confidence": number,
   "description": string
 }
 
 Where:
-- isActivePlay: true if a rally/point is actively in progress (players hitting back and forth), false if between points, serving, or idle
-- actionIntensity: 1-10 scale where:
-  - 1-3: Idle, walking, between points
-  - 4-6: Light activity, serving, setting up
-  - 7-8: Active rally with good movement
-  - 9-10: Intense rally, diving shots, fast exchanges
-- description: Brief 5-10 word description of what's happening
+- activeRally: TRUE if players are actively hitting/rallying (ball being exchanged). Look for: player in hitting stance, racket making contact, dynamic body position, focused attention on incoming ball
+- playerEngaged: TRUE if player is in ready position, moving to ball, or mid-swing (not standing idle or walking)
+- confidence: 0.0-1.0 how confident you are this is active play
+- description: Brief description (5-10 words)
 
-Focus on detecting active rallies vs time between points. Look for player movement, ball in motion, and game intensity.`;
+Look at body language, not ball position. Players in motion = engaged.`;
 
 export default async function handler(req, res) {
     // Handle CORS
@@ -68,7 +70,7 @@ async function analyzeFrame(frame) {
             headers: {
                 'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
                 'Content-Type': 'application/json',
-                'HTTP-Referer': 'https://jackshen.xyz',
+                'HTTP-Referer': 'https://jackshen.co',
                 'X-Title': 'Tennis Video Highlight'
             },
             body: JSON.stringify({
@@ -111,19 +113,20 @@ async function analyzeFrame(frame) {
             analysis = JSON.parse(jsonStr);
         } catch (parseError) {
             console.error('Failed to parse AI response:', content);
-            // Default values if parsing fails
-            analysis = {
-                isActivePlay: false,
-                actionIntensity: 1,
-                description: 'Unable to analyze frame'
-            };
+            analysis = { activeRally: false, playerEngaged: false, confidence: 0, description: 'Parse error' };
         }
+
+        const confidence = Math.min(1, Math.max(0, analysis.confidence || 0));
 
         return {
             index: frame.index,
             timestamp: frame.timestamp,
-            isActivePlay: analysis.isActivePlay || false,
-            actionIntensity: Math.min(10, Math.max(1, analysis.actionIntensity || 1)),
+            activeRally: analysis.activeRally || false,
+            playerEngaged: analysis.playerEngaged || false,
+            confidence: confidence,
+            // Map to old fields for compatibility
+            isActivePlay: analysis.activeRally || (analysis.playerEngaged && confidence >= 0.6),
+            actionIntensity: analysis.activeRally ? 9 : (analysis.playerEngaged ? 7 : 2),
             description: analysis.description || ''
         };
 
@@ -132,6 +135,9 @@ async function analyzeFrame(frame) {
         return {
             index: frame.index,
             timestamp: frame.timestamp,
+            activeRally: false,
+            playerEngaged: false,
+            confidence: 0,
             isActivePlay: false,
             actionIntensity: 1,
             description: 'Analysis error',
