@@ -3,8 +3,8 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/tennis-clips", "destination": "/projects/Tennis Video Highlight/index.html" },
-    { "source": "/tennis-clips/:path*", "destination": "/projects/Tennis Video Highlight/:path*" },
+    { "source": "/tennis-clips", "destination": "/projects/tennis-clips/index.html" },
+    { "source": "/tennis-clips/:path*", "destination": "/projects/tennis-clips/:path*" },
     { "source": "/visionquest/:path*", "destination": "/visionquest/index.html" },
     { "source": "/talktojack/admin", "destination": "/talktojack/admin.html" },
     { "source": "/talktojack", "destination": "/talktojack/index.html" },

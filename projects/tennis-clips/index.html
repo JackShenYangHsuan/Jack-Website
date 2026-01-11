@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tennis Video Highlight</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Tennis Highlights</h1>
+            <p class="subtitle">Upload a tennis video and AI will find the best rallies</p>
+        </header>
+
+        <!-- Upload Section -->
+        <section id="upload-section" class="section">
+            <div class="upload-area" id="upload-area">
+                <div class="upload-icon">🎾</div>
+                <p>Drag & drop your tennis video</p>
+                <p class="upload-hint">or tap to select from camera roll</p>
+                <input type="file" id="video-input" accept="video/*" hidden>
+            </div>
+        </section>
+
+        <!-- Video Preview Section -->
+        <section id="preview-section" class="section hidden">
+            <div class="video-container">
+                <video id="video-player" controls></video>
+            </div>
+            <div class="video-info">
+                <span id="video-duration"></span>
+                <span id="video-size"></span>
+            </div>
+            <div class="settings-row">
+                <label for="duration-select">Min highlight duration:</label>
+                <select id="duration-select">
+                    <option value="1">1 second</option>
+                    <option value="2" selected>2 seconds</option>
+                    <option value="3">3 seconds</option>
+                    <option value="5">5 seconds</option>
+                    <option value="8">8 seconds</option>
+                </select>
+            </div>
+            <button id="analyze-btn" class="btn btn-primary">
+                Analyze Video
+            </button>
+        </section>
+
+        <!-- Progress Section -->
+        <section id="progress-section" class="section hidden">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <p class="progress-text" id="progress-text">Extracting frames...</p>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="results-section" class="section hidden">
+            <h2>Detected Highlights</h2>
+            <p class="results-summary" id="results-summary"></p>
+
+            <div class="highlights-list" id="highlights-list">
+                <!-- Highlight cards will be inserted here -->
+            </div>
+
+            <div class="action-buttons">
+                <button id="view-analysis-btn" class="btn btn-secondary">
+                    View Frame Analysis
+                </button>
+                <button id="new-video-btn" class="btn btn-outline">
+                    Upload New Video
+                </button>
+            </div>
+        </section>
+
+        <!-- Analysis Debug View -->
+        <section id="analysis-section" class="section hidden">
+            <div class="analysis-header">
+                <h2>Frame Analysis</h2>
+                <button id="back-to-results-btn" class="btn btn-outline btn-small">
+                    ← Back to Results
+                </button>
+            </div>
+            <p class="analysis-description">
+                Each frame analyzed by AI with action intensity rating (1-10)
+            </p>
+            <div class="analysis-grid" id="analysis-grid">
+                <!-- Frame cards will be inserted here -->
+            </div>
+        </section>
+
+        <!-- Clip Preview Modal -->
+        <div id="clip-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Highlight Preview</h3>
+                    <button class="modal-close" id="modal-close">&times;</button>
+                </div>
+                <video id="clip-preview" controls></video>
+                <div class="clip-controls">
+                    <div class="time-adjust">
+                        <label>Start: <input type="number" id="clip-start" step="0.5"></label>
+                        <label>End: <input type="number" id="clip-end" step="0.5"></label>
+                    </div>
+                    <button id="download-clip-btn" class="btn btn-primary">
+                        Download Clip
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FFmpeg.wasm -->
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.7/dist/umd/ffmpeg.js"></script>
+    <script src="https://unpkg.com/@ffmpeg/util@0.12.1/dist/umd/util.js"></script>
+
+    <script src="video-analyzer.js"></script>
+    <script src="clip-generator.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
