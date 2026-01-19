@@ -1,33 +1,53 @@
 {
   "id": "video-studio",
-  "title": "Video studio for cinematic startup launch videos",
-  "cardDesc": "A one-person video studio for cinematic startup launch videos using DGX Spark and open-source AI models",
+  "title": "One-person Content Studio - Re-creating Anthropic Commercial at Zero Cost",
+  "cardDesc": "Full video production pipeline using open-source image and video generation models orchestrated through ComfyUI.",
   "thumbnail": "/assets/images/Video Studio Hero Image.png",
   "category": "fun",
+  "video": "https://www.youtube.com/embed/LL8O04AsKP8",
   "tags": ["20hrs with Claude Code", "ComfyUI", "DGX Spark"],
-  "paragraphs": [
-    "I built a one-person video studio for cinematic startup launch videos"
-  ],
   "sections": [
     {
-      "title": "Why",
-      "content": "After talking with many founders, one thing keeps coming up. Storytelling. Writing launch posts. Making launch videos. Explaining what they are building with taste and speed. All of this still takes a lot of manual work. It does not scale well. At the same time, I was asking myself how to best use my DGX Spark. Video generation stood out. It is compute-heavy. And the open-source video models coming out of China right now are very good."
+      "title": "Problem",
+      "items": [
+        "Professional launch videos cost $3,000-$8,000 and take 4-8 weeks",
+        "DIY tools produce generic, forgettable content",
+        "Most founders don't know how to structure emotional narratives"
+      ]
     },
     {
-      "title": "The experiment",
-      "content": "I wanted to test the limits of open-source models on my own hardware. I also did not want to be limited by my personal creativity. So I tried to recreate the \"Claude Code Keep Thinking\" video as a benchmark."
+      "title": "Solution",
+      "items": [
+        "Built an 8-phase video production pipeline: Discover → Style → Storyboard → Images → Videos → Stitch → Audio → Export",
+        "Runs entirely on local DGX Spark hardware - no cloud GPU costs or API limits",
+        "ComfyUI orchestrates Flux (images) and Wan 2.2 (video animation) via custom TypeScript API client"
+      ]
     },
     {
-      "title": "What I built",
-      "content": "A web app with an 8-step video pipeline. Style, storyboard, video generation, and audio layering. The app connects to my DGX Spark running ComfyUI. It uses cutting-edge open-source video and image models like Hunyuan and Z-Image."
+      "title": "Technical Architecture",
+      "items": [
+        "Next.js web app connects to ComfyUI server over local network (192.168.x.x:8188)",
+        "Custom ComfyUIClient: queues workflows via POST /prompt, polls /history/{id} for completion, fetches images via /view",
+        "Workflow injection: dynamically injects prompts into ComfyUI workflow JSON, randomizes seeds for variety",
+        "OpenRouter API for LLM calls (Phases 1-3), ElevenLabs for voiceover, Suno for music generation"
+      ]
     },
     {
-      "title": "The result",
-      "content": "I produced a 1:30 video with about 90% similarity in quality and style. It took under two hours using templated settings and fast configurations."
+      "title": "DGX Spark Specs",
+      "items": [
+        "Grace Blackwell GB10 SoC with 128GB unified memory",
+        "6144 CUDA cores, 1 PFLOP NVFP4 AI performance",
+        "Runs Flux at full BF16 precision (~97s for 50 steps)",
+        "No quantization needed, can run multiple models simultaneously"
+      ]
     },
     {
-      "title": "Key takeaway",
-      "content": "This feels like early software again. You used to need expensive engineers to build products. You used to need expensive gear and teams to produce high-end video. Now the cost and friction have dropped fast. The main constraint is no longer tools or compute. It is creativity."
+      "title": "Result",
+      "items": [
+        "Recreated Anthropic's 'Keep Thinking with Claude' video at 90% quality",
+        "Total time: under 2 hours from blank project to final export",
+        "Marginal cost per video approaching zero with local hardware"
+      ]
     }
   ]
 }

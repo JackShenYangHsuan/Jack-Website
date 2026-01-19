@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Teammates for Content Creators - Tinkering with AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #222222;
+            line-height: 1.6;
+            padding: 50px 20px 80px;
+        }
+
+        a { color: inherit; }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #666666;
+            text-decoration: none;
+            font-size: 12px;
+            margin-bottom: 30px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #000000;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            color: #000000;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            color: #000000;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 500;
+            margin-top: 28px;
+            margin-bottom: 12px;
+            color: #000000;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+            color: #222222;
+        }
+
+        .hero-video {
+            width: 100%;
+            max-width: 700px;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tldr-section {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .tldr-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            margin-top: 0;
+            color: #000000;
+        }
+
+        .tldr-section ul {
+            list-style: disc;
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .tldr-section li {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .tldr-section li:last-child {
+            margin-bottom: 0;
+        }
+
+        .architecture-diagram {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            overflow-x: auto;
+        }
+
+        .architecture-diagram pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #e0e0e0;
+            margin: 0;
+            white-space: pre;
+        }
+
+        .code-block {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #e0e0e0;
+            margin: 0;
+        }
+
+        .code-block .comment { color: #6a9955; }
+        .code-block .keyword { color: #569cd6; }
+        .code-block .string { color: #ce9178; }
+        .code-block .function { color: #dcdcaa; }
+
+        .agent-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .agent-card h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #000000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .agent-card h4 .agent-icon {
+            background: #000;
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .agent-card p {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .agent-card .tech-stack {
+            font-size: 12px;
+            color: #6b7280;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 14px;
+        }
+
+        .spec-table th,
+        .spec-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .spec-table th {
+            background: #f9fafb;
+            font-weight: 500;
+        }
+
+        .highlight-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            color: #222222;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+
+        .highlight-box h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #000000;
+        }
+
+        .highlight-box p {
+            color: #374151;
+            margin-bottom: 0;
+        }
+
+        .skill-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .skill-card h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #000000;
+        }
+
+        .skill-card p {
+            font-size: 13px;
+            margin-bottom: 0;
+            color: #374151;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 40px 16px 60px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            .architecture-diagram pre,
+            .code-block pre {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="/">← Back</a>
+
+        <h1>Digital Teammates for Content Creators</h1>
+
+        <iframe class="hero-video" src="https://www.youtube.com/embed/7Je5Z67hn3I" title="Digital Teammates Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+        <div class="tldr-section">
+            <h3>TL;DR</h3>
+            <ul>
+                <li>AI tool platform for content creators with specialized skills: comment analysis, competitor reports, video clipping, quote card generation.</li>
+                <li>Malleable software: merge any skills together and AI writes new tools at runtime, generating working code on the fly.</li>
+                <li>Three-agent architecture: Main (executes), Merge (writes new skills), Debug (auto-patches broken code).</li>
+            </ul>
+        </div>
+
+        <h2>The Problem</h2>
+        <p>Content creators juggle 10+ tools: YouTube Studio, analytics platforms, video editors, thumbnail generators, comment scrapers. None of these tools talk to each other. Copy-pasting data between apps is the norm.</p>
+        <p>Generic AI assistants don't understand creator workflows. They can't access your YouTube data, send emails on your behalf, or upload to your Google Drive.</p>
+
+        <h2>The Vision</h2>
+        <p>What if you had digital teammates that handle your repetitive workflows autonomously? Each teammate specializes in one task: analyzing comments, generating reports, creating clips. You give an instruction, and they execute end-to-end in the background.</p>
+        <p>But here's where it gets interesting: these teammates aren't fixed. The software is malleable. Users and agents can remix skills, combine them, and reshape the entire experience. Drag "Comment Analysis" and "Quote Card Generator" together, and the system creates a new workflow that didn't exist before.</p>
+
+        <div class="highlight-box">
+            <h4>Malleable Software</h4>
+            <p>Every skill becomes a building block. The Merge Agent reads source code, reasons about how pieces fit together, and writes new Python scripts at runtime. Users get flexibility. Agents get composability.</p>
+        </div>
+
+        <h2>System Architecture</h2>
+        <p>The system uses three distinct agents, each with a specialized purpose. This separation keeps execution fast while allowing complex skill creation.</p>
+
+        <div class="architecture-diagram">
+<pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                         USER BROWSER                            │
+│                       (Next.js 16 App)                          │
+└───────────────────────────────┬─────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      BACKEND API (Next.js)                      │
+│                                                                 │
+│   /api/tools/run      /api/tools/merge-agent    /api/chat      │
+│   (SSE streaming)     (skill creation)          (chat UI)      │
+└───────────┬───────────────────┬─────────────────┬───────────────┘
+            │                   │                 │
+            ▼                   ▼                 ▼
+     ┌──────────────┐   ┌──────────────┐   ┌──────────────┐
+     │ Main Agent   │   │ Merge Agent  │   │ Debug Agent  │
+     │ (Sonnet)     │   │ (Opus)       │   │ (Sonnet)     │
+     │              │   │              │   │              │
+     │ Executes     │   │ Creates new  │   │ Fixes broken │
+     │ skills       │   │ merged skills│   │ skills       │
+     └──────┬───────┘   └──────────────┘   └──────────────┘
+            │
+            ▼
+     ┌──────────────────────────────────────────────────┐
+     │              Custom MCP Server (rewire)          │
+     │                                                  │
+     │  • run_bash (Python scripts with whitelist)     │
+     │  • send_email (Gmail integration)               │
+     │  • upload_to_drive (Google Drive)               │
+     └──────────────────────────────────────────────────┘
+            │
+            ▼
+     ┌──────────────────────────────────────────────────┐
+     │              Python Scripts (/skills)            │
+     │                                                  │
+     │  • fetch_comments_api.py (YouTube API)          │
+     │  • summarize_with_gemini.py (AI summaries)      │
+     │  • generate_card.py (Gemini image gen)          │
+     │  • transcribe_video.py (AssemblyAI)             │
+     └──────────────────────────────────────────────────┘
+</pre>
+        </div>
+
+        <h2>The Three-Agent System</h2>
+
+        <div class="agent-card">
+            <h4><span class="agent-icon">1</span> Main Agent</h4>
+            <p>Executes skills by calling Python scripts via MCP, sends emails, uploads files. Handles all user-facing tool execution with streaming responses.</p>
+            <div class="tech-stack">Claude 3.5 Sonnet • MCP tools • Streaming SSE</div>
+        </div>
+
+        <div class="agent-card">
+            <h4><span class="agent-icon">2</span> Merge Agent</h4>
+            <p>Reads source skills, designs a unified workflow, validates config, tests end-to-end, and saves to database. Uses our most capable model for complex reasoning about skill composition.</p>
+            <div class="tech-stack">Claude Opus • Custom merge tools • Up to 30 turns</div>
+        </div>
+
+        <div class="agent-card">
+            <h4><span class="agent-icon">3</span> Debug Agent</h4>
+            <p>Automatically kicks in when a merged skill test fails. Classifies the error type, backs up the current version, applies fixes, and re-tests. Self-healing for merged skills.</p>
+            <div class="tech-stack">Claude Sonnet • Error classification • Version rollback</div>
+        </div>
+
+        <h2>Built-in Skills</h2>
+        <p>The platform ships with four core skills that cover the most common creator workflows:</p>
+
+        <div class="skill-card">
+            <h4>YouTube Comment Report</h4>
+            <p>Fetches comments via YouTube API, categorizes into themes using LLM, generates HTML report, emails it to you.</p>
+        </div>
+
+        <div class="skill-card">
+            <h4>Competitive Report</h4>
+            <p>Compare your channel against competitors. Fetches video data, summarizes recent uploads via Gemini, identifies content gaps.</p>
+        </div>
+
+        <div class="skill-card">
+            <h4>Video Clipper</h4>
+            <p>Downloads video from Google Drive, transcribes with speaker diarization (AssemblyAI), creates vertical clips with face tracking.</p>
+        </div>
+
+        <div class="skill-card">
+            <h4>Instagram Card Generator</h4>
+            <p>Turn any text into designed quote cards. Uses Gemini image generation for AI-created backgrounds with text overlay.</p>
+        </div>
+
+        <h2>Deep Dive: Claude Agent SDK Implementation</h2>
+        <p>The core of the system is a custom MCP server that provides tools with user context (Google tokens, settings).</p>
+
+        <h3>Creating the MCP Server</h3>
+        <div class="code-block">
+<pre><span class="keyword">function</span> <span class="function">createCustomMcpServer</span>(userContext) {
+  <span class="keyword">return</span> createSdkMcpServer({
+    name: <span class="string">'rewire'</span>,
+    version: <span class="string">'1.0.0'</span>,
+    tools: [
+      <span class="comment">// Execute Python scripts (security whitelist)</span>
+      tool(<span class="string">'run_bash'</span>, <span class="string">'Execute bash command'</span>,
+        { command: z.string() },
+        <span class="keyword">async</span> (args) => {
+          <span class="comment">// Only allow: python3 skills/*, cat, ls</span>
+          <span class="keyword">const</span> env = {
+            GOOGLE_ACCESS_TOKEN: userContext.googleTokens.accessToken,
+            YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
+            GOOGLE_AI_API_KEY: process.env.GOOGLE_AI_API_KEY
+          };
+          <span class="keyword">return</span> execAsync(args.command, { env });
+        }
+      ),
+
+      <span class="comment">// Gmail integration</span>
+      tool(<span class="string">'send_email'</span>, <span class="string">'Send email via Gmail'</span>,
+        { to, subject, body, htmlBody }),
+
+      <span class="comment">// Google Drive upload</span>
+      tool(<span class="string">'upload_to_drive'</span>, <span class="string">'Upload file to Drive'</span>,
+        { filePath, folderId })
+    ]
+  });
+}</pre>
+        </div>
+
+        <h3>Running the Agent</h3>
+        <div class="code-block">
+<pre><span class="keyword">export async function*</span> <span class="function">runAgent</span>(message, options) {
+  <span class="keyword">const</span> mcpServer = createCustomMcpServer(options.userContext);
+
+  <span class="keyword">const</span> queryInstance = query({
+    prompt: message,
+    options: {
+      systemPrompt: generateSystemPrompt(options),
+      model: <span class="string">'claude-3-5-sonnet-20241022'</span>,
+      mcpServers: { rewire: mcpServer },
+      allowedTools: [
+        <span class="string">'mcp__rewire__run_bash'</span>,
+        <span class="string">'mcp__rewire__send_email'</span>,
+        <span class="string">'mcp__gmail__*'</span>,
+        <span class="string">'mcp__google-workspace__*'</span>
+      ]
+    }
+  });
+
+  <span class="comment">// Stream events to client via SSE</span>
+  <span class="keyword">for await</span> (<span class="keyword">const</span> msg <span class="keyword">of</span> queryInstance) {
+    <span class="keyword">if</span> (msg.type === <span class="string">'assistant'</span>) {
+      <span class="keyword">yield</span> { type: <span class="string">'content'</span>, content: msg.text };
+    }
+  }
+}</pre>
+        </div>
+
+        <h2>Deep Dive: Skill Definition</h2>
+        <p>Each skill is defined as a TypeScript object with settings, a prompt, and scripts. The prompt is executable: the agent follows it step-by-step without asking the user.</p>
+
+        <h3>Skill Structure</h3>
+        <div class="code-block">
+<pre><span class="keyword">const</span> ytCommentReportSkill = {
+  id: <span class="string">'yt-comment-report'</span>,
+  name: <span class="string">'YouTube Comment Analysis'</span>,
+
+  settings: [
+    { key: <span class="string">'emailRecipient'</span>, type: <span class="string">'string'</span> },
+    { key: <span class="string">'sendEmail'</span>, type: <span class="string">'boolean'</span>, default: true }
+  ],
+
+  scripts: [<span class="string">'fetch_comments_api.py'</span>],
+
+  prompt: <span class="string">`
+## YouTube Comment Analysis
+
+### Step 1: Fetch comments
+Use mcp__rewire__run_bash:
+python3 skills/yt-comment-report/scripts/fetch_comments_api.py "{videoUrl}"
+
+### Step 2: Parse JSON, generate HTML report
+
+### Step 3: Send email (if sendEmail = true)
+Use mcp__rewire__send_email:
+- to: "{emailRecipient}"
+- htmlBody: [full report]
+  `</span>
+};</pre>
+        </div>
+
+        <div class="highlight-box">
+            <h4>Key Pattern: Executable Prompts</h4>
+            <p>Skill prompts are instructions, not documentation. The agent executes them step-by-step without asking for confirmation. Settings like <code>{emailRecipient}</code> are injected at runtime.</p>
+        </div>
+
+        <h2>Deep Dive: Runtime Code Generation</h2>
+        <p>This is where malleable software comes to life. When users drag 2-3 tools into a group, the Merge Agent doesn't just connect APIs. It writes new software.</p>
+
+        <h3>Merge Agent Tools</h3>
+        <table class="spec-table">
+            <tr>
+                <th>Tool</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td><code>read_skill</code></td>
+                <td>Read source skill config.ts to understand structure</td>
+            </tr>
+            <tr>
+                <td><code>read_script</code></td>
+                <td>Read Python scripts to understand implementation</td>
+            </tr>
+            <tr>
+                <td><code>validate_skill_config</code></td>
+                <td>Check merged skill config before saving</td>
+            </tr>
+            <tr>
+                <td><code>test_skill</code></td>
+                <td>Run end-to-end test with sample input</td>
+            </tr>
+            <tr>
+                <td><code>write_script</code></td>
+                <td>Write new Python script if needed</td>
+            </tr>
+            <tr>
+                <td><code>create_merged_skill</code></td>
+                <td>Save to database (Prisma)</td>
+            </tr>
+        </table>
+
+        <h3>Merge Flow</h3>
+        <div class="code-block">
+<pre><span class="comment">// 1. Read source skills</span>
+<span class="keyword">const</span> commentSkill = <span class="keyword">await</span> read_skill(<span class="string">'yt-comment-report'</span>);
+<span class="keyword">const</span> cardSkill = <span class="keyword">await</span> read_skill(<span class="string">'instagram-card-generator'</span>);
+
+<span class="comment">// 2. Design unified workflow</span>
+<span class="comment">// Agent reasons about how to combine them</span>
+
+<span class="comment">// 3. Validate config</span>
+<span class="keyword">await</span> validate_skill_config({
+  id: <span class="string">'comment-to-quote-cards'</span>,
+  name: <span class="string">'Comment to Quote Cards'</span>,
+  settings: [...commentSettings, ...cardSettings],
+  prompt: <span class="string">`Step 1: Fetch comments... Step 2: Extract quotes...`</span>
+});
+
+<span class="comment">// 4. Test end-to-end</span>
+<span class="keyword">const</span> result = <span class="keyword">await</span> test_skill({
+  skillName: <span class="string">'comment-to-quote-cards'</span>,
+  testInput: <span class="string">'https://youtube.com/watch?v=dQw4w9WgXcQ'</span>
+});
+
+<span class="comment">// 5. Save to database</span>
+<span class="keyword">if</span> (result.success) {
+  <span class="keyword">await</span> create_merged_skill(skillConfig);
+}</pre>
+        </div>
+
+        <h2>Deep Dive: Self-Healing</h2>
+        <p>When a merged skill fails during execution, the Debug Agent automatically diagnoses and fixes the issue.</p>
+
+        <h3>Error Classification</h3>
+        <div class="code-block">
+<pre><span class="keyword">function</span> <span class="function">classifyError</span>(error) {
+  <span class="keyword">if</span> (error.includes(<span class="string">'ModuleNotFoundError'</span>)) {
+    <span class="keyword">return</span> { type: <span class="string">'script'</span>, fix: <span class="string">'Add missing import'</span> };
+  }
+  <span class="keyword">if</span> (error.includes(<span class="string">'401'</span>) || error.includes(<span class="string">'Unauthorized'</span>)) {
+    <span class="keyword">return</span> { type: <span class="string">'permission'</span>, fix: <span class="string">'Check API key'</span> };
+  }
+  <span class="keyword">if</span> (error.includes(<span class="string">'SyntaxError'</span>)) {
+    <span class="keyword">return</span> { type: <span class="string">'config'</span>, fix: <span class="string">'Fix prompt syntax'</span> };
+  }
+  <span class="keyword">return</span> { type: <span class="string">'runtime'</span>, fix: <span class="string">'Investigate logs'</span> };
+}</pre>
+        </div>
+
+        <h3>Debug Flow</h3>
+        <p>1. Backup current skill version → 2. Diagnose error → 3. Apply fix → 4. Re-test → 5. If still failing after 3 attempts, alert user for manual debug or rollback.</p>
+
+        <h2>Tech Stack</h2>
+        <table class="spec-table">
+            <tr>
+                <th>Component</th>
+                <th>Technology</th>
+            </tr>
+            <tr>
+                <td>Frontend</td>
+                <td>Next.js 16 + React 19 + TypeScript</td>
+            </tr>
+            <tr>
+                <td>Backend</td>
+                <td>Next.js API Routes (serverless)</td>
+            </tr>
+            <tr>
+                <td>Database</td>
+                <td>PostgreSQL + Prisma ORM</td>
+            </tr>
+            <tr>
+                <td>AI Orchestration</td>
+                <td>Claude Agent SDK</td>
+            </tr>
+            <tr>
+                <td>MCP Servers</td>
+                <td>Custom (rewire) + Official (Gmail, Google Workspace)</td>
+            </tr>
+            <tr>
+                <td>External APIs</td>
+                <td>YouTube Data API, Gemini, AssemblyAI</td>
+            </tr>
+            <tr>
+                <td>Auth</td>
+                <td>NextAuth.js + Google OAuth</td>
+            </tr>
+        </table>
+
+        <h2>Key Takeaway</h2>
+        <p>Software is becoming malleable. Instead of building every possible integration upfront, you build atomic skills and let AI compose them into workflows that didn't exist before. The agent writes real code at runtime.</p>
+        <p>The Merge Agent doesn't use templates or connect predefined APIs. It reads source code, reasons about how pieces fit together, and generates new Python scripts. If the merged skill breaks, the Debug Agent patches it automatically.</p>
+        <p>This is a fundamentally different paradigm: instead of developers anticipating every use case, users create their own tools by combining building blocks. The agent handles the software engineering.</p>
+    </div>
+</body>
+</html>

@@ -1328,7 +1328,7 @@
                 <!-- Profile Header -->
                 <div class="profile-header">
                     <img src="assets/images/Profile.png" alt="Jack Shen" class="profile-image">
-                    <div class="profile-intro">Hey, I'm Jack, a builder pivoting from strategy consulting to applied AI startups. Manufactured in Taiwan, operating in SF.</div>
+                    <div class="profile-intro">Hey, I'm Jack, a builder pivoting from strategy consulting to applied AI startups. Made in Taiwan, operating in SF.</div>
                 </div>
 
                 <!-- Social Buttons -->
@@ -1353,7 +1353,7 @@
                 </div>
 
                 <!-- Bio -->
-                <p class="profile-bio">Built a camera app to <strong>500K downloads</strong> in college. Spent four years at <strong>McKinsey</strong> rebuilding performance engines and org structures for Fortune 500 financial turnarounds. Recently worked with <strong>YC founders</strong> on agentic sales platforms. Now at <strong>Berkeley</strong> B-school, exploring career options and tinkering with AI.</p>
+                <p class="profile-bio">Built a camera app to <strong>500K downloads</strong> in college. Spent four years at <strong>McKinsey</strong> leading performance-based digital transformations for Fortune 500s. Recently worked with <strong>YC founders</strong> on agentic sales platforms. Now at <strong>Berkeley</strong> B-school, exploring career options and tinkering with AI.</p>
 
                 <div class="section-divider"></div>
 
@@ -1848,6 +1848,10 @@
                             </div>
                         </div>
                     </div>`;
+            }
+
+            if (project.tryItLink) {
+                html += `<a href="${project.tryItLink}" target="_blank" rel="noopener noreferrer" style="display: inline-block; background: #000; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 500; margin-bottom: 24px;">Try it now →</a>`;
             }
 
             if (project.tldr) {

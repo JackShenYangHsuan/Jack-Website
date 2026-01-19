@@ -1,0 +1,44 @@
+{
+  "id": "digital-teammates",
+  "title": "Digital Teammates for Content Creators",
+  "cardDesc": "Malleable software platform where AI writes new tools at runtime. Merge any skills together and the agent generates working code on the fly.",
+  "thumbnail": "/assets/images/Digital Teammates for Content Creators_Hero Image.png",
+  "category": "personal",
+  "video": "https://www.youtube.com/embed/7Je5Z67hn3I",
+  "tags": ["Built with Claude Agent SDK"],
+  "sections": [
+    {
+      "title": "Malleable Software",
+      "items": [
+        "Software that writes itself: merge any skills together and AI generates working code at runtime",
+        "No predefined integrations. The Merge Agent reads source skills, designs a unified workflow, and writes new Python scripts",
+        "True composability: every tool becomes a building block for tools that don't exist yet"
+      ]
+    },
+    {
+      "title": "How It Works",
+      "items": [
+        "Drag 2-3 skills into a group (e.g., Comment Analysis + Quote Card Generator)",
+        "Claude Opus reads the source code, reasons about how to combine them, and writes a new merged skill",
+        "The new skill is tested end-to-end, saved to database, and ready to use. All without human coding"
+      ]
+    },
+    {
+      "title": "Built-in Skills",
+      "items": [
+        "YouTube Comment Report: Fetch, categorize, and email themed reports",
+        "Competitive Report: Compare channels with video summaries via Gemini",
+        "Video Clipper: Transcribe and create vertical clips with face tracking",
+        "Instagram Card Generator: AI-generated quote cards from any text"
+      ]
+    },
+    {
+      "title": "Technical Architecture",
+      "items": [
+        "Merge Agent (Claude Opus) writes new skills by composing existing ones. Real code generation at runtime",
+        "Three-agent system: Main (executes), Merge (creates skills), Debug (auto-fixes broken skills)",
+        "Self-healing: if a merged skill fails, Debug Agent diagnoses and patches the code automatically"
+      ]
+    }
+  ]
+}

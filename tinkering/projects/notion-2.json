@@ -1,0 +1,37 @@
+{
+  "id": "notion-2",
+  "title": "Notion 2.0 - Re-imagining Notion with digital teammates",
+  "cardDesc": "What if you had AI teammates living inside your Notion docs, ready to search, create, and edit alongside you?",
+  "thumbnail": "/assets/images/Notion 2.0_Hero Image.png",
+  "category": "personal",
+  "video": "https://www.youtube.com/embed/1aAEiaAXbOo",
+  "tags": ["8hrs with Claude Code"],
+  "sections": [
+    {
+      "title": "Problem",
+      "items": [
+        "Constantly switching tabs to search, create images, process videos",
+        "Workflow fragmentation - juggling 10+ tools for a single project",
+        "AI tools exist but live outside your actual workspace"
+      ]
+    },
+    {
+      "title": "Solution",
+      "items": [
+        "Rebuilt Notion from scratch with AI agents embedded directly in the editor",
+        "Four specialized digital teammates: Search, Image, Video, and General List agents",
+        "Agents work inline - results appear right where you need them, no tab switching"
+      ]
+    },
+    {
+      "title": "Key Features",
+      "items": [
+        "Search Agent: Highlight text, hit Cmd+2, get Google results embedded inline",
+        "Image Agent: Turn any text into infographics using Nano Banana, or generate photos with your face",
+        "Video Agent: Summarize YouTube videos, generate transcripts, clip highlights automatically",
+        "General List Agent: Process Google Sheets, extract and filter data with natural language",
+        "Page Merging: Drag-and-drop to intelligently combine multiple pages"
+      ]
+    }
+  ]
+}

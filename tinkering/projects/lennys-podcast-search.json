@@ -1,0 +1,46 @@
+{
+  "id": "lennys-podcast-search",
+  "title": "Lenny's Podcast Search",
+  "cardDesc": "Semantic search engine for 300+ Lenny's Podcast episodes using hybrid retrieval (dense + BM25) with cross-encoder reranking.",
+  "thumbnail": "/assets/images/Lenny's Search_Hero Image.png",
+  "video": "https://www.youtube.com/embed/uUSyV6JXs4U",
+  "category": "personal",
+  "tryItLink": "https://lennys-search.vercel.app/",
+  "tags": ["RAG", "Hybrid Retrieval", "15hrs with Claude Code"],
+  "sections": [
+    {
+      "title": "Problem",
+      "items": [
+        "Lenny's Podcast has 300+ episodes with invaluable product/growth wisdom",
+        "YouTube's native search is keyword-based and misses semantic meaning",
+        "No way to find specific insights across all episodes or jump to exact timestamps"
+      ]
+    },
+    {
+      "title": "Solution",
+      "items": [
+        "Built a semantic search engine using hybrid retrieval (dense vectors + BM25)",
+        "Speaker-turn aware chunking preserves Q&A context from host-guest conversations",
+        "Cross-encoder reranking surfaces the most relevant passages",
+        "Deep links jump directly to the exact YouTube timestamp"
+      ]
+    },
+    {
+      "title": "Technical Highlights",
+      "items": [
+        "Hybrid retrieval: OpenAI embeddings + BM25 sparse vectors fused with RRF",
+        "BGE Reranker cross-encoder for final precision ranking",
+        "Qdrant vector store with indexed payload fields for fast filtering",
+        "Contextual chunk enrichment using Claude Haiku for better embeddings"
+      ]
+    },
+    {
+      "title": "Bonus Feature",
+      "items": [
+        "Idea Constellation: Interactive graph visualization of 200+ key ideas",
+        "Ideas clustered by theme with connections showing similar/contradictory viewpoints",
+        "Filter by company (Airbnb, Stripe, etc.) to see insights from specific guests"
+      ]
+    }
+  ]
+}

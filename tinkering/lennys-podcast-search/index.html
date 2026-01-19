@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lenny's Podcast Search - Tinkering with AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #222222;
+            line-height: 1.6;
+            padding: 50px 20px 80px;
+        }
+
+        a { color: inherit; }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #666666;
+            text-decoration: none;
+            font-size: 12px;
+            margin-bottom: 30px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #000000;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            color: #000000;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            color: #000000;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 500;
+            margin-top: 28px;
+            margin-bottom: 12px;
+            color: #000000;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+            color: #222222;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 700px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-video {
+            width: 100%;
+            max-width: 700px;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .try-it-button {
+            display: inline-block;
+            background: #000;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            transition: background 0.2s;
+        }
+
+        .try-it-button:hover {
+            background: #333;
+        }
+
+        .tldr-section {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .tldr-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            margin-top: 0;
+            color: #000000;
+        }
+
+        .tldr-section ul {
+            list-style: disc;
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .tldr-section li {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .tldr-section li:last-child {
+            margin-bottom: 0;
+        }
+
+        .architecture-diagram {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            overflow-x: auto;
+        }
+
+        .architecture-diagram pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            line-height: 1.5;
+            color: #e0e0e0;
+            margin: 0;
+            white-space: pre;
+        }
+
+        .code-block {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #e0e0e0;
+            margin: 0;
+        }
+
+        .code-block .comment { color: #6a9955; }
+        .code-block .keyword { color: #569cd6; }
+        .code-block .string { color: #ce9178; }
+        .code-block .function { color: #dcdcaa; }
+        .code-block .number { color: #b5cea8; }
+
+        .phase-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .phase-card h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #000000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .phase-card h4 .phase-num {
+            background: #000;
+            color: #fff;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .phase-card p {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .phase-card .tech-stack {
+            font-size: 12px;
+            color: #6b7280;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 14px;
+        }
+
+        .spec-table th,
+        .spec-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .spec-table th {
+            background: #f9fafb;
+            font-weight: 500;
+        }
+
+        .highlight-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            color: #222222;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+
+        .highlight-box h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #000000;
+        }
+
+        .highlight-box p {
+            color: #374151;
+            margin-bottom: 0;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 40px 16px 60px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            .architecture-diagram pre,
+            .code-block pre {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="/">← Back</a>
+
+        <h1>Lenny's Podcast Search</h1>
+
+        <a href="https://lennys-search.vercel.app/" target="_blank" rel="noopener noreferrer" class="try-it-button">Try it now →</a>
+
+        <iframe class="hero-video" src="https://www.youtube.com/embed/uUSyV6JXs4U" title="Lenny's Podcast Search Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+        <div class="tldr-section">
+            <h3>TL;DR</h3>
+            <ul>
+                <li>Built a semantic search engine for 300+ Lenny's Podcast episodes (~2,000+ hours of content).</li>
+                <li>Hybrid retrieval: combines dense vectors (OpenAI embeddings) with sparse vectors (BM25) using RRF fusion.</li>
+                <li>Cross-encoder reranking with BGE-reranker-large for final precision.</li>
+                <li>Speaker-turn aware chunking preserves Q&A context from host-guest conversations.</li>
+                <li>Contextual chunk enrichment using Claude Haiku improves embedding quality.</li>
+                <li>Deep links jump directly to the exact YouTube timestamp for each result.</li>
+            </ul>
+        </div>
+
+        <h2>The Problem</h2>
+        <p>Lenny's Podcast is a goldmine of product management, growth, and leadership wisdom. 300+ episodes featuring guests from Airbnb, Stripe, Notion, Figma, and more. But finding specific insights is painful:</p>
+        <ul style="margin-bottom: 16px; padding-left: 20px;">
+            <li>YouTube search is keyword-based—misses semantic meaning</li>
+            <li>No way to search across all episodes at once</li>
+            <li>Even if you find an episode, scrubbing to the right moment is tedious</li>
+        </ul>
+        <p>I wanted to ask questions like "how did Airbnb approach growth in the early days?" and get direct answers with timestamps.</p>
+
+        <h2>System Architecture</h2>
+        <p>The system has three layers: data processing pipeline, retrieval engine, and web interface.</p>
+
+        <div class="architecture-diagram">
+<pre>
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                            DATA PIPELINE                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   YouTube Transcripts    Speaker Diarization    Contextual Enrichment       │
+│   (yt-dlp + whisper)  →  (host vs guest)     →  (Claude Haiku)              │
+│                                                                              │
+│         ↓                      ↓                      ↓                      │
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                    SPEAKER-TURN AWARE CHUNKER                        │   │
+│   │  • Q&A pair detection (host question + guest answer)                 │   │
+│   │  • 512 token chunks with 50 token overlap                            │   │
+│   │  • Topic extraction (growth, hiring, pricing, etc.)                  │   │
+│   │  • Sponsor segment detection                                         │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                    ↓                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                     ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           RETRIEVAL ENGINE                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌─────────────────┐         ┌─────────────────┐                           │
+│   │  DENSE SEARCH   │         │  SPARSE SEARCH  │                           │
+│   │  (Qdrant)       │         │  (BM25)         │                           │
+│   │                 │         │                 │                           │
+│   │  OpenAI         │         │  bm25s library  │                           │
+│   │  text-embedding │         │  tokenized      │                           │
+│   │  -3-small       │         │  corpus         │                           │
+│   │  (1536 dim)     │         │                 │                           │
+│   └────────┬────────┘         └────────┬────────┘                           │
+│            │                           │                                     │
+│            └───────────┬───────────────┘                                     │
+│                        ↓                                                     │
+│            ┌───────────────────────┐                                         │
+│            │   RRF FUSION          │                                         │
+│            │   k=60                │                                         │
+│            │   score = Σ 1/(k+rank)│                                         │
+│            └───────────┬───────────┘                                         │
+│                        ↓                                                     │
+│            ┌───────────────────────┐                                         │
+│            │   BGE RERANKER        │                                         │
+│            │   Cross-encoder       │                                         │
+│            │   bge-reranker-large  │                                         │
+│            └───────────────────────┘                                         │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                     ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                            WEB INTERFACE                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│   Next.js Frontend          FastAPI Backend          Qdrant Cloud           │
+│   (Vercel)                  (Render)                 (managed)              │
+└─────────────────────────────────────────────────────────────────────────────┘
+</pre>
+        </div>
+
+        <h2>Deep Dive: Speaker-Turn Aware Chunking</h2>
+        <p>Most RAG systems use naive sliding window chunking. For podcasts, this destroys context—you get half a question in one chunk and half an answer in another.</p>
+
+        <p>My chunker understands the conversation structure:</p>
+
+        <div class="phase-card">
+            <h4><span class="phase-num">1</span> Parse Speaker Turns</h4>
+            <p>Each transcript is parsed into speaker turns with timestamps. Speaker diarization identifies who's talking (Lenny vs guest).</p>
+            <div class="tech-stack">SpeakerTurn(speaker, role, content, timestamp_seconds, is_sponsor)</div>
+        </div>
+
+        <div class="phase-card">
+            <h4><span class="phase-num">2</span> Detect Q&A Pairs</h4>
+            <p>When a host turn is immediately followed by a guest turn, and combined tokens &lt; 400, they're grouped as a single chunk. This preserves question-answer context.</p>
+            <div class="tech-stack">chunk_type="qa_pair" | "host_question" | "guest_answer"</div>
+        </div>
+
+        <div class="phase-card">
+            <h4><span class="phase-num">3</span> Merge Short Turns</h4>
+            <p>Consecutive short turns from the same speaker are merged if combined &lt; 512 tokens. Prevents tiny fragments.</p>
+            <div class="tech-stack">cl100k_base tokenizer (same as GPT-4)</div>
+        </div>
+
+        <div class="phase-card">
+            <h4><span class="phase-num">4</span> Split Long Monologues</h4>
+            <p>Turns exceeding 512 tokens are split at sentence boundaries with 50-token overlap to maintain continuity.</p>
+            <div class="tech-stack">split_long_text_with_overlap(text, max_tokens=512, overlap_tokens=50)</div>
+        </div>
+
+        <h3>Topic Extraction</h3>
+        <p>Each chunk is tagged with topics using regex patterns:</p>
+
+        <div class="code-block">
+<pre><span class="keyword">TOPIC_PATTERNS</span> = {
+    <span class="string">"growth"</span>: r<span class="string">"\b(growth|growing|scale|scaling)\b"</span>,
+    <span class="string">"onboarding"</span>: r<span class="string">"\b(onboarding|onboard|activation)\b"</span>,
+    <span class="string">"retention"</span>: r<span class="string">"\b(retention|retaining|churn)\b"</span>,
+    <span class="string">"product-market-fit"</span>: r<span class="string">"\b(product.market.fit|pmf)\b"</span>,
+    <span class="string">"metrics"</span>: r<span class="string">"\b(metrics?|kpis?|okrs?|north.star)\b"</span>,
+    <span class="string">"hiring"</span>: r<span class="string">"\b(hiring|recruit|talent|interview)\b"</span>,
+    <span class="string">"pricing"</span>: r<span class="string">"\b(pricing|monetization|revenue)\b"</span>,
+    <span class="string">"ai"</span>: r<span class="string">"\b(ai|artificial.intelligence|machine.learning|llm|gpt)\b"</span>,
+    <span class="comment"># ... 17 topics total</span>
+}</pre>
+        </div>
+
+        <p>This enables filtered search: "show me what Brian Chesky said about hiring" filters by <code>guest="Brian Chesky"</code> AND <code>topic="hiring"</code>.</p>
+
+        <h2>Deep Dive: Contextual Chunk Enrichment</h2>
+        <p>A chunk like "I think that's really important" is meaningless without context. Anthropic's <a href="https://www.anthropic.com/news/contextual-retrieval" target="_blank">Contextual Retrieval paper</a> showed that prepending context improves retrieval by 49%.</p>
+
+        <p>For each chunk, Claude Haiku generates 2-3 sentences of context:</p>
+
+        <div class="code-block">
+<pre><span class="keyword">CONTEXT_PROMPT</span> = <span class="string">"""&lt;episode&gt;
+Title: {episode_title}
+Guest: {episode_guest}
+&lt;/episode&gt;
+
+&lt;previous_context&gt;
+{previous_context}  // Last 2 chunks
+&lt;/previous_context&gt;
+
+&lt;current_chunk&gt;
+{speaker} ({timestamp}): {chunk_content}
+&lt;/current_chunk&gt;
+
+Generate a brief context (2-3 sentences) that situates this chunk:
+1. What topic/question is being discussed
+2. Any specific companies, frameworks, or concepts referenced
+3. The speaker's role and expertise if relevant"""</span></pre>
+        </div>
+
+        <p>The context is prepended to each chunk before embedding. So "I think that's really important" becomes:</p>
+
+        <div class="highlight-box">
+            <h4>Contextualized Chunk Example</h4>
+            <p>"Brian Chesky, CEO of Airbnb, is discussing the importance of hands-on customer research in the early stages. He's responding to Lenny's question about how Airbnb validated product-market fit. I think that's really important..."</p>
+        </div>
+
+        <h2>Deep Dive: Hybrid Retrieval with RRF</h2>
+        <p>Dense (semantic) search is great for meaning, but misses exact keyword matches. Sparse (BM25) search catches keywords but misses synonyms. Hybrid combines both.</p>
+
+        <h3>The Retrieval Pipeline</h3>
+
+        <div class="code-block">
+<pre><span class="keyword">def</span> <span class="function">search</span>(self, query, filters):
+    <span class="comment"># 1. Dense search (semantic similarity)</span>
+    query_embedding = embedder.<span class="function">embed_query</span>(query)
+    dense_results = vector_store.<span class="function">search</span>(
+        query_embedding=query_embedding,
+        top_k=<span class="number">15</span>,
+        guest_filter=filters.guest,
+        speaker_role_filter=filters.speaker_role,
+        topic_filter=filters.topic,
+        exclude_sponsors=<span class="keyword">True</span>
+    )
+
+    <span class="comment"># 2. Sparse search (keyword matching)</span>
+    bm25_results = bm25_retriever.<span class="function">search</span>(query, top_k=<span class="number">15</span>)
+
+    <span class="comment"># 3. RRF fusion</span>
+    fused = <span class="function">reciprocal_rank_fusion</span>(
+        [dense_results, bm25_results],
+        k=<span class="number">60</span>
+    )
+
+    <span class="keyword">return</span> fused[:<span class="number">20</span>]</pre>
+        </div>
+
+        <h3>Reciprocal Rank Fusion (RRF)</h3>
+        <p>RRF combines ranked lists without needing score normalization:</p>
+
+        <div class="code-block">
+<pre><span class="comment"># For each document d in the combined results:</span>
+<span class="keyword">score</span>(d) = Σ <span class="number">1</span>/(k + rank(d))
+
+<span class="comment"># k=60 is the standard constant</span>
+<span class="comment"># If doc is rank 1 in dense and rank 3 in BM25:</span>
+<span class="comment"># score = 1/(60+1) + 1/(60+3) = 0.0164 + 0.0159 = 0.0323</span></pre>
+        </div>
+
+        <p>Documents that appear in both lists get boosted. Documents that only appear in one list still contribute.</p>
+
+        <h2>Deep Dive: Cross-Encoder Reranking</h2>
+        <p>Bi-encoders (like OpenAI embeddings) encode query and document separately. Fast, but limited. Cross-encoders process query AND document together through the transformer—much more accurate but slower.</p>
+
+        <div class="code-block">
+<pre><span class="keyword">class</span> <span class="function">BGEReranker</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, model_name=<span class="string">"BAAI/bge-reranker-large"</span>):
+        self.device = <span class="string">"mps"</span> <span class="keyword">if</span> torch.backends.mps.is_available() <span class="keyword">else</span> <span class="string">"cpu"</span>
+        self._reranker = <span class="keyword">None</span>  <span class="comment"># Lazy loaded</span>
+
+    <span class="keyword">def</span> <span class="function">rerank</span>(self, query, results, top_n=<span class="number">5</span>):
+        <span class="comment"># Lazy load model on first use</span>
+        <span class="keyword">if</span> self._reranker <span class="keyword">is None</span>:
+            <span class="keyword">from</span> FlagEmbedding <span class="keyword">import</span> FlagReranker
+            self._reranker = <span class="function">FlagReranker</span>(self.model_name, use_fp16=<span class="keyword">True</span>)
+
+        <span class="comment"># Create query-document pairs</span>
+        pairs = [[query, r[<span class="string">"text"</span>]] <span class="keyword">for</span> r <span class="keyword">in</span> results]
+
+        <span class="comment"># Score all pairs at once</span>
+        scores = self._reranker.<span class="function">compute_score</span>(pairs, normalize=<span class="keyword">True</span>)
+
+        <span class="comment"># Sort by rerank score</span>
+        <span class="keyword">for</span> r, score <span class="keyword">in</span> <span class="function">zip</span>(results, scores):
+            r[<span class="string">"rerank_score"</span>] = <span class="function">float</span>(score)
+
+        <span class="keyword">return</span> <span class="function">sorted</span>(results, key=<span class="keyword">lambda</span> x: x[<span class="string">"rerank_score"</span>], reverse=<span class="keyword">True</span>)[:top_n]</pre>
+        </div>
+
+        <p>The reranker takes the top 20 RRF results and re-scores them, returning the top 15. This final pass dramatically improves precision.</p>
+
+        <h2>Deep Dive: Qdrant Vector Store</h2>
+        <p>Qdrant stores vectors with rich payloads and supports filtered search with payload indexes:</p>
+
+        <div class="code-block">
+<pre><span class="comment"># Payload indexes for fast filtering</span>
+indexes = [
+    (<span class="string">"episode_guest"</span>, PayloadSchemaType.KEYWORD),
+    (<span class="string">"speaker_role"</span>, PayloadSchemaType.KEYWORD),    <span class="comment"># "host" | "guest"</span>
+    (<span class="string">"topics"</span>, PayloadSchemaType.KEYWORD),           <span class="comment"># Array field</span>
+    (<span class="string">"is_sponsor_segment"</span>, PayloadSchemaType.BOOL),
+    (<span class="string">"start_seconds"</span>, PayloadSchemaType.INTEGER),
+    (<span class="string">"chunk_type"</span>, PayloadSchemaType.KEYWORD),       <span class="comment"># "qa_pair" | "guest_answer" | ...</span>
+]
+
+<span class="comment"># Search with filters</span>
+filter = Filter(must=[
+    FieldCondition(key=<span class="string">"episode_guest"</span>, match=MatchValue(value=<span class="string">"Brian Chesky"</span>)),
+    FieldCondition(key=<span class="string">"topics"</span>, match=MatchValue(value=<span class="string">"growth"</span>)),
+    FieldCondition(key=<span class="string">"is_sponsor_segment"</span>, match=MatchValue(value=<span class="keyword">False</span>)),
+])</pre>
+        </div>
+
+        <h2>Deep Dive: BM25 Lightweight Mode</h2>
+        <p>Full BM25 index with chunk metadata uses ~150MB RAM. For deployment on memory-constrained servers, I implemented lightweight mode:</p>
+
+        <div class="code-block">
+<pre><span class="keyword">class</span> <span class="function">BM25Retriever</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, lightweight_mode=<span class="keyword">False</span>):
+        self.lightweight_mode = lightweight_mode
+        <span class="comment"># In lightweight mode, only store chunk_ids (~5MB vs ~150MB)</span>
+        self.chunk_ids: list[str] = []
+
+    <span class="keyword">def</span> <span class="function">search</span>(self, query, top_k=<span class="number">15</span>):
+        <span class="keyword">if</span> self.lightweight_mode:
+            <span class="comment"># Return only chunk_ids, no metadata</span>
+            <span class="comment"># HybridRetriever fetches full data from Qdrant</span>
+            <span class="keyword">return</span> [{ <span class="string">"chunk_id"</span>: self.chunk_ids[idx] } <span class="keyword">for</span> idx <span class="keyword">in</span> results]</pre>
+        </div>
+
+        <p>The hybrid retriever enriches BM25 results from Qdrant, applying filters there instead. Saves 100MB+ with minimal latency impact.</p>
+
+        <h2>Performance Benchmarks</h2>
+
+        <table class="spec-table">
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Total chunks indexed</td>
+                <td>~45,000</td>
+            </tr>
+            <tr>
+                <td>Episodes covered</td>
+                <td>300+</td>
+            </tr>
+            <tr>
+                <td>Query latency (p50)</td>
+                <td>~180ms</td>
+            </tr>
+            <tr>
+                <td>Query latency with reranking</td>
+                <td>~350ms</td>
+            </tr>
+            <tr>
+                <td>Embedding dimension</td>
+                <td>1536 (text-embedding-3-small)</td>
+            </tr>
+            <tr>
+                <td>Vector store size</td>
+                <td>~280MB</td>
+            </tr>
+            <tr>
+                <td>BM25 index size (lightweight)</td>
+                <td>~5MB</td>
+            </tr>
+        </table>
+
+        <h2>Bonus: Idea Constellation</h2>
+        <p>Beyond search, I extracted ~200 key ideas from the podcast and visualized them as an interactive graph using React Flow:</p>
+
+        <ul style="margin-bottom: 16px; padding-left: 20px;">
+            <li>Ideas clustered by theme (Growth, Hiring, Product Strategy, etc.)</li>
+            <li>Connections show similar or contradictory viewpoints</li>
+            <li>Click any idea to jump to the YouTube timestamp</li>
+            <li>Filter by company (Airbnb, Stripe, Notion, etc.)</li>
+        </ul>
+
+        <p>The graph uses force-directed layout for connected ideas and tiered rings for cluster exploration.</p>
+
+        <h2>Tech Stack Summary</h2>
+
+        <table class="spec-table">
+            <tr>
+                <th>Component</th>
+                <th>Technology</th>
+            </tr>
+            <tr>
+                <td>Backend API</td>
+                <td>FastAPI (Python)</td>
+            </tr>
+            <tr>
+                <td>Vector Store</td>
+                <td>Qdrant Cloud</td>
+            </tr>
+            <tr>
+                <td>Embeddings</td>
+                <td>OpenAI text-embedding-3-small</td>
+            </tr>
+            <tr>
+                <td>Sparse Retrieval</td>
+                <td>bm25s (lightweight BM25)</td>
+            </tr>
+            <tr>
+                <td>Reranking</td>
+                <td>BAAI/bge-reranker-large</td>
+            </tr>
+            <tr>
+                <td>Contextual Enrichment</td>
+                <td>Claude Haiku</td>
+            </tr>
+            <tr>
+                <td>Frontend</td>
+                <td>Next.js + React Flow</td>
+            </tr>
+            <tr>
+                <td>Deployment</td>
+                <td>Vercel (frontend) + Render (backend)</td>
+            </tr>
+        </table>
+
+        <h2>Key Takeaway</h2>
+        <p>Hybrid retrieval is the secret sauce. Dense search alone misses exact matches. BM25 alone misses semantic similarity. RRF fusion + cross-encoder reranking gives you the best of both worlds.</p>
+        <p>And for conversational content like podcasts, speaker-turn aware chunking is essential. Don't break up Q&A pairs.</p>
+    </div>
+</body>
+</html>
