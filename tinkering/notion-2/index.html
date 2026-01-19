@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notion 2.0 - Re-imagining Notion with digital teammates - Tinkering with AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #222222;
+            line-height: 1.6;
+            padding: 50px 20px 80px;
+        }
+
+        a { color: inherit; }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #666666;
+            text-decoration: none;
+            font-size: 12px;
+            margin-bottom: 30px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #000000;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            color: #000000;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            color: #000000;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+            color: #222222;
+        }
+
+        .demo-video {
+            width: 100%;
+            max-width: 700px;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .tldr-section {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .tldr-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #000000;
+        }
+
+        .tldr-section ul {
+            list-style: disc;
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .tldr-section li {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .tldr-section li:last-child {
+            margin-bottom: 0;
+        }
+
+        .try-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #000000;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-bottom: 32px;
+        }
+
+        .try-button:hover {
+            background: #1a1a1a;
+            transform: translateY(-1px);
+        }
+
+        .agent-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .agent-card h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #000000;
+        }
+
+        .agent-card p {
+            font-size: 14px;
+            margin-bottom: 0;
+            color: #374151;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 40px 16px 60px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="/">← Back</a>
+
+        <h1>Notion 2.0 - Re-imagining Notion with digital teammates</h1>
+
+        <iframe class="demo-video" src="https://www.youtube.com/embed/1aAEiaAXbOo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+        <div class="tldr-section">
+            <h3>TL;DR</h3>
+            <ul>
+                <li>Rebuilt Notion from scratch with AI agents embedded directly in the editor - no more tab switching or workflow fragmentation.</li>
+                <li>Four digital teammates live inside your docs: Search Agent (inline Google results), Image Agent (infographics + personalized photos), Video Agent (summarize, transcribe, clip videos), and General List Agent (process spreadsheets with natural language).</li>
+                <li>Demonstrated with a NYC trip planning use case: weather lookup, custom infographics, video summaries, Google Sheets filtering, and video clipping - all without leaving the doc.</li>
+                <li>Page Merging feature intelligently combines multiple pages by finding overlaps and suggesting a unified structure.</li>
+            </ul>
+        </div>
+
+        <h2>The Problem</h2>
+        <p>Every time I plan something in Notion, I end up with 15 browser tabs open. Search for weather? New tab. Create an infographic? Switch to Canva. Summarize a video? Open ChatGPT. Extract data from a spreadsheet? Back to Google Sheets.</p>
+
+        <p>The irony is that AI tools are everywhere now, but they all live <em>outside</em> your actual workspace. You're constantly context-switching, copying and pasting, breaking your flow.</p>
+
+        <h2>The Vision</h2>
+        <p>What if AI teammates lived <em>inside</em> your documents? Not as a sidebar chatbot, but as collaborators that work directly in your content. You highlight text, trigger an agent, and the result appears right where you need it.</p>
+
+        <p>So I rebuilt Notion from scratch using Claude Code - keeping all the familiar building blocks (pages, slash commands, drag-and-drop blocks) but adding four specialized digital teammates.</p>
+
+        <h2>The Digital Teammates</h2>
+
+        <div class="agent-card">
+            <h4>Search Agent</h4>
+            <p>Highlight any text, hit Cmd+2 (or click the search icon), and your text turns green - that's your search query. The agent runs a Google search and embeds the results inline, right in your document. No tab switching, no copy-paste.</p>
+        </div>
+
+        <div class="agent-card">
+            <h4>Image Agent</h4>
+            <p>Turn any text block into a beautiful infographic using Nano Banana under the hood. Or toggle "use my face" to generate personalized photos - like me ice skating in Central Park for a trip itinerary. Context engineering makes them Instagram-ready.</p>
+        </div>
+
+        <div class="agent-card">
+            <h4>Video Agent</h4>
+            <p>Embed a YouTube video, then ask the agent to summarize it, list key points, or generate a full transcript. The magic: select any excerpt from the transcript with a purple cursor, and it clips that exact segment and saves it to your Google Drive.</p>
+        </div>
+
+        <div class="agent-card">
+            <h4>General List Agent</h4>
+            <p>Embed a Google Sheet, then query it with natural language. "Pull the restaurant names ranked 1, 2, 3" - the agent understands the spreadsheet structure, identifies the right columns, and extracts exactly what you need.</p>
+        </div>
+
+        <h2>Page Merging</h2>
+        <p>When you have multiple pages scattered around a project, drag and drop them together. The agent reads through all content, finds overlaps, identifies where information can be consolidated, and suggests a merged, well-formatted result.</p>
+
+        <h2>The Shift</h2>
+        <p>This isn't about replacing Notion - it's about reimagining what a workspace looks like when AI is a first-class citizen. The goal: one integrated environment where you think, your teammates execute, and the results appear exactly where you need them.</p>
+
+        <p>No more juggling tools. No more breaking flow. Just you and your digital teammates, building together.</p>
+    </div>
+</body>
+</html>
